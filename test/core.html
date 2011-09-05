@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mozilla YourWeb Test Suite</title>
+	<link rel="stylesheet" href="assets/qunit.css" type="text/css" media="screen">
+	<script src="../assets/js/libs/jquery-1.6.3.min.js"></script>
+	<script src="assets/qunit.js"></script>
+	<script src="../assets/js/libs/underscore.min.js"></script>
+	<script src="../assets/js/libs/backbone-0.5.3.min.js"></script>
+	<script src="../assets/js/libs/strftime.js"></script>
+	<script src="../assets/js/utils.js"></script>
+	<script src="assets/sinon-1.1.1.js"></script>
+	<script>
+		$(document).ready(function() {
+			var ctx = window;
+			
+			module('App object');
+			test('App is global and accessible', function() {
+				ok(ctx.App, 'App is defined');
+			});
+			
+			module('App namespacing utility');
+			test('Creating "testSuite" namespace', function(){
+				ctx.App.namespace('testSuite');
+				ok(ctx.App.testSuite, 'App.testSuite is defined');
+			});
+			
+			module('App PubSub system');
+			test('App.events', function() {
+				ok(ctx.App.events, 'App.event is defined');
+			});
+			
+			test('App.events should call subscribers on publish', function() {
+				var callback = sinon.spy();
+				
+				ctx.App.events.subscribe('some/topic', callback);
+				ctx.App.events.publish('some/topic');
+				
+				ok(callback.called);
+			});
+		});	
+	</script>
+</head>
+<body>
+	<h1 id="qunit-header">Mozilla YourWeb Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+</body>
+</html>

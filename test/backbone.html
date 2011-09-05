@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mozilla YourWeb Test Suite</title>
+	<link rel="stylesheet" href="assets/qunit.css" type="text/css" media="screen">
+	<script src="../assets/js/libs/jquery-1.6.3.min.js"></script>
+	<script src="assets/qunit.js"></script>
+	<script src="../assets/js/libs/underscore.min.js"></script>
+	<script src="../assets/js/libs/backbone-0.5.3.min.js"></script>
+	<script src="../assets/js/libs/strftime.js"></script>
+	<script src="../assets/js/utils.js"></script>
+	<script src="assets/sinon-1.1.1.js"></script>
+	<script>
+		$(document).ready(function() {
+			var ctx = window;
+						
+			module('Backbone');
+			test('Fetch one answer', function() {
+				var server = sinon.fakeServer.create(),
+				callback = sinon.spy(),
+				Answer = Backbone.Model.extend({
+					defaults : function() {
+						return {
+							content	: 'My Answer',
+							image	: 'http://placekitten.com/200/300',
+							metadata: {
+								weight	: 0,
+								usertype: 'Other',
+								created	: new Date(),
+								language: ''
+							} 
+						}
+					},
+					url: function() {
+						return '/answer/' + this.id;
+					}
+				}),
+				answer = new Answer({id: 123});
+
+				// Set how the fake server will respond
+				// This reads: a GET request for /episode/123 
+				// will return a 200 response of type 
+				// application/json with the given JSON response body
+				server.respondWith("GET", "/answer/123",
+				  [200, {"Content-Type": "application/json"},
+				  '{"id":123,"title":"A test"}']);
+				
+				// Bind to the change event on the model
+				answer.bind('change', callback);
+				
+				// makes an ajax request to the server
+				answer.fetch();
+				
+				// Fake server responds to the request
+				server.respond();
+				
+				var model = callback.args[0][0];
+				
+				// Expect that the spy was called with the new model
+				ok(callback.called, 'change event was fired');
+				equals(model.attributes.title, 'A test', 'Model title property is set correctly');
+			});
+		});	
+	</script>
+</head>
+<body>
+	<h1 id="qunit-header">Mozilla YourWeb Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+</body>
+</html>
