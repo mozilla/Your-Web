@@ -41,16 +41,21 @@
 					 * Filter collection by weight.
 					 *
 					 * @method filterByWeight
-					 * @param {Number|String} targetWweight Weight to search for
+					 * @param {Number} targetWweight 		Weight to filter by
+					 * @param {Number} targetWweightLimit 	If present, filters collection between targetWeight and targetWeightLimit
 					 * Formats accepted: 
 					 * 		50 		: will return all items with weight = 50
-					 *		'10-50' : will return all items with weight between 10 and 50
+					 *		10, 50  : will return all items with weight between 10 and 50
 					 *
 					 * @returns {Array} An array with the filtered collection objects
 					 */
-					filterByWeight: function(targetWeight) {
+					filterByWeight: function(targetWeight, targetWeightLimit) {
 						return this.filter(function(answer) {
-							return answer.get("metadata").weight === targetWeight;
+							if (targetWeightLimit) {
+								return (answer.get("metadata").weight >= targetWeight && answer.get("metadata").weight <= targetWeightLimit);
+							} else {
+								return answer.get("metadata").weight == targetWeight;
+							}
 						});
 					},
 					
@@ -160,84 +165,6 @@
 				equals(answers.get(5).get('id'), 5, 'Should find a model by id');
 			});
 			
-			test('ordering by date', function() {
-				var answers = new AnswerList(),
-					answer1 = new Backbone.Model({
-						title: 'Test 1',
-						metadata: {
-							date: '2011-09-12'
-						}
-					}),
-					answer2 = new Backbone.Model({
-						title: 'Test 2',
-						metadata: {
-							date: '2011-09-05'
-						}
-					}),
-					answer3 = new Backbone.Model({
-						title: 'Test 3',
-						metadata: {
-							date: '2011-09-12 12:30'
-						}
-					}),
-					answer4 = new Backbone.Model({
-						title: 'Test 3',
-						metadata: {
-							date: '2011-09-12 09:30'
-						}
-					});
-					
-				answers.comparator = function(item) {
-					return new Date(item.get('metadata').date);
-				}
-				
-				answers.add([answer1, answer2, answer3, answer4]);
-				
-				deepEqual(answers.at(0), answer2);
-				deepEqual(answers.at(1), answer1);
-				deepEqual(answers.at(2), answer4);
-				deepEqual(answers.at(3), answer3);			
-			});
-			
-			test('ordering by date (reverse)', function() {
-				var answers = new AnswerList(),
-					answer1 = new Backbone.Model({
-						title: 'Test 1',
-						metadata: {
-							date: '2011-09-12'
-						}
-					}),
-					answer2 = new Backbone.Model({
-						title: 'Test 2',
-						metadata: {
-							date: '2011-09-05'
-						}
-					}),
-					answer3 = new Backbone.Model({
-						title: 'Test 3',
-						metadata: {
-							date: '2011-09-12 12:30'
-						}
-					}),
-					answer4 = new Backbone.Model({
-						title: 'Test 3',
-						metadata: {
-							date: '2011-09-12 09:30'
-						}
-					});
-					
-				answers.comparator = function(item) {
-					return - new Date(item.get('metadata').date);
-				}
-				
-				answers.add([answer1, answer2, answer3, answer4]);
-				
-				deepEqual(answers.at(0), answer3);
-				deepEqual(answers.at(1), answer4);
-				deepEqual(answers.at(2), answer1);
-				deepEqual(answers.at(3), answer2);
-			});
-			
 			test('ordering by weight', function() {
 				var answers = new AnswerList(),
 					answer1 = new Backbone.Model({
@@ -271,41 +198,6 @@
 				deepEqual(answers.at(0), answer2);
 				deepEqual(answers.at(1), answer1);
 				deepEqual(answers.at(2), answer3);			
-			});
-			
-			test('ordering by weight (reverse)', function() {
-				var answers = new AnswerList(),
-					answer1 = new Backbone.Model({
-						title: 'Test 1',
-						metadata: {
-							date: '2011-09-12',
-							weight: 50
-						}
-					}),
-					answer2 = new Backbone.Model({
-						title: 'Test 2',
-						metadata: {
-							date: '2011-09-05',
-							weight: 25
-						}
-					}),
-					answer3 = new Backbone.Model({
-						title: 'Test 3',
-						metadata: {
-							date: '2011-09-12 12:30',
-							weight: 100
-						}
-					});
-					
-				answers.comparator = function(item) {
-					return -item.get('metadata').weight;
-				}
-				
-				answers.add([answer1, answer2, answer3]);
-				
-				deepEqual(answers.at(0), answer3);
-				deepEqual(answers.at(1), answer1);
-				deepEqual(answers.at(2), answer2);			
 			});
 			
 			test('ordering by usertype (alphabetical)', function() {
@@ -346,6 +238,45 @@
 				deepEqual(answers.at(2), answer1);			
 			});
 			
+			test('ordering by date', function() {
+				var answers = new AnswerList(),
+					answer1 = new Backbone.Model({
+						title: 'Test 1',
+						metadata: {
+							date: '2011-09-12'
+						}
+					}),
+					answer2 = new Backbone.Model({
+						title: 'Test 2',
+						metadata: {
+							date: '2011-09-05'
+						}
+					}),
+					answer3 = new Backbone.Model({
+						title: 'Test 3',
+						metadata: {
+							date: '2011-09-12 12:30'
+						}
+					}),
+					answer4 = new Backbone.Model({
+						title: 'Test 3',
+						metadata: {
+							date: '2011-09-12 09:30'
+						}
+					});
+					
+				answers.comparator = function(item) {
+					return new Date(item.get('metadata').date);
+				}
+				
+				answers.add([answer1, answer2, answer3, answer4]);
+				
+				deepEqual(answers.at(0), answer2);
+				deepEqual(answers.at(1), answer1);
+				deepEqual(answers.at(2), answer4);
+				deepEqual(answers.at(3), answer3);			
+			});
+			
 			module('Collection filtering methods');
 			test('Showing items with weight = 50', function() {
 				var answers = new AnswerList(),
@@ -380,6 +311,41 @@
 				filteredAnswers = answers.filterByWeight(50);
 				
 				equals(filteredAnswers.length, 1);				
+			});
+			
+			test('Showing items with weight between 50 and 75', function() {
+				var answers = new AnswerList(),
+					answer1 = new Backbone.Model({
+						title: 'Test 1',
+						metadata: {
+							date: '2011-09-12',
+							weight: 50,
+							usertype: 'developer'
+						}
+					}),
+					answer2 = new Backbone.Model({
+						title: 'Test 2',
+						metadata: {
+							date: '2011-09-05',
+							weight: 65,
+							usertype: 'designer'
+						}
+					}),
+					answer3 = new Backbone.Model({
+						title: 'Test 3',
+						metadata: {
+							date: '2011-09-12 12:30',
+							weight: 100,
+							usertype: 'designer'
+						}
+					}),
+					filteredAnswers;
+				
+				answers.add([answer1, answer2, answer3]);
+					
+				filteredAnswers = answers.filterByWeight(50, 75);
+				
+				equals(filteredAnswers.length, 2);				
 			});
 			
 			test('Showing items with images', function() {

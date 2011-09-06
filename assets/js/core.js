@@ -29,22 +29,49 @@
 		
 		localStorage: new Store("todos"),
 		
-		/* TODO: write actual API filtering functions here */
+		sortByWeight: function() {
+			this.comparator = function(item) {
+				return item.get('metadata').weight;
+			}
+			
+			this.sort();
+		},
+		
+		sortByUserType: function() {
+			this.comparator = function(item) {
+				return item.get('metadata').usertype;
+			}
+				
+			this.sort();
+		},
+		
+		sortByDate: function() {
+			this.comparator = function(item) {
+				return new Date(item.get('metadata').date);
+			}
+			
+			this.sort();
+		},
 		
 		/**
 		 * Filter collection by weight.
 		 *
 		 * @method filterByWeight
-		 * @param {Number|String} targetWweight Weight to search for
+		 * @param {Number} targetWweight 		Weight to filter by
+		 * @param {Number} targetWweightLimit 	If present, filters collection between targetWeight and targetWeightLimit
 		 * Formats accepted: 
 		 * 		50 		: will return all items with weight = 50
-		 *		'10-50' : will return all items with weight between 10 and 50
+		 *		10, 50  : will return all items with weight between 10 and 50
 		 *
 		 * @returns {Array} An array with the filtered collection objects
 		 */
-		filterByWeight: function(targetWeight) {
+		filterByWeight: function(targetWeight, targetWeightLimit) {
 			return this.filter(function(answer) {
-				return answer.get("metadata").weight === targetWeight;
+				if (targetWeightLimit) {
+					return (answer.get("metadata").weight >= targetWeight && answer.get("metadata").weight <= targetWeightLimit);
+				} else {
+					return answer.get("metadata").weight == targetWeight;
+				}
 			});
 		},
 		
@@ -85,7 +112,7 @@
 		 */
 		filterByUserType: function(userType) {
 			return this.filter(function(answer) {
-				return userTypeArray answer.get('metadata').usertype == userType;
+				return answer.get('metadata').usertype == userType;
 			});
 		},
 		
