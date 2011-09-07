@@ -29,27 +29,42 @@
 		
 		localStorage: new Store("todos"),
 		
+		/**
+		 * Sort collection by weight.
+		 *
+		 * @method sortByWeight
+		 *
+		 */
 		sortByWeight: function() {
 			this.comparator = function(item) {
 				return item.get('metadata').weight;
 			}
-			
 			this.sort();
 		},
 		
+		/**
+		 * Sort collection by userType.
+		 *
+		 * @method sortByWeight
+		 *
+		 */
 		sortByUserType: function() {
 			this.comparator = function(item) {
 				return item.get('metadata').usertype;
-			}
-				
+			}	
 			this.sort();
 		},
 		
-		sortByDate: function() {
+		/**
+		 * Sort collection by date created.
+		 *
+		 * @method sortByWeight
+		 *
+		 */
+		sortByCreated: function() {
 			this.comparator = function(item) {
 				return new Date(item.get('metadata').date);
 			}
-			
 			this.sort();
 		},
 		

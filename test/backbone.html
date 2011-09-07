@@ -35,7 +35,44 @@
 					
 					url: '/answers',
 					
-					/* TODO: write actual API filtering functions here */
+					/**
+					 * Sort collection by weight.
+					 *
+					 * @method sortByWeight
+					 *
+					 */
+					sortByWeight: function() {
+						this.comparator = function(item) {
+							return item.get('metadata').weight;
+						}
+						this.sort();
+					},
+					
+					/**
+					 * Sort collection by userType.
+					 *
+					 * @method sortByWeight
+					 *
+					 */
+					sortByUserType: function() {
+						this.comparator = function(item) {
+							return item.get('metadata').usertype;
+						}	
+						this.sort();
+					},
+					
+					/**
+					 * Sort collection by date created.
+					 *
+					 * @method sortByWeight
+					 *
+					 */
+					sortByCreated: function() {
+						this.comparator = function(item) {
+							return new Date(item.get('metadata').date);
+						}
+						this.sort();
+					},
 					
 					/**
 					 * Filter collection by weight.
@@ -188,12 +225,10 @@
 							weight: 100
 						}
 					});
-					
-				answers.comparator = function(item) {
-					return item.get('metadata').weight;
-				}
 				
 				answers.add([answer1, answer2, answer3]);
+				
+				answers.sortByWeight();
 				
 				deepEqual(answers.at(0), answer2);
 				deepEqual(answers.at(1), answer1);
@@ -207,7 +242,7 @@
 						metadata: {
 							date: '2011-09-12',
 							weight: 50,
-							usertype: 'developer'
+							usertype: 'librarian'
 						}
 					}),
 					answer2 = new Backbone.Model({
@@ -223,18 +258,16 @@
 						metadata: {
 							date: '2011-09-12 12:30',
 							weight: 100,
-							usertype: 'designer'
+							usertype: 'developer'
 						}
 					});
-					
-				answers.comparator = function(item) {
-					return item.get('metadata').usertype;
-				}
 				
 				answers.add([answer1, answer2, answer3]);
 				
-				deepEqual(answers.at(0), answer3);
-				deepEqual(answers.at(1), answer2);
+				answers.sortByUserType();
+				
+				deepEqual(answers.at(0), answer2);
+				deepEqual(answers.at(1), answer3);
 				deepEqual(answers.at(2), answer1);			
 			});
 			
@@ -264,12 +297,10 @@
 							date: '2011-09-12 09:30'
 						}
 					});
-					
-				answers.comparator = function(item) {
-					return new Date(item.get('metadata').date);
-				}
 				
 				answers.add([answer1, answer2, answer3, answer4]);
+				
+				answers.sortByCreated();
 				
 				deepEqual(answers.at(0), answer2);
 				deepEqual(answers.at(1), answer1);
