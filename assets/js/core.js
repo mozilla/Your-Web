@@ -3,10 +3,25 @@
 	var app = ctx.App,
 	instance = this,
 	// Main objects
+	Question,
+	QuestionList,
 	Answer,
 	AnswerList;
+	
+	// Set up the main Question Model
+	Question = Backbone.Model.extend({
+		defaults: function() {
+			return {
+				content: 'Which is the best Star Wars movie?',
+				metadata: {
+					created: new Date(),
+					language: 'en-US'
+				}
+			}
+		}
+	});
 		
-	// Set up the main Answers Model
+	// Set up the main Answer Model
 	Answer = Backbone.Model.extend({
 		defaults : function() {
 			return {
@@ -16,12 +31,20 @@
 					weight	: 0,
 					usertype: 'Other',
 					created	: new Date(),
-					language: ''
+					language: 'en-US'
 				} 
 			}
 		}
 	});
 	
+	// Set up the main Questions Collection
+	QuestionList = Backbone.Collection.extend({
+		
+		model: Question,
+		
+		localStorage: new Store('questions')
+	});
+		
 	// Set up the main Answers Collection
 	AnswerList = Backbone.Collection.extend({
 		
