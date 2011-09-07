@@ -50,7 +50,7 @@
 		
 		model: Answer,
 		
-		localStorage: new Store("todos"),
+		localStorage: new Store("answers"),
 		
 		/**
 		 * Sort collection by weight.
