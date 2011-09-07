@@ -13,11 +13,16 @@
 		defaults: function() {
 			return {
 				content: 'Which is the best Star Wars movie?',
+				active: false,
 				metadata: {
 					created: new Date(),
 					language: 'en-US'
 				}
 			}
+		},
+		
+		toggleActive: function() {
+			this.save({active: !this.get('active')});
 		}
 	});
 		
@@ -42,7 +47,23 @@
 		
 		model: Question,
 		
-		localStorage: new Store('questions')
+		localStorage: new Store('questions'),
+		
+		active: function() {
+			return this.filter(function(question) {
+				return question.get('active');
+			});
+		},
+		
+		setActive: function(question) {
+			// Deactivate all others
+			_.each(this.active(), function(item) {
+				item.toggleActive();
+			});
+			
+			question.toggleActive();
+			this.trigger('render');
+		}
 	});
 		
 	// Set up the main Answers Collection
@@ -174,11 +195,11 @@
 		}		
 	});
 	
+	// Instantiate QuestionList collection
+	app.questions = new QuestionList;
+	
 	// Instantiate AnswerList collection
 	app.answers = new AnswerList;
-	
-	//app.answers.bind('add',   app.events.publish('answers/addOne'));
-	//app.answers.bind('reset', app.events.publish('answers/addAll'));
 	
 	// Subscribe to interesting events
 	app.events.subscribe('answers/create', function(params) {
@@ -189,8 +210,20 @@
 		app.answers.create(newModel);
 	});
 	
-	app.events.subscribe('answers/fetch', function() {
+	app.events.subscribe('answers/refresh', function() {
 		app.answers.fetch();
+	});
+	
+	app.events.subscribe('questions/create', function(params) {
+		var newModel = new Question;
+		//newModel.attributes.content = params.content;
+		//newModel.attributes.metadata.usertype = params.metadata.usertype;
+						
+		app.answers.create(newModel);
+	});
+	
+	app.events.subscribe('questions/refresh', function() {
+		app.questions.fetch();
 	});
 	
 })(window);
