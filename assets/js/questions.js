@@ -91,11 +91,14 @@
 			 * Publishes an event with the newly created object as a parameter. 
 			 *
 			 * @method create
-			 * @param {Object} model Object conforming to the structure defined in Question.defaults
+			 * @param 	{Object} model Object conforming to the structure defined in Question.defaults
+			 * @returns {Object} newQuestion Newly created Question Model instance
 			 */
 			create: function(params) {
 				var newQuestion = questions.create(params);
 				app.events.publish('questions/new', [newQuestion]);
+				
+				return newQuestion;
 			},
 			
 			/**

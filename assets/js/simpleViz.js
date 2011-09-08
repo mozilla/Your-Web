@@ -7,7 +7,7 @@
 	AppView,
 	//templates
 	questionTemplate = '{{content}}';
-	answerTemplate = '<article>{{#if image}}<img src="{{image}}" />{{/if}}<p>{{content}}<p> <small>Submitted by a {{#metadata}}{{usertype}}{{/metadata}} on {{#metadata}}{{created}}{{/metadata}}</small></article>';
+	answerTemplate = '<article>{{#if image}}<img src="{{image}}" />{{/if}}<p>{{content}}<p> <small>Submitted by a {{usertype}} on {{created}}</small></article>';
 	
 	app.namespace('views');
 		
@@ -25,9 +25,9 @@
 		
 		render: function() {
 			var modelData = this.model.toJSON(),
-			created = new Date(modelData.metadata.created);
+			created = new Date(modelData.created);
 			
-			modelData.metadata.created = created.strftime('%A %d, %B %Y');
+			modelData.created = created.strftime('%A %d, %B %Y');
 			
 			$(this.el).html( this.template( modelData ) );
 			
@@ -60,9 +60,9 @@
 		
 		render: function() {
 			var modelData = this.model.toJSON(),
-			created = new Date(modelData.metadata.created);
+			created = new Date(modelData.created);
 			
-			modelData.metadata.created = created.strftime('%A %d, %B %Y');
+			modelData.created = created.strftime('%A %d, %B %Y');
 			
 			$(this.el).html( this.template( modelData ) );
 			
@@ -114,12 +114,7 @@
 				
 			if (!text || e.keyCode != 13) return;
 			
-			app.events.publish('answers/create', [{
-				content: text,
-				metadata: {
-					usertype: usertype
-				}
-			}]);
+			app.answers.create({content: text, usertype: usertype});
 			
 			this.input.val('');
 		}
@@ -129,8 +124,14 @@
 	QuestionListView = Backbone.View.extend({
 		el: $('#content'),
 		
+		events: {
+			'keypress #new-question': 'createOnEnter'
+		},
+		
 		initialize: function() {
 			var that = this;
+			
+			this.input = this.$('#new-question');
 					
 			app.questions.collection.bind('reset', this.addActive, this);
 			app.questions.collection.bind('render', this.render, this);
@@ -160,6 +161,19 @@
 		
 		clear: function() {
 			this.$('.question-list').html('');
+		},
+		
+		createOnEnter: function(e) {
+			var text = this.input.val(),
+				active = $('#question_active').is(':checked');
+				
+			if (!text || e.keyCode != 13) return;
+			
+			var newQuestion = app.questions.create({content: text});
+			
+			if (active) app.questions.setActive(newQuestion);
+			
+			this.input.val('');
 		}
 	});
 	
