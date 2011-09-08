@@ -1,3 +1,12 @@
+/**
+ * The Questions module defines Models and Collections used to 
+ * store question data. It exposes a public API to interact with
+ * these objects.
+ *
+ * @module Questions
+ * @namespace APP
+ * @class questions
+ */
 (function(ctx){
 	var app = ctx.APP;
 	
@@ -55,20 +64,48 @@
 		return {
 			collection: questions,
 			
+			/**
+			 * Retrieves active question from collection.
+			 *
+			 * @method getActive
+			 * @returns {Object} A Question Backbone Model instance.
+			 */
 			getActive: function() {
 				return questions.active()[0];
 			},
 			
+			/**
+			 * Sets a given Backbone Model as active
+			 * Publishes an event containing the newly active question as a parameter.
+			 *
+			 * @method setActive
+			 * @param {Object} question A Question Backbone Model instance.
+			 */
 			setActive: function(question) {
 				questions.setActive(question);
 				app.events.publish('questions/active', [question]);
 			},
 			
+			/**
+			 * Creates a new object in collection
+			 * Publishes an event with the newly created object as a parameter. 
+			 *
+			 * @method create
+			 * @param {Object} model Object conforming to the structure defined in Question.defaults
+			 */
 			create: function(params) {
 				var newQuestion = questions.create(params);
 				app.events.publish('questions/new', [newQuestion]);
 			},
 			
+			/**
+			 * Retrieves updated collection from store.
+			 * Publishes an event on successful retrieval of collection, 
+			 * with the updated collection as a parameter.
+			 *
+			 * @method refresh
+			 * @param {Object} options Options object conforming to the jQuery.ajaxOptions structure
+			 */
 			refresh: function(options) {
 				options = (options) ? options : {};
 				

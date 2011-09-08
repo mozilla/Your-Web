@@ -1,9 +1,15 @@
+/**
+ * The Core module defines several utilities the application
+ * depends on, such as the events pubsub system.
+ *
+ * @module Core
+ * @namespace APP
+ * @class core
+ */
 (function(ctx){
 	ctx.APP = (ctx.APP != undefined) ? ctx.APP : {};
 	var app = ctx.APP;
 	
-	//Some general utilities
-		
 	// make it safe to use console.log always
 	(function(b){function c(){}for(var d="assert,count,debug,dir,dirxml,error,exception,group,groupCollapsed,groupEnd,info,log,timeStamp,profile,profileEnd,time,timeEnd,trace,warn".split(","),a;a=d.pop();){b[a]=b[a]||c}})((function(){try
 	{console.log();return window.console;}catch(err){return window.console={};}})());
@@ -18,6 +24,7 @@
 		 *
 		 * Usage: app.log('inside coolFunc', this, arguments)
 		 *
+		 * @submodule Utils
 		 * @method log
 		 */
 		log: function(){
@@ -36,6 +43,7 @@
 		/**
 		 * A utility that non-destructively defines namespaces
 		 *
+		 * @submodule Utils
 		 * @method namespace
 		 * @param {String} namespaceString Name of namespace to create
 		 * @return {Object} Namespaced object
@@ -72,6 +80,7 @@
              * Example:
              * App.events.publish("/some/topic", ["a","b","c"]);
              *
+             * @submodule Events
              * @method publish
              * @param {String} topic The channel to publish on
              * @param {Array}  args  The data to publish. Each array item is converted into an ordered
@@ -90,6 +99,7 @@
              * Example:
              * App.events.subscribe("/some/topic", function(a, b, c){ //handle data});
              *
+             * @submodule Events
              * @method subscribe
              * @param {String}   topic     The channel to subscribe to
              * @param {Function} callback  The handler event. Anytime something is Sushi.events.publish'ed on a 
@@ -112,6 +122,7 @@
              * var handle = App.events.subscribe("/some/topic", function(a, b, c){ //handle data});
              * App.events.unsubscribe(handle);
              *
+             * @submodule Events
              * @method unsubscribe
              * @param {Array} handle The return value from a Sushi.events.subscribe call
              *

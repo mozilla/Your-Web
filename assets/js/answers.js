@@ -1,4 +1,13 @@
-(function(ctx){	
+/**
+ * The Answers module defines Models and Collections used to 
+ * store answer data. It exposes a public API to interact with
+ * these objects.
+ *
+ * @module Answers
+ * @namespace APP
+ * @class answers
+ */
+(function(ctx){
 	var app = ctx.APP;
 
 	app.namespace('answers');
@@ -44,7 +53,7 @@
 			/**
 			 * Sort collection by userType.
 			 *
-			 * @method sortByWeight
+			 * @method sortByUserType
 			 *
 			 */
 			sortByUserType: function() {
@@ -57,7 +66,7 @@
 			/**
 			 * Sort collection by date created.
 			 *
-			 * @method sortByWeight
+			 * @method sortByCreated
 			 *
 			 */
 			sortByCreated: function() {
@@ -157,16 +166,32 @@
 		return {
 			collection: answers,
 			
-			create: function(params) {
-				var newAnswer = answers.create(params);
-				app.events.publish('answers/new', newAnswer);
+			/**
+			 * Creates a new object in collection
+			 * Publishes an event with the newly created object as a parameter. 
+			 *
+			 * @method create
+			 * @param {Object} model Object conforming to the structure defined in Answer.defaults
+			 */
+			create: function(model) {
+				var newAnswer = answers.create(model);
+				app.events.publish('answers/new', [newAnswer]);
 			},
 			
+			/**
+			 * Retrieves updated collection from store.
+			 * Publishes an event on successful retrieval of collection, 
+			 * with the updated collection as a parameter.
+			 *
+			 * @method refresh
+			 * @param {Object} options Options object conforming to the jQuery.ajaxOptions structure
+			 */
 			refresh: function(options) {
+				options = (options) ? options : {};
 				
-				var options = _.extend(options, {
+				options = _.extend(options, {
 					success: function() {
-						app.events.publish('answers/refresh', answers);
+						app.events.publish('answers/refresh', [questions]);
 					}
 				});
 				
