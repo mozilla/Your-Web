@@ -172,10 +172,13 @@
 			 *
 			 * @method create
 			 * @param {Object} model Object conforming to the structure defined in Answer.defaults
+ 			 * @returns {Object} newAnswer Newly created Answer Model instance.
 			 */
 			create: function(model) {
 				var newAnswer = answers.create(model);
 				app.events.publish('answers/new', [newAnswer]);
+				
+				return newAnswer;
 			},
 			
 			/**
@@ -191,7 +194,7 @@
 				
 				options = _.extend(options, {
 					success: function() {
-						app.events.publish('answers/refresh', [questions]);
+						app.events.publish('answers/refresh', [answers]);
 					}
 				});
 				
