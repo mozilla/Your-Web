@@ -1,6 +1,6 @@
 (function(ctx){
 
-	var app = ctx.App,
+	var app = ctx.APP,
 	instance = this,
 	AnswerView,
 	QuestionView,
@@ -8,6 +8,8 @@
 	//templates
 	questionTemplate = '{{content}}';
 	answerTemplate = '<article>{{#if image}}<img src="{{image}}" />{{/if}}<p>{{content}}<p> <small>Submitted by a {{#metadata}}{{usertype}}{{/metadata}} on {{#metadata}}{{created}}{{/metadata}}</small></article>';
+	
+	app.namespace('views');
 		
 	// Set up a simple view
 	AnswerView = Backbone.View.extend({
@@ -81,20 +83,20 @@
 		el: $('#content'),
 		
 		events: {
-			"keypress #new-answer": "createOnEnter"
+			'keypress #new-answer': 'createOnEnter'
 		},
 		
 		initialize: function() {
 			var that = this,
-				activeQuestion = app.questions.active();
+				activeQuestion = app.questions.getActive();
 				
 				
-			this.input = this.$("#new-answer");
+			this.input = this.$('#new-answer');
 			
-			app.answers.bind('add',   this.addOne, this);
-			app.answers.bind('reset', this.addAll, this);
+			app.answers.collection.bind('add',   this.addOne, this);
+			app.answers.collection.bind('reset', this.addAll, this);
 			
-			app.answers.fetch({data: activeQuestion});
+			app.answers.refresh({data: activeQuestion});
 		},
 		
 		addOne: function(answer) {
@@ -103,7 +105,7 @@
 		},
 		
 		addAll: function() {
-			app.answers.each(this.addOne);
+			app.answers.collection.each(this.addOne);
 		},
 		
 		createOnEnter: function(e) {
@@ -130,13 +132,10 @@
 		initialize: function() {
 			var that = this;
 					
-			app.questions.bind('reset', this.addActive, this);
-			app.questions.bind('render', this.render, this);
+			app.questions.collection.bind('reset', this.addActive, this);
+			app.questions.collection.bind('render', this.render, this);
 			
-			app.questions.fetch({success: function(data) {
-				// Render the Answer List
-				if (app.questions.active().length) app.AnswerListView = new AnswerListView;
-			}})
+			app.questions.refresh();
 		},
 		
 		render: function() {
@@ -152,11 +151,11 @@
 		},
 		
 		addAll: function() {
-			app.questions.each(this.addOne);
+			app.questions.collection.each(this.addOne);
 		},
 		
 		addActive: function() {
-			this.addOne(app.questions.active()[0]);
+			this.addOne(app.questions.getActive());
 		},
 		
 		clear: function() {
@@ -164,7 +163,12 @@
 		}
 	});
 	
+	// Subscribe to interesting events
+	app.events.subscribe('questions/refresh', function() {
+		if (app.questions.getActive()) app.views.answerListView = new AnswerListView;
+	});
+	
 	// Instantiate the main AppView
-	app.QuestionListView = new QuestionListView;
+	app.views.QuestionListView = new QuestionListView;
 		
 })(window);
