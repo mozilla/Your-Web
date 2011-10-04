@@ -1,6 +1,17 @@
-(function(ctx){
-
-	var app = ctx.APP,
+define(
+//Module dependencies
+[
+	'libs/jquery-1.6.3.min',
+	'libs/backbone-0.5.3.min',
+	'libs/underscore.min',
+	'libs/handlebars',
+	'libs/strftime',
+	'core',
+	'questions',
+	'answers'
+],
+function(){
+	var app = window.APP,
 	instance = this,
 	AnswerView,
 	QuestionView,
@@ -96,7 +107,7 @@
 			app.answers.collection.bind('add',   this.addOne, this);
 			app.answers.collection.bind('reset', this.addAll, this);
 			
-			app.answers.refresh({data: activeQuestion});
+			app.answers.refresh();
 		},
 		
 		addOne: function(answer) {
@@ -184,5 +195,9 @@
 	
 	// Instantiate the main AppView
 	app.views.QuestionListView = new QuestionListView;
+	
+	$('#submitQuestion, #submitAnswer').bind('submit', function() {
+		return false;
+	});
 		
-})(window);
+});

@@ -7,8 +7,16 @@
  * @namespace APP
  * @class questions
  */
-(function(ctx){
-	var app = ctx.APP;
+define(
+//Module dependencies
+[
+	'libs/backbone-0.5.3.min',
+	'libs/backbone-localstorage',
+	'libs/underscore.min',
+	'core'
+],
+function() {
+	var app = window.APP;
 	
 	app.namespace('questions');
 	_.extend(app.questions, (function(){
@@ -94,8 +102,9 @@
 			 * @param 	{Object} model Object conforming to the structure defined in Question.defaults
 			 * @returns {Object} newQuestion Newly created Question Model instance
 			 */
-			create: function(params) {
-				var newQuestion = questions.create(params);
+			create: function(model) {
+				var newModel = new Question(model),
+				newQuestion = questions.create(newModel);
 				app.events.publish('questions/new', [newQuestion]);
 				
 				return newQuestion;
@@ -123,4 +132,4 @@
 		}
 		
 	})());
-})(window);
+});
