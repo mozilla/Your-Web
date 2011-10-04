@@ -6,9 +6,14 @@
  * @namespace APP
  * @class core
  */
-(function(ctx){
-	ctx.APP = (ctx.APP != undefined) ? ctx.APP : {};
-	var app = ctx.APP;
+ define(
+//Module dependencies
+[
+	'libs/underscore.min'
+],
+function() {
+	window.APP = (window.APP != undefined) ? window.APP : {};
+	var app = window.APP;
 	
 	// make it safe to use console.log always
 	(function(b){function c(){}for(var d="assert,count,debug,dir,dirxml,error,exception,group,groupCollapsed,groupEnd,info,log,timeStamp,profile,profileEnd,time,timeEnd,trace,warn".split(","),a;a=d.pop();){b[a]=b[a]||c}})((function(){try
@@ -33,7 +38,7 @@
 			instance.history = instance.history || [];   // store logs to an array for reference
 		  	instance.history.push(arguments);
 		  	
-		  	if (ctx.console) {
+		  	if (window.console) {
 				arguments.callee = arguments.callee.caller;
 				var newarr = [].slice.call(arguments);
 				(typeof console.log === 'object' ? instance.apply.call(console.log, console, newarr) : console.log.apply(console, newarr));
@@ -143,4 +148,4 @@
         	};	
     	})()
 	});
-})(window);
+});

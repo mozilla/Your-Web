@@ -7,8 +7,16 @@
  * @namespace APP
  * @class answers
  */
-(function(ctx){
-	var app = ctx.APP;
+ define(
+//Module dependencies
+[
+	'libs/backbone-0.5.3.min',
+	'libs/backbone-localstorage',
+	'libs/underscore.min',
+	'core'
+],
+function(){
+	var app = window.APP;
 
 	app.namespace('answers');
 	_.extend(app.answers, (function(){
@@ -17,7 +25,7 @@
 		AnswerList;
 		
 		// Set up the main Answer Model
-		window.Answer = Backbone.Model.extend({
+		Answer = Backbone.Model.extend({
 			defaults : function() {
 				return {
 					content	: 'My Answer',
@@ -179,9 +187,9 @@
  			 * @returns {Object} newAnswer Newly created Answer Model instance.
 			 */
 			create: function(model) {
-				var newAnswer = answers.create(model);
+				var newModel = new Answer(model),
+				newAnswer = answers.create(newModel);
 				app.events.publish('answers/new', [newAnswer]);
-				
 				return newAnswer;
 			},
 			
@@ -223,4 +231,4 @@
 		}
 		
 	})());	
-})(window);
+});
