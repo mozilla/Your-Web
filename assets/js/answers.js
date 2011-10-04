@@ -17,7 +17,7 @@
 		AnswerList;
 		
 		// Set up the main Answer Model
-		Answer = Backbone.Model.extend({
+		window.Answer = Backbone.Model.extend({
 			defaults : function() {
 				return {
 					content	: 'My Answer',
@@ -36,6 +36,10 @@
 			model: Answer,
 			
 			localStorage: new Store('answers'),
+			
+			url: function( models ) {
+				return '/question/' + app.questions.getActive().get('id');
+			},
 			
 			/**
 			 * Sort collection by weight.
@@ -164,7 +168,7 @@
 				
 		// Public API
 		return {
-			collection: answers,
+			collection	: answers,
 			
 			/**
 			 * Creates a new object in collection

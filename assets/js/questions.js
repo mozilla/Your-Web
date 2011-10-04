@@ -21,13 +21,13 @@
 		Question = Backbone.Model.extend({
 			defaults: function() {
 				return {
-					content: 'Which is the best Star Wars movie?',
-					active: false,
-					created: new Date(),
+					content	: 'Which is the best Star Wars movie?',
+					active	: false,
+					created	: new Date(),
 					language: 'en-US'
 				}
 			},
-			
+
 			toggleActive: function() {
 				this.save({active: !this.get('active')});
 			}
@@ -62,7 +62,7 @@
 		
 		// Public API
 		return {
-			collection: questions,
+			collection	: questions,
 			
 			/**
 			 * Retrieves active question from collection.
