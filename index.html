@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+	<title>Your Web</title>
+</head>
+
+<body>
+<h1>Your Web</h1>
+
+<div id="content">
+	<form id="submitQuestion">
+		<label for="new-question">Add a new question</label>
+		<input type="text" id="new-question" placeholder="How do you see the web in 3 years?" />
+		<input type="checkbox" id="question_active" /><label for="question_active">Make active question?</label>
+	</form>
+	<div class="question-list">
+	</div>
+	<form id="submitAnswer">
+		<label for="new-answer">Submit your answer</label>
+		<input type="text" id="new-answer" placeholder="Full of kittens!" />
+		<label for="usertype">I am a</label>
+		<select type="text" id="usertype">
+			<option value="designer">Designer</option>
+			<option value="developer" selected>Developer</option>
+		</select>
+	</form>
+	<ul class="answer-list">
+	</ul>
+</div>
+
+<script data-main="assets/js/main.js" src="assets/js/libs/requirejs/require.js"></script>
+</body>
+</html>
