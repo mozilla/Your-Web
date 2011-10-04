@@ -101,7 +101,8 @@ function(){
 			var that = this,
 				activeQuestion = app.questions.getActive();
 				
-				
+			this.$('.answer-list').empty();
+			
 			this.input = this.$('#new-answer');
 			
 			app.answers.collection.bind('add',   this.addOne, this);
@@ -128,6 +129,10 @@ function(){
 			app.answers.create({content: text, usertype: usertype});
 			
 			this.input.val('');
+		},
+		
+		empty: function() {
+			this.$('.answer-list').empty();
 		}
 	});
 	
@@ -193,11 +198,17 @@ function(){
 		if (app.questions.getActive()) app.views.answerListView = new AnswerListView;
 	});
 	
+	app.events.subscribe('questions/active', function() {
+		if (app.questions.getActive()) {
+			app.views.answerListView.empty();
+			app.answers.refresh();
+		}
+	});
+	
 	// Instantiate the main AppView
 	app.views.QuestionListView = new QuestionListView;
 	
 	$('#submitQuestion, #submitAnswer').bind('submit', function() {
 		return false;
 	});
-		
 });

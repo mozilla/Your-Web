@@ -11,7 +11,7 @@
 //Module dependencies
 [
 	'libs/backbone-0.5.3.min',
-	'libs/backbone-localstorage',
+	//'libs/backbone-localstorage',
 	'libs/underscore.min',
 	'core'
 ],
@@ -43,10 +43,10 @@ function(){
 			
 			model: Answer,
 			
-			localStorage: new Store('answers'),
+			//localStorage: new Store('answers'),
 			
 			url: function( models ) {
-				return '/question/' + app.questions.getActive().get('id');
+				return '/answers/' + app.questions.getActive().get('id');
 			},
 			
 			/**
@@ -173,6 +173,11 @@ function(){
 		
 		// Instantiate AnswerList collection
 		answers = new AnswerList;
+		
+		// Subscribe to interesting events
+		answers.bind('reset', function() {
+			app.events.publish('answers/refresh', [answers]);
+		});
 				
 		// Public API
 		return {
@@ -199,18 +204,9 @@ function(){
 			 * with the updated collection as a parameter.
 			 *
 			 * @method refresh
-			 * @param {Object} options Options object conforming to the jQuery.ajaxOptions structure
 			 */
-			refresh: function(options) {
-				options = (options) ? options : {};
-				
-				options = _.extend(options, {
-					success: function() {
-						app.events.publish('answers/refresh', [answers]);
-					}
-				});
-				
-				answers.fetch(options);
+			refresh: function() {
+				answers.fetch();
 			},
 			
 			sortByCreated: 		answers.sortByCreated,

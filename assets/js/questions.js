@@ -11,7 +11,7 @@ define(
 //Module dependencies
 [
 	'libs/backbone-0.5.3.min',
-	'libs/backbone-localstorage',
+	//'libs/backbone-localstorage',
 	'libs/underscore.min',
 	'core'
 ],
@@ -46,7 +46,11 @@ function() {
 			
 			model: Question,
 			
-			localStorage: new Store('questions'),
+			//localStorage: new Store('questions'),
+			
+			url: function() {
+				return '/questions/';
+			},
 			
 			active: function() {
 				return this.filter(function(question) {
@@ -67,6 +71,11 @@ function() {
 		
 		// Instantiate QuestionList collection
 		questions = new QuestionList;
+		
+		// Subscribe to interesting events
+		questions.bind('reset', function() {
+			app.events.publish('questions/refresh', [questions]);
+		});
 		
 		// Public API
 		return {
@@ -116,18 +125,9 @@ function() {
 			 * with the updated collection as a parameter.
 			 *
 			 * @method refresh
-			 * @param {Object} options Options object conforming to the jQuery.ajaxOptions structure
 			 */
-			refresh: function(options) {
-				options = (options) ? options : {};
-				
-				options = _.extend(options, {
-					success: function() {
-						app.events.publish('questions/refresh', [questions]);
-					}
-				});
-				
-				questions.fetch(options);
+			refresh: function() {
+				questions.fetch();
 			}
 		}
 		
