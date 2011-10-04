@@ -1,3 +1,6 @@
 [submodule "assets/js/libs/requirejs"]
 	path = assets/js/libs/requirejs
 	url = https://github.com/jrburke/requirejs.git
+[submodule "assets/js/libs/sinon"]
+	path = assets/js/libs/sinon
+	url = https://github.com/cjohansen/Sinon.JS/
