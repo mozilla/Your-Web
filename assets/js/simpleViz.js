@@ -18,7 +18,7 @@ function(){
 	AppView,
 	//templates
 	questionTemplate = '{{content}}';
-	answerTemplate = '<article>{{#if image}}<img src="{{image}}" />{{/if}}<p>{{content}}<p> <small>Submitted by a {{usertype}} on {{created}}</small></article>';
+	answerTemplate = '<article {{#if likes}}class="liked"{{/if}}>{{#if image}}<img src="{{image}}" />{{/if}}<p>{{content}}<p> <small>Submitted by a {{usertype}} on {{created}}</small> <button class="btn success like">Like</button></article>';
 	
 	app.namespace('views');
 		
@@ -26,6 +26,10 @@ function(){
 	AnswerView = Backbone.View.extend({
 		
 		tagName: 'li',
+		
+		events: {
+			'click .like' : 'like'
+		},
 		
 		template: Handlebars.compile(answerTemplate),
 		
@@ -56,6 +60,10 @@ function(){
 		
 		clear: function() {
 			this.model.destroy();
+		},
+		
+		like: function(e) {
+			this.model.like();
 		}
 	});
 	
@@ -94,21 +102,16 @@ function(){
 		el: $('#content'),
 		
 		events: {
-			'keypress #new-answer': 'createOnEnter'
+			'keypress #new-answer'	: 'createOnEnter'
 		},
 		
-		initialize: function() {
-			var that = this,
-				activeQuestion = app.questions.getActive();
-				
-			this.$('.answer-list').empty();
-			
+		initialize: function() {							
 			this.input = this.$('#new-answer');
 			
-			app.answers.collection.bind('add',   this.addOne, this);
-			app.answers.collection.bind('reset', this.addAll, this);
-			
-			app.answers.refresh();
+			this.collection.bind('add',   this.addOne, this);
+			this.collection.bind('reset', this.render, this);
+			this.collection.fetch();
+			//app.answers.refresh();
 		},
 		
 		addOne: function(answer) {
@@ -116,8 +119,10 @@ function(){
 			this.$('.answer-list').append(view.render().el);
 		},
 		
-		addAll: function() {
-			app.answers.collection.each(this.addOne);
+		render: function(answers) {
+			this.$('.answer-list').empty();
+			//app.answers.collection.each(this.addOne);
+			answers.each(this.addOne);
 		},
 		
 		createOnEnter: function(e) {
@@ -195,7 +200,7 @@ function(){
 	
 	// Subscribe to interesting events
 	app.events.subscribe('questions/refresh', function() {
-		if (app.questions.getActive()) app.views.answerListView = new AnswerListView;
+		if (app.questions.getActive()) app.views.answerListView = new AnswerListView({collection: app.answers.collection});
 	});
 	
 	app.events.subscribe('questions/active', function() {

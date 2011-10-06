@@ -33,6 +33,7 @@ function() {
 								"weight":0,"usertype":"developer",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
+								"likes": 0,\
 								"id":"44cc74df-1e8e-0abb-fc8e-a45a50130d1d"\
 							},\
 							{\
@@ -42,6 +43,7 @@ function() {
 								"usertype":"designer",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"en-US",\
+								"likes": 5,\
 								"id":"c0176d62-782f-d0b7-1a57-91e017177342"\
 							}\
 						]',
@@ -54,7 +56,8 @@ function() {
 								"usertype":"developer",\
 								"created":"2011-10-04T16:13:12.492Z",\
 								"language":"en-US",\
-								"id":"0e010311-d281-7185-f91a-1c3131ce9ddb"\
+								"id":"0e010311-d281-7185-f91a-1c3131ce9ddb",\
+								"likes":12\
 							}\
 						]',
 		

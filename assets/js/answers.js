@@ -106,13 +106,13 @@ function(){
 			 * @returns {Array} An array with the filtered collection objects
 			 */
 			filterByWeight: function(targetWeight, targetWeightLimit) {
-				return this.filter(function(answer) {
+				return _(this.filter(function(answer) {
 					if (targetWeightLimit) {
 						return (answer.get('weight') >= targetWeight && answer.get('weight') <= targetWeightLimit);
 					} else {
 						return answer.get('weight') == targetWeight;
 					}
-				});
+				}));
 			},
 			
 			/**
@@ -123,9 +123,9 @@ function(){
 			 * @returns {Array} An array with the filtered collection objects
 			 */
 			filterByImage: function() {
-				return this.filter(function(answer) {
+				return _(this.filter(function(answer) {
 					return answer.get('image') && answer.get('image') != '';
-				});
+				}));
 			},
 			
 			/**
@@ -137,9 +137,9 @@ function(){
 			 * @returns {Array} An array with the filtered collection objects
 			 */
 			filterByLanguage: function(language) {
-				return this.filter(function(answer) {
+				return _(this.filter(function(answer) {
 					return _.indexOf(languageArray, answer.get('language') != -1);
-				});
+				}));
 			},
 			
 			/**
@@ -151,9 +151,9 @@ function(){
 			 * @returns {Array} An array with the filtered collection objects
 			 */
 			filterByUserType: function(userType) {
-				return this.filter(function(answer) {
+				return _(this.filter(function(answer) {
 					return answer.get('usertype') == userType;
-				});
+				}));
 			},
 			
 			/**
@@ -170,22 +170,25 @@ function(){
 			filterByCreated: function(fromDate, toDate) {
 				if (!toDate) toDate = fromDate;
 							
-				return this.filter(function(answer) {
+				return _(this.filter(function(answer) {
 					return new Date(answer.get('date')) >= new Date(fromDate) && new Date(answer.get('date')) <= new Date(toDate);
-				});
+				}));
 			},
 			
 			/**
 			 * Filter collection by objects that were liked by a user
 			 *
 			 * @method filterByLiked
+			 * @param {Integer} likes Number of likes to filter collection by.
 			 *
 			 * @returns {Array} An array with the filtered collection objects
 			 */
-			filterByLiked: function() {
-				return this.filter(function(answer) {
-					return answer.get('liked');
-				});
+			filterByLikes: function(likes) {
+				likes = likes || 0;
+				
+				return _(this.filter(function(answer) {
+					return answer.get('likes') > likes;
+				}));
 			} 
 		});
 		
