@@ -1,6 +1,6 @@
 define(
 [
-	'libs/sinon/pkg/sinon-1.2.0'
+	'libs/sinon-1.2.0'
 ],
 function() {
 	var app = window.APP;
