@@ -6,6 +6,7 @@ define(
 	'libs/underscore.min',
 	'libs/handlebars',
 	'libs/strftime',
+	'../lib/bootstrap/js/bootstrap-modal',
 	'core',
 	'questions',
 	'answers'
@@ -212,6 +213,11 @@ function(){
 	
 	// Instantiate the main AppView
 	app.views.QuestionListView = new QuestionListView;
+	
+	$('#submitAnswer-modal').modal({
+		backdrop: true,
+		keyboard: true
+	});
 	
 	$('#submitQuestion, #submitAnswer').bind('submit', function() {
 		return false;

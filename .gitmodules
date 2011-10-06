@@ -4,3 +4,6 @@
 [submodule "assets/js/libs/sinon"]
 	path = assets/js/libs/sinon
 	url = https://github.com/cjohansen/Sinon.JS/
+[submodule "assets/lib/bootstrap"]
+	path = assets/lib/bootstrap
+	url = https://github.com/twitter/bootstrap.git
