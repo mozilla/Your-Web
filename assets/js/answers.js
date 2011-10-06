@@ -33,8 +33,13 @@ function(){
 					weight	: 0,
 					usertype: 'Other',
 					created	: new Date(),
-					language: 'en-US'
+					language: 'en-US',
+					likes: 0
 				}
+			},
+			
+			like: function() {
+				this.save({likes: this.get('likes') + 1});
 			}
 		});	
 			
@@ -168,20 +173,33 @@ function(){
 				return this.filter(function(answer) {
 					return new Date(answer.get('date')) >= new Date(fromDate) && new Date(answer.get('date')) <= new Date(toDate);
 				});
-			}		
+			},
+			
+			/**
+			 * Filter collection by objects that were liked by a user
+			 *
+			 * @method filterByLiked
+			 *
+			 * @returns {Array} An array with the filtered collection objects
+			 */
+			filterByLiked: function() {
+				return this.filter(function(answer) {
+					return answer.get('liked');
+				});
+			} 
 		});
 		
 		// Instantiate AnswerList collection
-		answers = new AnswerList;
+		_answers = new AnswerList;		
 		
 		// Subscribe to interesting events
-		answers.bind('reset', function() {
-			app.events.publish('answers/refresh', [answers]);
+		_answers.bind('reset', function() {
+			app.events.publish('answers/refresh', [_answers]);
 		});
 				
 		// Public API
 		return {
-			collection	: answers,
+			collection	: _answers,
 			
 			/**
 			 * Creates a new object in collection
@@ -193,7 +211,7 @@ function(){
 			 */
 			create: function(model) {
 				var newModel = new Answer(model),
-				newAnswer = answers.create(newModel);
+				newAnswer = _answers.create(newModel);
 				app.events.publish('answers/new', [newAnswer]);
 				return newAnswer;
 			},
@@ -206,25 +224,8 @@ function(){
 			 * @method refresh
 			 */
 			refresh: function() {
-				answers.fetch();
-			},
-			
-			sortByCreated: 		answers.sortByCreated,
-			
-			sortByUserType: 	answers.sortByUserType,
-			
-			sortByWeight: 		answers.sortByWeight,
-			
-			filterByCreated: 	answers.filterByCreated,
-			
-			filterByImage: 		answers.filterByImage,
-			
-			filterByLanguage: 	answers.filterByLanguage,
-			
-			filterByUserType: 	answers.filterByUserType,
-			
-			filterByWeight:		answers.filterByWeight
+				_answers.fetch();
+			}
 		}
-		
 	})());	
 });
