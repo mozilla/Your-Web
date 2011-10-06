@@ -34,12 +34,17 @@ function(){
 					usertype: 'Other',
 					created	: new Date(),
 					language: 'en-US',
-					likes: 0
+					likes: 0,
+					userHasLiked: false
 				}
 			},
 			
 			like: function() {
-				this.save({likes: this.get('likes') + 1});
+				this.save({likes: parseInt(this.get('likes'), 10) + 1, userHasLiked: true});
+			},
+			
+			unlike: function() {
+				this.save({likes: parseInt(this.get('likes'), 10) - 1, userHasLiked: false});
 			}
 		});	
 			

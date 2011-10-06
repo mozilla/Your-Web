@@ -19,7 +19,7 @@ function(){
 	AppView,
 	//templates
 	questionTemplate = '{{content}}';
-	answerTemplate = '<article {{#if likes}}class="liked"{{/if}}>{{#if image}}<img src="{{image}}" />{{/if}}<p>{{content}}<p> <small>Submitted by a {{usertype}} on {{created}}</small> <button class="btn success like">Like</button></article>';
+	answerTemplate = '<article {{#if likes}}class="liked"{{/if}}>{{#if image}}<img src="{{image}}" />{{/if}}<p>{{content}}<p> <small>Submitted by a {{usertype}} on {{created}}</small> {{#if userHasLiked}}<button class="btn danger unlike hide">Unlike</button> {{else}} <button class="btn success like">Like</button>{{/if}}</article>';
 	
 	app.namespace('views');
 		
@@ -29,7 +29,8 @@ function(){
 		tagName: 'li',
 		
 		events: {
-			'click .like' : 'like'
+			'click .like' 	: 'like',
+			'click .unlike'	: 'unlike'
 		},
 		
 		template: Handlebars.compile(answerTemplate),
@@ -50,11 +51,6 @@ function(){
 			return this;
 		},
 		
-		setText: function() {
-			var text = this.model.get('content');
-			this.$('article').text(text);
-		},
-		
 		remove: function() {
 			$(this.el).remove();
 		},
@@ -65,6 +61,14 @@ function(){
 		
 		like: function(e) {
 			this.model.like();
+			this.$('.like').hide();
+			this.$('.unlike').show();
+		},
+		
+		unlike: function(e) {
+			this.model.unlike();
+			this.$('.like').show();
+			this.$('.unlike').hide();
 		}
 	});
 	

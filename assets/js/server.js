@@ -34,6 +34,7 @@ function() {
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
 								"likes": 0,\
+								"userHasLiked": true,\
 								"id":"44cc74df-1e8e-0abb-fc8e-a45a50130d1d"\
 							},\
 							{\
