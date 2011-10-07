@@ -156,7 +156,7 @@ function(){
 			defaults : function() {
 				return {
 					content	: 'My Answer',
-					image	: 'http://placekitten.com/200/300',
+					image	: null,
 					weight	: 0,
 					usertype: 'Other',
 					created	: new Date(),

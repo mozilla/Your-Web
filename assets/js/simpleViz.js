@@ -21,7 +21,7 @@ function(){
 	AppView,
 	//templates
 	questionTemplate = '{{content}}',
-	answerTemplate = '<article {{#if likes}}class="liked"{{/if}}>{{#if image}}<img src="{{image}}" />{{/if}}<p>{{content}}<p> <small>Submitted by a {{usertype}} on {{created}}</small> {{#if userHasLiked}}<button class="btn danger unlike hide">Unlike</button> {{else}} <button class="btn success like">Like</button>{{/if}}</article>';
+	answerTemplate = '<article {{#if likes}}class="liked"{{/if}}>{{#if image}}<img src="{{image}}" />{{/if}}{{content}}<p class="meta">Submitted by a {{usertype}} on {{created}}{{#if userHasLiked}}<button class="btn danger unlike hide">Unlike</button> {{else}} <button class="btn success like">Like</button>{{/if}}</p></article>';
 	
 	app.namespace('views');
 		
@@ -44,11 +44,16 @@ function(){
 		
 		render: function() {
 			var modelData = this.model.toJSON(),
-			created = new Date(modelData.created);
+			created = new Date(modelData.created),
+			classes = ['red', 'yellow', 'green', 'blue', 'pink'],
+			randomInt = Math.round(Math.random() * 4),
+			color = classes[randomInt];
 			
 			modelData.created = created.strftime('%A %d, %B %Y');
 			
 			$(this.el).html( this.template( modelData ) );
+			
+			$(this.el).addClass(color);
 			
 			return this;
 		},

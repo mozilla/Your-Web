@@ -29,7 +29,6 @@ function() {
 		answersFor1 = '[\
 							{\
 								"content":"Kittens",\
-								"image":"http://placekitten.com/200/300",\
 								"weight":0,\
 								"usertype":"developer",\
 								"created":"2011-10-04T16:12:53.228Z",\
@@ -40,7 +39,6 @@ function() {
 							},\
 							{\
 								"content":"Foxes on Fire!!",\
-								"image":"http://placekitten.com/200/300",\
 								"weight":0,\
 								"usertype":"designer",\
 								"created":"2011-10-04T16:13:02.284Z",\
@@ -49,8 +47,45 @@ function() {
 								"id":"c0176d62-782f-d0b7-1a57-91e017177342"\
 							},\
 							{\
+								"content":"Open Source",\
+								"weight":0,\
+								"usertype":"developer",\
+								"created":"2011-10-04T16:12:53.228Z",\
+								"language":"en-US",\
+								"likes": 0,\
+								"userHasLiked": true,\
+								"id":"44cc74df-1e8e-0abb-fc8e-a43a50130d1d"\
+							},\
+							{\
+								"content":"Free",\
+								"weight":0,\
+								"usertype":"designer",\
+								"created":"2011-10-04T16:13:02.284Z",\
+								"language":"en-US",\
+								"likes": 5,\
+								"id":"c0176d62-782f-d0b7-1a57-91e017177642"\
+							},\
+							{\
+								"content":"Beer",\
+								"weight":0,\
+								"usertype":"developer",\
+								"created":"2011-10-04T16:12:53.228Z",\
+								"language":"en-US",\
+								"likes": 0,\
+								"userHasLiked": true,\
+								"id":"44cc74df-1e8e-0abb-fc8e-a73a50130d1d"\
+							},\
+							{\
+								"content":"Giga Puddi",\
+								"weight":0,\
+								"usertype":"designer",\
+								"created":"2011-10-04T16:13:02.284Z",\
+								"language":"en-US",\
+								"likes": 5,\
+								"id":"c0176d62-782f-d0b7-1a27-91e017177642"\
+							},\
+							{\
 								"content":"Raposas!!",\
-								"image":"http://placekitten.com/200/300",\
 								"weight":0,\
 								"usertype":"designer",\
 								"created":"2011-10-04T16:13:02.284Z",\

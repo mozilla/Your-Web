@@ -1,0 +1,40 @@
+.answer-list {
+	list-style-type: none;
+	width: 200px;
+	
+	li {
+		display: inline;
+		margin: 0 5px;
+		color: white;
+		font-size: 24px;
+		line-height: 32px;
+		
+		article {
+			display: inline;
+		}
+	}
+	
+	.meta {
+		display: none;
+	}
+	
+	li.red {
+		background-color: red;
+	}
+	
+	li.green {
+		background-color: green;
+	}
+	
+	li.blue {
+		background-color: blue;
+	}
+	
+	li.pink {
+		background-color: pink;
+	}
+	
+	li.yellow {
+		background-color: yellow;
+	}
+}

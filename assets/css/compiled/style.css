@@ -1,0 +1,23 @@
+.answer-list {
+  list-style-type: none;
+  width: 200px; }
+  .answer-list li {
+    display: inline;
+    margin: 0 5px;
+    color: white;
+    font-size: 24px;
+    line-height: 32px; }
+    .answer-list li article {
+      display: inline; }
+  .answer-list .meta {
+    display: none; }
+  .answer-list li.red {
+    background-color: red; }
+  .answer-list li.green {
+    background-color: green; }
+  .answer-list li.blue {
+    background-color: blue; }
+  .answer-list li.pink {
+    background-color: pink; }
+  .answer-list li.yellow {
+    background-color: yellow; }
