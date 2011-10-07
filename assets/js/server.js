@@ -30,7 +30,8 @@ function() {
 							{\
 								"content":"Kittens",\
 								"image":"http://placekitten.com/200/300",\
-								"weight":0,"usertype":"developer",\
+								"weight":0,\
+								"usertype":"developer",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
 								"likes": 0,\
@@ -45,6 +46,16 @@ function() {
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"en-US",\
 								"likes": 5,\
+								"id":"c0176d62-782f-d0b7-1a57-91e017177342"\
+							},\
+							{\
+								"content":"Raposas!!",\
+								"image":"http://placekitten.com/200/300",\
+								"weight":0,\
+								"usertype":"designer",\
+								"created":"2011-10-04T16:13:02.284Z",\
+								"language":"pt-PT",\
+								"likes": 50,\
 								"id":"c0176d62-782f-d0b7-1a57-91e017177342"\
 							}\
 						]',

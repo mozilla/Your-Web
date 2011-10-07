@@ -3,7 +3,8 @@ require([], function() {
 		'libs/jquery-1.6.3.min',
 		'core',
 		'server',
-		'simpleViz'
+		'simpleViz',
+		'ui'
 	], 
 	function(){
 	
