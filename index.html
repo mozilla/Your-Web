@@ -47,7 +47,7 @@
 				<div class="clearfix">
 					<label for="usertype">I'm writing in</label>
 					<div class="input">
-						<select type="text" id="usertype">
+						<select type="text">
 							<option value="en-US">English (US)</option>
 							<option value="pt-PT" selected>Portuguese (European)</option>
 						</select>
@@ -62,10 +62,35 @@
 	
 	<a class="btn" data-controls-modal="submitAnswer-modal" data-backdrop="static" >Submit your answer!</a>
 	
+	<div id="filters">
+		<div class="input">
+			<input class="filter" type="checkbox" name="" data-filter-type="usertype" value="designer">
+			<span>Designers</span>
+		</div>
+		<div class="input">
+			<input class="filter" type="checkbox" name="" data-filter-type="usertype" value="developer">
+			<span>Developers</span>
+		</div>
+		<div class="input">
+			<select class="filter" type="text" data-filter-type="language" value="en-US">
+				<option value="en-US" selected>English (US)</option>
+				<option value="pt-PT">Portuguese (European)</option>
+			</select>
+		</div>
+	</div>
+	
 	<ul class="answer-list">
 	</ul>
 </div>
 
 <script data-main="assets/js/main.js" src="assets/js/libs/requirejs/require.js"></script>
+<script>
+	var APP_CONFIG = {
+		filters: {
+			usertype: ['designer', 'developer'],
+			language: ['en-US']
+		}
+	}
+</script>
 </body>
 </html>

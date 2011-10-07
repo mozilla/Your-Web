@@ -15,10 +15,12 @@ function(){
 	var app = window.APP,
 	instance = this,
 	AnswerView,
+	AnswerListView,
 	QuestionView,
+	QuestionListView,
 	AppView,
 	//templates
-	questionTemplate = '{{content}}';
+	questionTemplate = '{{content}}',
 	answerTemplate = '<article {{#if likes}}class="liked"{{/if}}>{{#if image}}<img src="{{image}}" />{{/if}}<p>{{content}}<p> <small>Submitted by a {{usertype}} on {{created}}</small> {{#if userHasLiked}}<button class="btn danger unlike hide">Unlike</button> {{else}} <button class="btn success like">Like</button>{{/if}}</article>';
 	
 	app.namespace('views');
@@ -102,7 +104,7 @@ function(){
 		}
 	});
 	
-	// Set up the main App View
+	// Set up the Answer List view
 	AnswerListView = Backbone.View.extend({
 		el: $('#content'),
 		
@@ -113,8 +115,8 @@ function(){
 		initialize: function() {							
 			this.input = this.$('#new-answer');
 			
-			this.collection.bind('add',   this.addOne, this);
-			this.collection.bind('reset', this.render, this);
+			this.collection.bind('add',   this.addOne);
+			this.collection.bind('reset', this.applyFilters);
 			this.collection.fetch();
 			//app.answers.refresh();
 		},
@@ -126,7 +128,6 @@ function(){
 		
 		render: function(answers) {
 			this.$('.answer-list').empty();
-			//app.answers.collection.each(this.addOne);
 			answers.each(this.addOne);
 		},
 		
@@ -143,10 +144,14 @@ function(){
 		
 		empty: function() {
 			this.$('.answer-list').empty();
+		},
+		
+		applyFilters: function() {
+			app.events.publish('filters/change', [app.config.filters]);
 		}
 	});
 	
-	// Set up the main App View
+	// Set up the Question List view
 	QuestionListView = Backbone.View.extend({
 		el: $('#content'),
 		
@@ -154,11 +159,9 @@ function(){
 			'keypress #new-question': 'createOnEnter'
 		},
 		
-		initialize: function() {
-			var that = this;
-			
+		initialize: function() {			
 			this.input = this.$('#new-question');
-					
+
 			app.questions.collection.bind('reset', this.addActive, this);
 			app.questions.collection.bind('render', this.render, this);
 			
@@ -191,11 +194,12 @@ function(){
 		
 		createOnEnter: function(e) {
 			var text = this.input.val(),
-				active = $('#question_active').is(':checked');
+				active = $('#question_active').is(':checked'),
+				newQuestion;
 				
 			if (!text || e.keyCode != 13) return;
 			
-			var newQuestion = app.questions.create({content: text});
+			newQuestion = app.questions.create({content: text});
 			
 			if (active) app.questions.setActive(newQuestion);
 			
@@ -215,13 +219,28 @@ function(){
 		}
 	});
 	
-	// Instantiate the main AppView
+	app.events.subscribe('filters/change', function(filters) {
+		var resultCollection = app.answers.collection,
+			functionMap = {
+				'usertype': 'filterByUserTypes',
+				'language':	'filterByLanguages'
+			}
+		
+		for (var key in filters) {
+			resultCollection = resultCollection[ functionMap[ key ] ]( filters[key] );
+		}
+		
+		APP.views.answerListView.render(resultCollection);
+	});
+	
+	// Instantiate the Question List View
 	app.views.QuestionListView = new QuestionListView;
 	
+	// Modals
 	$('#submitAnswer-modal').modal({
 		backdrop: true,
 		keyboard: true
-	});
+	});	
 	
 	$('#submitQuestion, #submitAnswer').bind('submit', function() {
 		return false;
