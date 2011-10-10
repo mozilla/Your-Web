@@ -4,7 +4,8 @@ require([], function() {
 		'core',
 		'server',
 		'simpleViz',
-		'ui'
+		'ui',
+		'tilemap'
 	], 
 	function(){
 	
