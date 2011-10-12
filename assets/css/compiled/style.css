@@ -1,23 +1,32 @@
-.answer-list {
+.tiled-answers {
   list-style-type: none;
   width: 200px; }
-  .answer-list li {
-    display: inline;
-    margin: 0 5px;
+  .tiled-answers li {
+    position: absolute;
     color: white;
     font-size: 24px;
     line-height: 32px; }
-    .answer-list li article {
+    .tiled-answers li article {
       display: inline; }
-  .answer-list .meta {
+  .tiled-answers .meta {
     display: none; }
-  .answer-list li.red {
+  .tiled-answers li.red {
     background-color: red; }
-  .answer-list li.green {
+  .tiled-answers li.green {
     background-color: green; }
-  .answer-list li.blue {
+  .tiled-answers li.blue {
     background-color: blue; }
-  .answer-list li.pink {
+  .tiled-answers li.pink {
     background-color: pink; }
-  .answer-list li.yellow {
+  .tiled-answers li.yellow {
     background-color: yellow; }
+
+#tilemap {
+  position: relative; }
+
+.tiled-answers {
+  position: absolute;
+  z-index: 10;
+  margin: 0;
+  top: 199px;
+  left: 0; }
