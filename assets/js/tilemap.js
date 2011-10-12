@@ -38,10 +38,10 @@ function(){
 		 * @param {int} 	columns		Number of columns in tile map.
 		 */
 		buildTileMap = function(lines, columns) {	
-			_width = lines * _PXINTILE;
+			_height = lines * _PXINTILE;
 			_lines = lines;
 			
-			_height = columns * _PXINTILE;
+			_width = columns * _PXINTILE;
 			_columns = columns;
 			
 			tilemap = [];

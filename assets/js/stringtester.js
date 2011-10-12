@@ -43,17 +43,10 @@ function(){
 		},
 		
 		_generateCombos = function(strObj) {
-			var maxHorizontal = strObj.words.length;
 			
-			/*
-			maxHorizontal = 4
+			var breaks = strObj.words.length - 1;
 			
-			[0, 0, 0, 0] -> maxHorizontal
-					
-			Run all distributions of maxHorizontal across the array, eliminate zeroes
-			
-				
-			*/
+			//for (var breaks = 0
 			
 		},
 		
