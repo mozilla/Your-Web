@@ -42,12 +42,67 @@ function(){
 			return tilemap.pixelsToTiles(width);
 		},
 		
+		_buildMatrix = function(words, combo, numberOfBreaks) {
+			var line = 0,
+				column = 0,
+				matrix = {
+					grid: {}
+				};
+			
+			if (!matrix.grid[line]) matrix.grid[line] = {};
+			matrix.grid[line][column] = words[0];
+			
+			for (var w=1, len=words.length; w<len; w++) {
+			
+				if (combo[w-1] < numberOfBreaks) {
+					line++;
+					column = 0;
+				} else {
+					column++;
+				}
+				
+				if (!matrix.grid[line]) matrix.grid[line] = {};
+				
+				matrix.grid[line][column] = words[w];		
+			}
+			
+			matrix.columns = column + 1;
+			matrix.lines = line;
+			return matrix;
+		},
+		
+		_scoreMatrix = function(matrix) {
+			
+			matrix.score = matrix.lines * 1.1 + matrix.columns * 1.5;			
+			return matrix;
+		},
+		
 		_generateCombos = function(strObj) {
 			
-			var breaks = strObj.words.length - 1;
+			var comboSet = [],
+				combos = [],
+				variants = [];
+				
+			for (var i=strObj.words.length; i--; ) {
+				comboSet.push(i);	
+			}			
 			
-			//for (var breaks = 0
+			combos = _getPossibleCombinations(comboSet);
+						
+			for (var breaks = 0, len = strObj.words.length - 1; breaks<len; breaks++) {
+				
+				_.each(combos, function(combo) {
+					var matrix = _scoreMatrix(_buildMatrix(strObj.words, combo, breaks)),					
+						scores = _.pluck(variants, 'score');
+					
+					if (!_.include(scores, matrix.score)) {
+						variants.push(matrix);
+					}
+				}); 
+				
+			}
 			
+			return variants;		
 		},
 		
 		_getPossibleCombinations = function(arr) {
@@ -89,7 +144,9 @@ function(){
 			var words = _breakWords(string);
 			
 			// Add string to cache
-			_cache[string] = {};
+			_cache[string] = {
+				used: false
+			};
 			_cache[string].words = [];
 			
 			_.each(words, function(word) {				
@@ -98,17 +155,38 @@ function(){
 					hTiles: _renderWord(word)
 				});
 			});
+			
+			_cache[string].combos = _generateCombos(_cache[string]);
 		},
 		
 		stringThatFits = function(hTiles, vTiles) {
-		
+			//Loop through cache
+			var candidates = _.select(_cache, function(element) {
+				return !element.used;
+			}),
+			
+			passed = [];
+			
+			_.each(candidates, function(element) {
+				var combos = _.select(element.combos, function(combo) {
+					return combo.columns <= hTiles && combo.lines <= vTiles;
+				});
+				
+				combos = _.sortBy(combos, function(combo) {
+					return - combo.score;
+				});
+				
+				// Choose the one with the highest score
+				passed.push(combos[0]);
+			});
+			
+			return passed;
 		}
 		
 		// Public API
 		return {
 			test: test,
-			stringThatFits: stringThatFits,
-			getCombinations: _getPossibleCombinations
+			stringThatFits: stringThatFits
 		}
 	})());	
 });
