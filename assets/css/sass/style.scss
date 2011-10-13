@@ -1,10 +1,9 @@
-.answer-list {
+.tiled-answers {
 	list-style-type: none;
 	width: 200px;
 	
 	li {
-		display: inline;
-		margin: 0 5px;
+		position: absolute;		
 		color: white;
 		font-size: 24px;
 		line-height: 32px;
@@ -37,4 +36,16 @@
 	li.yellow {
 		background-color: yellow;
 	}
+}
+
+#tilemap {
+	position: relative;
+}
+
+.tiled-answers {
+	position: absolute;
+	z-index:10;
+	margin: 0;
+	top:199px;
+	left: 0;
 }

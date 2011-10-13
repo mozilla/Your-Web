@@ -80,8 +80,13 @@
 		</div>
 	</div>
 	
+	<canvas id="tilemap"></canvas>
+	<ul class="tiled-answers">
+	</ul>
+	<!--
 	<ul class="answer-list">
 	</ul>
+	-->
 </div>
 
 <script data-main="assets/js/main.js" src="assets/js/libs/requirejs/require.js"></script>
@@ -90,6 +95,10 @@
 		filters: {
 			usertype: ['designer', 'developer'],
 			language: ['en-US']
+		},
+		tilemap: {
+			lines: 20,
+			columns: 40
 		}
 	}
 </script>
