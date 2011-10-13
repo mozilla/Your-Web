@@ -143,7 +143,6 @@ function(){
 		render: function(answers) {
 			this.$('.tiled-answers').empty();
 			answers.each(this.addOne);
-			renderMap();
 		},
 		
 		createOnEnter: function(e) {
@@ -250,69 +249,6 @@ function(){
 	
 	// Instantiate the Question List View
 	app.views.QuestionListView = new QuestionListView;
-	
-	function renderMap() {
-		var tilemap = app.tilemap,
-			free,
-			strings = [
-				{
-					content: 'This is a test',
-					hTiles: 4,
-					vTiles: 1
-				},
-				{
-					content: "Horsey!",
-					hTiles: 2,
-					vTiles: 1
-				},
-				{
-					content: 'Giga Puddi',
-					hTiles: 3,
-					vTiles: 1
-				}
-			]
-			
-		Array.prototype.binarySearch = function(find, comparator) {
-		  var low = 0, high = this.length - 1,
-			  i, comparison;
-		  while (low <= high) {
-			i = Math.floor((low + high) / 2);
-			comparison = comparator(this[i], find);
-			if (comparison < 0) { low = i + 1; continue; };
-			if (comparison > 0) { high = i - 1; continue; };
-			return i;
-		  }
-		  return null;
-		};
-		
-		//for (var i=0, mLen=app.tilemap.map().length; i<mLen; i++) {
-			
-			free = tilemap.freeHorizontal({x:0, y:0});			
-			
-			var tileSizes = _.pluck(strings, 'hTiles');
-						
-			for (var t=0, tLen=free.length; t<tLen; t++) {
-				//see if there's a string that fits
-				
-				// Filter the tileSizes array so that we exclude impossible matches
-				_.select(tileSizes, function(size) {
-					return size <= free[t].count;
-				});
-				
-				//is there a direct match?
-				//var tileSizesSorted = tileSizes.slice(0).sort();
-				var exactMatch = tileSizes.binarySearch(free[t].count, function(a, b) {
-					return (a - b);
-				});
-				
-				if (exactMatch) {
-					//app.log('found match!', strings[exactMatch]);
-				} else {
-				
-				}
-			}
-		//}
-	}
 	
 	// Modals
 	$('#submitAnswer-modal').modal({

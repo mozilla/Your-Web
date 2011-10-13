@@ -10,6 +10,7 @@
  define(
 //Module dependencies
 [
+	'core',
 	'libs/underscore.min',
 	'tilemap'
 ],
@@ -182,6 +183,13 @@ function(){
 			
 			return passed;
 		}
+		
+		// Subscribe to interesting events
+		
+		// Test strings as they come in
+		app.answers.collection.bind('add', function() {
+			app.log('add');
+		});
 		
 		// Public API
 		return {
