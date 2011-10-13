@@ -37,7 +37,10 @@ function(){
 		 * @param {int} 	lines 		Number of lines in tile map.
 		 * @param {int} 	columns		Number of columns in tile map.
 		 */
-		buildTileMap = function(lines, columns) {	
+		buildTileMap = function(lines, columns, preocuppied) {	
+			var occupiedLines = [],
+				occupiedColumns = [];
+			
 			_height = lines * _PXINTILE;
 			_lines = lines;
 			
@@ -46,17 +49,66 @@ function(){
 			
 			tilemap = [];
 			
+			if (!preocuppied) preoccupied = {};
+			
+			// Create the preoccupied ranges from config
+			if (preocuppied.lines) {
+				occupiedLines = _.range(preocuppied.lines.start, preocuppied.lines.stop, preocuppied.lines.step || 1);
+			}
+			
+			if (preocuppied.columns) {
+				occupiedColumns = _.range(preocuppied.columns.start, preocuppied.columns.stop, preocuppied.columns.step || 1);
+			}
+			
 			for (var l=0; l < lines; l++) {
 				var line = [];
 				
 				for (var c=0; c < columns; c++) {
-					line.push(Math.round(Math.random()));
+					var val = ( _.include(occupiedLines, l, true) && _.include(occupiedColumns, c, true) )
+					line.push(val);
 				}
 				
 				tilemap.push(line);
 			}
 			
-			return tilemap;
+			return _padMap(tilemap);
+		},
+		
+		/**
+		 * Adds random padding (occupied tiles) to the map on its edges
+		 * 
+		 */
+		_padMap = function(map) {
+			// Math.round(Math.random())
+			var isTopEdge = function(line) {
+				return (line == 0);
+			},
+			isBottomEdge = function(line) {
+				return (line == map.length-1)
+			},
+			isLeftEdge = function(column) {
+				return (column == 0);
+			},
+			isRightEdge = function(line, column) {
+				return (column == map[line].length-1);
+			};
+			
+			for (var l=0, llen=map.length; l<llen; l++) {
+				for (var c=0, clen=map[l].length; c<clen; c++) {
+					if (
+						isTopEdge(l) || 
+						isBottomEdge(l) || 
+						isLeftEdge(c) || 
+						isRightEdge(l, c)
+					) {
+						if (Math.round(Math.random())) {
+							occupyTile( {x:l, y:c} );
+						}
+					}
+				}
+			}
+			
+			return map;
 		},
 		
 		/**

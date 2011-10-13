@@ -44,8 +44,9 @@ function(){
 		},
 		
 		_buildMatrix = function(words, combo, numberOfBreaks) {
-			var line = 0,
-				column = 0,
+			var line = 1,
+				column = 1,
+				maxCols = 1,
 				matrix = {
 					grid: {}
 				};
@@ -57,17 +58,19 @@ function(){
 			
 				if (combo[w-1] < numberOfBreaks) {
 					line++;
-					column = 0;
+					column = 1;
 				} else {
 					column++;
 				}
+				
+				maxCols = (maxCols < column) ? column : maxCols;
 				
 				if (!matrix.grid[line]) matrix.grid[line] = {};
 				
 				matrix.grid[line][column] = words[w];		
 			}
-			
-			matrix.columns = column + 1;
+						
+			matrix.columns = maxCols;			
 			matrix.lines = line;
 			return matrix;
 		},
@@ -78,22 +81,22 @@ function(){
 			return matrix;
 		},
 		
-		_generateCombos = function(strObj) {
+		_generateCombos = function(words) {
 			
 			var comboSet = [],
 				combos = [],
 				variants = [];
 				
-			for (var i=strObj.words.length; i--; ) {
+			for (var i=words.length; i--; ) {
 				comboSet.push(i);	
 			}			
 			
 			combos = _getPossibleCombinations(comboSet);
 						
-			for (var breaks = 0, len = strObj.words.length - 1; breaks<len; breaks++) {
+			for (var breaks = 0, len = (words.length - 1 || 1); breaks<len; breaks++) {
 				
 				_.each(combos, function(combo) {
-					var matrix = _scoreMatrix(_buildMatrix(strObj.words, combo, breaks)),					
+					var matrix = _scoreMatrix( _buildMatrix(words, combo, breaks) ),
 						scores = _.pluck(variants, 'score');
 					
 					if (!_.include(scores, matrix.score)) {
@@ -157,7 +160,7 @@ function(){
 				});
 			});
 			
-			_cache[string].combos = _generateCombos(_cache[string]);
+			_cache[string].combos = _generateCombos(words);
 		},
 		
 		stringThatFits = function(hTiles, vTiles) {
@@ -186,15 +189,23 @@ function(){
 		
 		// Subscribe to interesting events
 		
-		// Test strings as they come in
-		app.answers.collection.bind('add', function() {
-			app.log('add');
+		// Test strings on first reset
+		app.answers.collection.bind('reset', function(collection) {
+			collection.each(function(model){
+				test(model.get('content'));
+			});
+		});
+		
+		// And as they come in
+		app.answers.collection.bind('add', function(model, collection) {
+			test(model.get('content'));
 		});
 		
 		// Public API
 		return {
 			test: test,
-			stringThatFits: stringThatFits
+			stringThatFits: stringThatFits,
+			revealCache: function() {return _cache}
 		}
 	})());	
 });
