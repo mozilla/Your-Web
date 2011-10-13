@@ -29,7 +29,7 @@ function(){
 	app.namespace('views');
 	
 	// Generate the tilemap
-	app.tilemap.buildMap(app.config.tilemap.lines, app.config.tilemap.columns);
+	app.tilemap.buildMap(app.config.tilemap.lines, app.config.tilemap.columns, app.config.tilemap.preoccupied);
 	app.tilemap.render($('#tilemap').get(0));
 	$('.tiled-answers').css({width: $('#tilemap').width(), height: $('#tilemap').height()});
 		
