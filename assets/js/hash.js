@@ -38,7 +38,15 @@ function(){
             _userAnswered: "",
             _currentQuestion: "",
             
+            
+            /**
+			 * Update the current state
+			 * Returns a collection of the update state collection
+			 *
+			 * @method state
+			 */
             state: function() {
+                
             
                 if(this._state != window.location.hash) {
                     this._state = window.location.hash;
@@ -58,25 +66,56 @@ function(){
                         }
                     },this);
                  }   
-                    
                 return {
                         language	: this._language,
                         usertype: this._usertype,
                         important: this._important,
                         userAnswered: this._userAnswered,
-                        currentQuestion: this._currentQuestion
+                        currentQuestion: this._currentQuestion,
 
                     }
                 
             },
             
+            /**
+			 * Get a non-modified collection
+			 * Returns a collection of the update state collection
+			 *
+			 * @method state
+			 */
+            description : function() {
+                 return {
+                        language	: this._language,
+                        usertype: this._usertype,
+                        important: this._important,
+                        userAnswered: this._userAnswered,
+                        currentQuestion: this._currentQuestion,
+                        state : this._state
+
+                    }
+            },
+            
+            
+            
+            /**
+			 * Set up the instance
+			 * Publishes an event on successful retrieval of collection, 
+			 * with the updated collection as a parameter.
+			 *
+			 * @method init
+			 */
             init: function() {
                 this._language = app.config.filters.language;
                 this._usertype = app.config.filters.usertype;                
+
+            // Publish the done event with the current state as a payload
                 
                 app.events.publish('hash/done', this.state());
 
-                
+            // Subscribe to interesting events
+
+            // Application events
+                        
                 app.events.subscribe('filters/change', function(payload) {
 
                     app.hash.setProperty("language",payload.language);
@@ -92,6 +131,25 @@ function(){
                     app.hash.refresh();
 
                 });
+                
+            // Browser events
+       
+                if ("onhashchange" in window) {
+                    $(window).bind('hashchange', function() { 
+                        app.events.publish('hash/changed', window.APP.hash.retrieve());
+                        }
+                    );
+
+                } else {
+                    window.setInterval(function() { 
+                       if (window.location.hash != app.hash.description().state) {
+                            console.log(app.hash.description());
+                            app.events.publish('hash/changed', app.hash.retrieve());
+                       }
+                    }, 1000);
+               
+                 }
+
             
             
                 
@@ -114,12 +172,11 @@ function(){
             
 		});	
         
-        _hash = new Hash();
         
+        _hash = new Hash();
         _hash.init();
 
 			
-		// Subscribe to interesting events
         
         
            
@@ -130,10 +187,9 @@ function(){
 		// Public API
 		return {
 			
+            
 			/**
-			 * Retrieves updated collection from store.
-			 * Publishes an event on successful retrieval of collection, 
-			 * with the updated collection as a parameter.
+			 * Refreshes the Hash Model based on the URI hash
 			 *
 			 * @method refresh
 			 */
@@ -141,10 +197,33 @@ function(){
 				_hash.refresh();
 			},
             
+            /**
+			 * Retrieves updated collection from store.
+			 * Publishes an event on successful retrieval of collection, 
+			 * with the updated collection as a parameter.
+			 *
+			 * @method retrieve
+			 */
             retrieve: function() {
                 return _hash.state();
             },
             
+            /**
+			 * Retrieves updated collection from store.
+			 * Publishes an event on successful retrieval of collection, 
+			 * with the updated collection as a parameter.
+			 *
+			 * @method retrieve
+			 */
+            description: function() {
+                return _hash.description();
+            },
+            
+            /**
+			 * Set a property of the Hash model
+			 *
+			 * @method setProperty
+			 */
             setProperty: function(key, value) {
                 _hash.setProperty(key, value);
             }
