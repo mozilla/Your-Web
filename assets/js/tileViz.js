@@ -119,10 +119,10 @@ function(){
 	
 	// Set up the Answer List view
 	AnswerListView = Backbone.View.extend({
-		el: $('#content'),
+		el: $('body'),
 		
 		events: {
-			'keypress #new-answer'	: 'createOnEnter'
+			'click #saveAnswer'	: 'createOnEnter'
 		},
 		
 		initialize: function() {							
@@ -148,12 +148,12 @@ function(){
 		createOnEnter: function(e) {
 			var text = this.input.val(),
 				usertype = $('#usertype').val();
-				
-			if (!text || e.keyCode != 13) return;
-			
-			app.answers.create({content: text, usertype: usertype});
 			
 			this.input.val('');
+			
+			
+			
+			return app.answers.create({content: text, usertype: usertype});
 		},
 		
 		empty: function() {
@@ -249,14 +249,4 @@ function(){
 	
 	// Instantiate the Question List View
 	app.views.QuestionListView = new QuestionListView;
-	
-	// Modals
-	$('#submitAnswer-modal').modal({
-		backdrop: true,
-		keyboard: true
-	});	
-	
-	$('#submitQuestion, #submitAnswer').bind('submit', function() {
-		return false;
-	});
 });
