@@ -92,9 +92,75 @@ function() {
 								"language":"pt-PT",\
 								"likes": 50,\
 								"id":"c0176d62-782f-d0b7-1a57-91e017177342"\
+							},\
+							{\
+								"content":"Kittens gone wild",\
+								"weight":0,\
+								"usertype":"developer",\
+								"created":"2011-10-04T16:12:53.228Z",\
+								"language":"en-US",\
+								"likes": 0,\
+								"userHasLiked": true,\
+								"id":"44cc74df-1e8e-02bb-fc8e-a45a50130d1d"\
+							},\
+							{\
+								"content":"Communication",\
+								"weight":0,\
+								"usertype":"designer",\
+								"created":"2011-10-04T16:13:02.284Z",\
+								"language":"en-US",\
+								"likes": 5,\
+								"id":"c0176d62-782f-d027-1a57-91e017177342"\
+							},\
+							{\
+								"content":"Openness!",\
+								"weight":0,\
+								"usertype":"developer",\
+								"created":"2011-10-04T16:12:53.228Z",\
+								"language":"en-US",\
+								"likes": 0,\
+								"userHasLiked": true,\
+								"id":"44cc74df-1e8e-0a2b-fc8e-a43a50130d1d"\
+							},\
+							{\
+								"content":"Books",\
+								"weight":0,\
+								"usertype":"designer",\
+								"created":"2011-10-04T16:13:02.284Z",\
+								"language":"en-US",\
+								"likes": 5,\
+								"id":"c0176d62-782f-d027-1a57-91e017177642"\
+							},\
+							{\
+								"content":"Keypads",\
+								"weight":0,\
+								"usertype":"developer",\
+								"created":"2011-10-04T16:12:53.228Z",\
+								"language":"en-US",\
+								"likes": 0,\
+								"userHasLiked": true,\
+								"id":"44cc74df-1e8e-0a24-fc8e-a73a50130d1d"\
+							},\
+							{\
+								"content":"No more mouses",\
+								"weight":0,\
+								"usertype":"designer",\
+								"created":"2011-10-04T16:13:02.284Z",\
+								"language":"en-US",\
+								"likes": 5,\
+								"id":"c0176d62-782f-d0f7-1a27-91e017177642"\
+							},\
+							{\
+								"content":"Browsers",\
+								"weight":0,\
+								"usertype":"designer",\
+								"created":"2011-10-04T16:13:02.284Z",\
+								"language":"pt-PT",\
+								"likes": 50,\
+								"id":"c0176d62-732f-d0b7-1a57-91e017177342"\
 							}\
 						]',
-						
+
 		answersFor2 = '[\
 							{\
 								"content":"Moar Lulz!",\

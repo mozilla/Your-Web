@@ -219,6 +219,16 @@ function(){
 		
 		},
 		
+		clearMap = function(canvas) {
+			var ctx;
+			
+			if (!canvas) return false;
+			
+			ctx = canvas.getContext('2d');
+
+			ctx.clearRect ( 0 , 0 , canvas.width , canvas.height );
+		},
+		
 		/**
 		 * Renders map inside DOM element
 		 *
@@ -261,10 +271,12 @@ function(){
 			freeHorizontal		:	freeHorizontal,
 			freeVertical		:	freeVertical,
 			buildMap			:	buildTileMap,
+			isTileFree			:	_isTileFree,
 			map					:	function() {
 										return tilemap;
 									},
 			render				:	renderMap,
+			clear				: 	clearMap,
 			freeTile			:	freeTile,
 			occupyTile			:	occupyTile,
 			pixelsToTiles		: 	function(pixels) {
