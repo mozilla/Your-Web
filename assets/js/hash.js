@@ -30,12 +30,17 @@ function(){
 		// Set up the main Hash Model
 		Hash = Backbone.Model.extend({
 			
-            
+            /** Holds the current state in the form of a hash */
             _state: "",
-            _language: new Array("aap"),
+            /** Currently selected language as an Array. */
+            _language: new Array(),
+            /** Array with selected user types for filtering. */
             _usertype: new Array(),
+            /** Array of selected tile ids. */
             _important: new Array(),
+            /** The id of tile created by a user */
             _userAnswered: "",
+            /** The id of question selected by a user */
             _currentQuestion: "",
             
             
@@ -63,7 +68,7 @@ function(){
                             this._userAnswered = (component[1].length > 0) ? component[1] : "";
                         } else if(component[0] == "q") {
                             this._currentQuestion = (component[1].length > 0) ? component[1] : "";
-                        }
+                        } 
                     },this);
                  }   
                 return {
@@ -236,6 +241,9 @@ function(){
 			 * Set a property of the Hash model
 			 *
 			 * @method setProperty
+             * @param {String} key Named key in the model
+             * @param {String} value Valuel of the named key
+
 			 */
             setProperty: function(key, value) {
                 _hash.setProperty(key, value);
