@@ -106,7 +106,8 @@ function(){
 			 */
             init: function() {
                 this._language = app.config.filters.language;
-                this._usertype = app.config.filters.usertype;                
+                this._usertype = app.config.filters.usertype;   
+                this._currentQuestion = "";  
 
             // Publish the done event with the current state as a payload
                 
@@ -120,14 +121,24 @@ function(){
 
                     app.hash.setProperty("language",payload.language);
                     app.hash.setProperty("usertype",payload.usertype);
+                    app.hash.setProperty("currentQuestion",app.questions.getActive().get('id'));                
                     
                     app.hash.refresh();
 
                 });
                 
                 app.events.subscribe('questions/active', function(payload) {
+                
+                    app.hash.setProperty("currentQuestion",app.questions.getActive().get('id'));  
+                                  
+                    app.hash.refresh();
 
-                    app.hash.setProperty("currentQuestion",payload.content);                
+                });
+                
+                 app.events.subscribe('answers/new', function(payload) {
+                 
+                    app.hash.setProperty("userAnswered",app.answers.getActive().get('id'));  
+                                  
                     app.hash.refresh();
 
                 });
@@ -143,7 +154,6 @@ function(){
                 } else {
                     window.setInterval(function() { 
                        if (window.location.hash != app.hash.description().state) {
-                            console.log(app.hash.description());
                             app.events.publish('hash/changed', app.hash.retrieve());
                        }
                     }, 1000);
@@ -156,14 +166,23 @@ function(){
                 
             },
 			
+            /**
+			 * Takes the current state of the model and changes the window hash accordingly
+			 *
+			 * @method refresh
+			 */
             
             refresh: function() {
-                this._state = "&tl="+this._language.join(",")+"&ut="+this._usertype.join(",")+"&f="+this._important.join(",")+"&a="+this._userAnswered+"&1="+this._currentQuestion;
+                this._state = "&tl="+this._language.join(",")+"&ut="+this._usertype.join(",")+"&f="+this._important.join(",")+"&a="+this._userAnswered+"&q="+this._currentQuestion;
                 window.location.hash = this._state;
             },
             
             
-            
+            /**
+			 * Sets a property in the model
+			 *
+			 * @method setProperty
+			 */
             setProperty: function(key, value) {
              
                this["_"+key] = value;
@@ -176,12 +195,6 @@ function(){
         _hash = new Hash();
         _hash.init();
 
-			
-        
-        
-           
-            
-            
 
 				
 		// Public API
