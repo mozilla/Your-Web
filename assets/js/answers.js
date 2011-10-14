@@ -148,6 +148,15 @@ function(){
 				_.extend(returnArray, filterList);
 				
 				return returnArray;
+			},
+			
+			filterByImportant: function() {
+				var returnArray = _(this.filter(function(answer) {
+					return answer.get('important');
+				}));
+				
+				_.extend(returnArray, filterList);
+				return returnArray;
 			}
 		}
 		
@@ -162,7 +171,8 @@ function(){
 					created	: new Date(),
 					language: 'en-US',
 					likes: 0,
-					userHasLiked: false
+					userHasLiked: false,
+					important: false
 				}
 			},
 			
