@@ -24,7 +24,7 @@ function(){
 	AppView,
 	//templates
 	questionTemplate = '{{content}}',
-	answerTemplate = '<article {{#if likes}}class="liked"{{/if}}>{{#if image}}<img src="{{image}}" />{{/if}}{{content}}<p class="meta">Submitted by a {{usertype}} on {{created}}{{#if userHasLiked}}<button class="btn danger unlike hide">Unlike</button> {{else}} <button class="btn success like">Like</button>{{/if}}</p></article>';
+	answerTemplate = '<article>{{#if image}}<img src="{{image}}" />{{/if}}{{content}}<p class="meta">Submitted by a {{usertype}} on {{created}}</p></article>';
 	
 	app.namespace('views');
 	
@@ -39,8 +39,7 @@ function(){
 		tagName: 'li',
 		
 		events: {
-			'click .like' 	: 'like',
-			'click .unlike'	: 'unlike'
+
 		},
 		
 		template: Handlebars.compile(answerTemplate),
@@ -72,18 +71,6 @@ function(){
 		
 		clear: function() {
 			this.model.destroy();
-		},
-		
-		like: function(e) {
-			this.model.like();
-			this.$('.like').hide();
-			this.$('.unlike').show();
-		},
-		
-		unlike: function(e) {
-			this.model.unlike();
-			this.$('.like').show();
-			this.$('.unlike').hide();
 		}
 	});
 	
@@ -119,10 +106,10 @@ function(){
 	
 	// Set up the Answer List view
 	AnswerListView = Backbone.View.extend({
-		el: $('#content'),
+		el: $('body'),
 		
 		events: {
-			'keypress #new-answer'	: 'createOnEnter'
+			'click #saveAnswer'	: 'createOnEnter'
 		},
 		
 		initialize: function() {							
@@ -148,12 +135,20 @@ function(){
 		createOnEnter: function(e) {
 			var text = this.input.val(),
 				usertype = $('#usertype').val();
-				
-			if (!text || e.keyCode != 13) return;
-			
-			app.answers.create({content: text, usertype: usertype});
 			
 			this.input.val('');
+			
+			
+			
+			return app.answers.create({content: text, usertype: usertype}, {
+				success: function(model, response) {
+					app.events.publish('answer/saved', [model, response]);
+				},
+				
+				error: function(model, response) {
+					app.events.publish('answer/saveerror', [model, response]);
+				}
+			});
 		},
 		
 		empty: function() {
@@ -219,6 +214,63 @@ function(){
 			
 			this.input.val('');
 		}
+	}),
+	
+	_placeObject = function(obj, location) {
+		var tilemap = app.tilemap,
+			xPos = tilemap.tilesToPixels(location.x),
+			yPos = tilemap.tilesToPixels(location.y),
+			$el = $('<span>'),
+			content = '';
+			
+		_.each(obj.grid, function(line) {
+			_.each(line, function(word) {
+				content += word.text + ' ';
+			});
+			content += '<br />';
+		});
+			
+		$('.tiled-answers').append($el);
+			
+		$el.html(content).css({fontSize: '200%', position: 'absolute', top: xPos + 'px', left: yPos+ 'px'});
+	},
+	
+	fillMap = function() {
+		var tilemap = app.tilemap,
+			map = tilemap.map(),
+			freeTiles;
+		
+		function recursive(line, col) {
+			
+			freeTiles = tilemap.freeHorizontal( { x:line, y:col } );
+			
+			_.each(freeTiles, function(free) {
+				var object = app.stringtester.stringThatFits(free.count, 50);
+				
+				if (object) {					
+					if (tilemap.isTileFree(free.tile)) _placeObject(object, free.tile);
+					
+					for (var l=free.tile.x, len=free.tile.x + object.maxVTiles; l<=len; l++) {
+						for (var c=free.tile.y; c <= free.tile.y + object.maxHTiles; c++) {
+							tilemap.occupyTile({x:l, y:c});
+						}
+					}
+					
+					recursive(line, free.tile.y + object.maxHTiles);
+				}
+			});
+		}
+		
+		for (var l=0, len=map.length; l<len; l++) {
+			recursive(l, 0);
+		}
+		
+		tilemap.clear($('#tilemap').get(0));
+		tilemap.render($('#tilemap').get(0));
+	};
+	
+	app.answers.collection.bind('reset', function() {
+		setTimeout(fillMap, 500);
 	});
 	
 	// Subscribe to interesting events
@@ -249,14 +301,4 @@ function(){
 	
 	// Instantiate the Question List View
 	app.views.QuestionListView = new QuestionListView;
-	
-	// Modals
-	$('#submitAnswer-modal').modal({
-		backdrop: true,
-		keyboard: true
-	});	
-	
-	$('#submitQuestion, #submitAnswer').bind('submit', function() {
-		return false;
-	});
 });

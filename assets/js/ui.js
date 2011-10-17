@@ -40,5 +40,17 @@ function(){
 			//Publish an event saying the filters changed
 			app.events.publish('filters/change', [app.config.filters]);
 		});
+		
+		// Modals
+		$('#submitAnswer-modal').modal({
+			backdrop: true,
+			keyboard: true
+		});	
+		
+		$('#submitQuestion, #submitAnswer').bind('submit', function() {
+			$('#submitAnswer-modal').modal('hide');
+			return false;
+		});
+		
 	});
 });

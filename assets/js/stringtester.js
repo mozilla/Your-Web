@@ -32,12 +32,12 @@ function(){
 		
 		_renderWord = function(word) {
 			// Create a mock element
-			var $el = $('<span>' + word + '</span>').css({visibility: 'hidden'}),
+			var $el = $('<span style="font-size: 200%">' + word + '</span>').css({visibility: 'hidden'}),
 			width;
 			
 			$('body').append($el);
 			width = Math.ceil($el.width());
-			$el.remove();
+			//$el.remove();
 			
 			// Return width, in tiles
 			return tilemap.pixelsToTiles(width);
@@ -47,20 +47,25 @@ function(){
 			var line = 1,
 				column = 1,
 				maxCols = 1,
+				maxHTiles = 1,
+				maxVTiles = 1,
+				colTiles = 1,
 				matrix = {
 					grid: {}
 				};
 			
 			if (!matrix.grid[line]) matrix.grid[line] = {};
 			matrix.grid[line][column] = words[0];
+			maxHTiles = words[0].hTiles;
 			
 			for (var w=1, len=words.length; w<len; w++) {
-			
-				if (combo[w-1] < numberOfBreaks) {
+				if (combo[w] < numberOfBreaks) {
 					line++;
 					column = 1;
+					maxHTiles = (maxHTiles < words[w].hTiles) ? words[w].hTiles : maxHTiles;
 				} else {
-					column++;
+					column += 1;
+					maxHTiles += words[w].hTiles;
 				}
 				
 				maxCols = (maxCols < column) ? column : maxCols;
@@ -69,15 +74,18 @@ function(){
 				
 				matrix.grid[line][column] = words[w];		
 			}
-						
-			matrix.columns = maxCols;			
+				
+			matrix.columns = maxCols;
+			matrix.maxHTiles = maxHTiles;
 			matrix.lines = line;
+			matrix.maxVTiles = line;
+
 			return matrix;
 		},
 		
 		_scoreMatrix = function(matrix) {
 			
-			matrix.score = matrix.lines * 1.1 + matrix.columns * 1.5;			
+			matrix.score = matrix.lines * 10 + matrix.columns * 1.5;			
 			return matrix;
 		},
 		
@@ -153,38 +161,53 @@ function(){
 			};
 			_cache[string].words = [];
 			
-			_.each(words, function(word) {				
+			_.each(words, function(word) {			
 				_cache[string].words.push({
 					text: word,
 					hTiles: _renderWord(word)
 				});
 			});
 			
-			_cache[string].combos = _generateCombos(words);
+			_cache[string].combos = _generateCombos(_cache[string].words);
 		},
 		
 		stringThatFits = function(hTiles, vTiles) {
+			
 			//Loop through cache
 			var candidates = _.select(_cache, function(element) {
 				return !element.used;
 			}),
 			
-			passed = [];
+			passed = [],
+			
+			randIdx;
 			
 			_.each(candidates, function(element) {
 				var combos = _.select(element.combos, function(combo) {
-					return combo.columns <= hTiles && combo.lines <= vTiles;
+					return combo.maxHTiles <= hTiles && combo.maxVTiles <= vTiles;
 				});
 				
-				combos = _.sortBy(combos, function(combo) {
-					return - combo.score;
-				});
-				
-				// Choose the one with the highest score
-				passed.push(combos[0]);
+				if (combos.length) {
+					
+					combos = _.sortBy(combos, function(combo) {
+						return - combo.score;
+					});
+					
+					element.combos = combos;
+					
+					passed.push(element);
+				}
 			});
 			
-			return passed;
+			if (passed.length) {			
+				randIdx = Math.round(Math.random()*(passed.length-1));
+				
+				passed[randIdx].used = true;
+				
+				return passed[randIdx].combos[0];
+			} else {
+				return null;
+			}
 		}
 		
 		// Subscribe to interesting events

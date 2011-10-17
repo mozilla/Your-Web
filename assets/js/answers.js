@@ -129,24 +129,12 @@ function(){
 				return returnArray;
 			},
 			
-			/**
-			 * Filter collection by objects that were liked by a user
-			 *
-			 * @method filterByLikes
-			 * @param {Integer} likes Number of likes to filter collection by.
-			 *
-			 * @returns {Array} An array with the filtered collection objects
-			 */
-			filterByLikes: function(likes) {
-				var returnArray;
-				likes = likes || 0;
-				
-				returnArray = _(this.filter(function(answer) {
-					return answer.get('likes') > likes;
+			filterByImportant: function() {
+				var returnArray = _(this.filter(function(answer) {
+					return answer.get('important');
 				}));
 				
 				_.extend(returnArray, filterList);
-				
 				return returnArray;
 			}
 		}
@@ -161,17 +149,8 @@ function(){
 					usertype: 'Other',
 					created	: new Date(),
 					language: 'en-US',
-					likes: 0,
-					userHasLiked: false
+					important: false
 				}
-			},
-			
-			like: function() {
-				this.save({likes: parseInt(this.get('likes'), 10) + 1, userHasLiked: true});
-			},
-			
-			unlike: function() {
-				this.save({likes: parseInt(this.get('likes'), 10) - 1, userHasLiked: false});
 			}
 		});	
 			
