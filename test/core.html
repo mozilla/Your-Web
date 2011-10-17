@@ -10,34 +10,21 @@
 	<script src="../assets/js/libs/strftime.js"></script>
 	<script src="../assets/js/utils.js"></script>
 	<script src="assets/sinon-1.1.1.js"></script>
+
 	<script>
 		$(document).ready(function() {
 			var ctx = window;
 			
-			module('App object');
+			module('Hash object');
 			test('App is global and accessible', function() {
 				ok(ctx.App, 'App is defined');
 			});
 			
-			module('App namespacing utility');
-			test('Creating "testSuite" namespace', function(){
-				ctx.App.namespace('testSuite');
-				ok(ctx.App.testSuite, 'App.testSuite is defined');
+			test('Hash is defined in the global App', function() {
+				ok(ctx.App.hash, 'Hash is defined');
 			});
 			
-			module('App PubSub system');
-			test('App.events', function() {
-				ok(ctx.App.events, 'App.event is defined');
-			});
 			
-			test('App.events should call subscribers on publish', function() {
-				var callback = sinon.spy();
-				
-				ctx.App.events.subscribe('some/topic', callback);
-				ctx.App.events.publish('some/topic');
-				
-				ok(callback.called);
-			});
 		});	
 	</script>
 </head>

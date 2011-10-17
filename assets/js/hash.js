@@ -217,21 +217,20 @@ function(){
             
             /**
 			 * Retrieves updated collection from store.
-			 * Publishes an event on successful retrieval of collection, 
-			 * with the updated collection as a parameter.
 			 *
 			 * @method retrieve
+             * @returns {Object} updated collection
 			 */
             retrieve: function() {
                 return _hash.state();
             },
             
             /**
-			 * Retrieves updated collection from store.
-			 * Publishes an event on successful retrieval of collection, 
-			 * with the updated collection as a parameter.
+			 * Retrieves collection from store
 			 *
 			 * @method retrieve
+             *
+             * @returns {Object}  collection
 			 */
             description: function() {
                 return _hash.description();
@@ -241,9 +240,11 @@ function(){
 			 * Set a property of the Hash model
 			 *
 			 * @method setProperty
+             *
              * @param {String} key Named key in the model
              * @param {String} value Valuel of the named key
-
+             * 
+             * 
 			 */
             setProperty: function(key, value) {
                 _hash.setProperty(key, value);
