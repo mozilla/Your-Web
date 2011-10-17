@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mozilla YourWeb Test Suite</title>
+	<link rel="stylesheet" href="assets/qunit.css" type="text/css" media="screen">
+	<script src="../assets/js/libs/jquery-1.6.3.min.js"></script>
+	<script data-main="../assets/js/main.js" src="../assets/js/libs/requirejs/require.js"></script>
+	<script src="assets/qunit.js"></script>
+	<script src="../assets/js/libs/underscore.min.js"></script>
+	<script src="../assets/js/libs/backbone-0.5.3.min.js"></script>
+	<script src="../assets/js/libs/strftime.js"></script>
+	<script src="assets/sinon-1.1.1.js"></script>
+	<script src="../assets/js/main.js"></script>
+	
+	<script>
+		var APP_CONFIG = {
+			filters: {
+				usertype: ['designer', 'developer'],
+				language: ['en-US']
+			},
+			tilemap: {
+				lines: 20,
+				columns: 40,
+				preoccupied: {
+					lines: {
+						start: 0,
+						stop: 4
+					},
+					columns: {
+						start: 0,
+						stop: 10
+					}
+				}
+			}
+		}
+		
+		var ctx = window;
+
+		$(document).ready(function() {
+			
+			module('App object');
+			test('App is global and accessible', function() {
+				ok(ctx.APP, 'APP is defined');
+			});
+			
+			module('APP namespacing utility');
+			test('Creating "testSuite" namespace', function(){
+				ctx.APP.namespace('testSuite');
+				ok(ctx.APP.testSuite, 'APP.testSuite is defined');
+			});
+			
+			module('APP PubSub system');
+			test('APP.events', function() {
+				ok(ctx.APP.events, 'APP.event is defined');
+			});
+			
+			test('APP.events should call subscribers on publish', function() {
+				var callback = sinon.spy();
+				
+				ctx.APP.events.subscribe('some/topic', callback);
+				ctx.APP.events.publish('some/topic');
+				
+				ok(callback.called);
+			});
+			
+			module('APP Hash system');
+			test('APP.hash', function() {
+				ok(ctx.APP.hash, 'APP.hash is defined');
+			});
+			
+			test('APP.hash.refresh', function() {
+				ok(ctx.APP.hash.refresh, 'APP.hash.refresh is defined');
+			});
+
+			test('APP.hash.retrieve', function() {
+				
+				ok(ctx.APP.hash.retrieve, 'APP.hash.retrieve is defined');
+				var currentHash = ctx.APP.hash.retrieve();
+				
+				notEqual(Object.keys(currentHash).length, 0, 'By default the Hash object already has properties');
+				
+				
+			});
+			
+			test('APP.hash.description', function() {
+				
+				ok(ctx.APP.hash.description, 'APP.hash.description is defined');
+				var currentHash = ctx.APP.hash.description();
+				
+				notEqual(Object.keys(currentHash).length, 0, 'By default the Hash object already has properties');
+				
+				
+			});
+			
+			test('APP.hash.refresh', function() {
+				
+				ok(ctx.APP.hash.description, 'APP.hash.refresh is defined');
+				var currentHash = ctx.APP.hash.description();
+
+				window.location.hash = "";
+				var currentHash = ctx.APP.hash.description();
+				var firstHash = window.location.hash;
+				
+				ctx.APP.hash.setProperty("currentQuestion",currentHash.currentQuestion);
+				ctx.APP.hash.refresh();
+								var secondHash = window.location.hash;
+
+				notEqual(firstHash, secondHash, 'Refresh updates the URL hash');
+				
+			});
+			
+			test('APP.hash.setProperty', function() {
+				ok(ctx.APP.hash.setProperty, 'APP.hash.setProperty is defined');
+				window.location.hash = "";
+				var currentHash = ctx.APP.hash.description();
+				var firstHash = window.location.hash;
+				
+				ctx.APP.hash.setProperty("currentQuestion",currentHash.currentQuestion);
+				ctx.APP.hash.refresh();
+				var secondHash = window.location.hash;
+				notEqual(firstHash, secondHash, 'A valid property change changes the URL hash.');
+
+				ctx.APP.hash.setProperty("monkeyKey",currentHash.currentQuestion);
+				 ctx.APP.hash.refresh();
+				var thirdHash = window.location.hash;
+				equal(secondHash, thirdHash, 'An invalid property change does not the URL hash.');
+				
+			});
+			
+			
+			
+
+			
+		});	
+	</script>
+</head>
+<body>
+	<h1 id="qunit-header">Mozilla YourWeb Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+</body>
+</html>
