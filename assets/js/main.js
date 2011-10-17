@@ -6,6 +6,8 @@ require([], function() {
         'hash',        
 		'ui',
 		'tileViz',
+		'browsertester',
+        
 	], 
 	function(){
 	
