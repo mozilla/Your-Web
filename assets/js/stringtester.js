@@ -37,7 +37,7 @@ function(){
 			
 			$('body').append($el);
 			width = Math.ceil($el.width());
-			//$el.remove();
+			$el.remove();
 			
 			// Return width, in tiles
 			return tilemap.pixelsToTiles(width);
@@ -150,7 +150,7 @@ function(){
 			return permArr;
 		},
 		
-		test = function(string) {
+		test = function(string, model) {
 			if (!string) return false;
 			
 			var words = _breakWords(string);
@@ -169,6 +169,7 @@ function(){
 			});
 			
 			_cache[string].combos = _generateCombos(_cache[string].words);
+			_cache[string].model = model;
 		},
 		
 		stringThatFits = function(hTiles, vTiles) {
@@ -204,6 +205,8 @@ function(){
 				
 				passed[randIdx].used = true;
 				
+				passed[randIdx].combos[0].model = passed[randIdx].model;
+				
 				return passed[randIdx].combos[0];
 			} else {
 				return null;
@@ -215,7 +218,7 @@ function(){
 		// Test strings on first reset
 		app.answers.collection.bind('reset', function(collection) {
 			collection.each(function(model){
-				test(model.get('content'));
+				test(model.get('content'), model);
 			});
 		});
 		
