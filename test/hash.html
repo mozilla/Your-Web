@@ -87,7 +87,22 @@
 				ok(ctx.APP.hash.description, 'APP.hash.description is defined');
 				var currentHash = ctx.APP.hash.description();
 				
+				var description1 = ctx.APP.hash.description();
 				notEqual(Object.keys(currentHash).length, 0, 'By default the Hash object already has properties');
+				ctx.APP.hash.setProperty("currentQuestion",currentHash.currentQuestion+"a");
+				
+				var description2 = ctx.APP.hash.description();
+				
+				notEqual(description1.currentQuestion, description2.currentQuestion, 'Description after setProperty returns the updated Hash object');
+				
+				
+				var description1 = ctx.APP.hash.description();
+				notEqual(Object.keys(currentHash).length, 0, 'By default the Hash object already has properties');
+				window.location.hash = "&tl=en-US&ut=designer,developer&f=&a=&q=7bd1255f-6efe-983a-6918-52b213d8d176b";
+				
+				var description2 = ctx.APP.hash.description();
+				
+				equal(description1.currentQuestion, description2.currentQuestion, 'Description after hash change returns the updated Hash object');
 				
 				
 			});
@@ -103,13 +118,23 @@
 				
 				ctx.APP.hash.setProperty("currentQuestion",currentHash.currentQuestion);
 				ctx.APP.hash.refresh();
-								var secondHash = window.location.hash;
+				var secondHash = window.location.hash;
 
 				notEqual(firstHash, secondHash, 'Refresh updates the URL hash');
+				
+				
+				window.location.hash = "&tl=en-US&ut=designer,developer&f=&a=&q=7bd1255f-6efe-983a-6918-52b213d8d175";
+				var firstObject = ctx.APP.hash.retrieve();
+				window.location.hash = "&tl=en-US&ut=designer,developer&f=&a=&q=7bd1255f-6efe-983a-6918-52b213d8d176";
+				var secondObject = ctx.APP.hash.retrieve();
+				
+				notEqual(firstObject.currentQuestion, secondObject.currentQuestion, 'Updated URL hash updates the model');
+
 				
 			});
 			
 			test('APP.hash.setProperty', function() {
+				
 				ok(ctx.APP.hash.setProperty, 'APP.hash.setProperty is defined');
 				window.location.hash = "";
 				var currentHash = ctx.APP.hash.description();
@@ -121,7 +146,7 @@
 				notEqual(firstHash, secondHash, 'A valid property change changes the URL hash.');
 
 				ctx.APP.hash.setProperty("monkeyKey",currentHash.currentQuestion);
-				 ctx.APP.hash.refresh();
+				ctx.APP.hash.refresh();
 				var thirdHash = window.location.hash;
 				equal(secondHash, thirdHash, 'An invalid property change does not the URL hash.');
 				
