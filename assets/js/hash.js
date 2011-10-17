@@ -11,7 +11,7 @@
 //Module dependencies
 [
     'libs/backbone-0.5.3.min',
-	'libs/underscore',
+	'libs/underscore.min',
 	'core'
 ],
 
