@@ -11,6 +11,7 @@
 //Module dependencies
 [
 	'core',
+	'libs/jquery-1.6.3.min',
 	'libs/underscore.min',
 	'tilemap'
 ],
@@ -151,7 +152,7 @@ function(){
 		},
 		
 		test = function(string, model) {
-			if (!string) return false;
+			if (!string || !model) return false;
 			
 			var words = _breakWords(string);
 			
@@ -217,14 +218,16 @@ function(){
 		
 		// Test strings on first reset
 		app.answers.collection.bind('reset', function(collection) {
-			collection.each(function(model){
+			_(collection.filter(function(answer) {
+				return !answer.get('image');
+			})).each(function(model){
 				test(model.get('content'), model);
 			});
 		});
 		
 		// And as they come in
 		app.answers.collection.bind('add', function(model, collection) {
-			test(model.get('content'));
+			test(model.get('content'), model);
 		});
 		
 		// Public API
