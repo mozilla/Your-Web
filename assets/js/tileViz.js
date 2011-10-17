@@ -11,7 +11,8 @@ define(
 	'questions',
 	'answers',
 	'tilemap',
-	'stringtester'
+	'stringtester',
+	'imagetester'
 ],
 function(){
 	var app = window.APP,
@@ -24,12 +25,12 @@ function(){
 	AppView,
 	//templates
 	questionTemplate = '{{content}}',
-	answerTemplate = '<article>{{#if image}}<img src="{{image}}" />{{/if}}{{{layout}}}<p class="meta">Submitted by a {{usertype}} on {{created}}</p></article>';
+	answerTemplate = '<article>{{#if image}}<img src="{{image.url}}" />{{/if}}{{{layout}}}<p class="meta">Submitted by a {{usertype}} on {{created}}</p></article>';
 	
 	app.namespace('views');
 	
 	// Generate the tilemap
-	app.tilemap.buildMap(app.config.tilemap.lines, app.config.tilemap.columns, app.config.tilemap.preoccupied);
+	app.tilemap.buildMap(app.config.tilemap.lines, app.config.tilemap.columns, app.config.tilemap.preoccupied);	
 	app.tilemap.render($('#tilemap').get(0));
 	$('.tiled-answers').css({width: $('#tilemap').width(), height: $('#tilemap').height()});
 		
@@ -130,7 +131,7 @@ function(){
 		},
 		
 		render: function(answers) {
-			this.$('.tiled-answers').empty();
+			//this.$('.tiled-answers').empty();
 			answers.each(this.addOne);
 		},
 		
@@ -242,27 +243,27 @@ function(){
 		$el.css({fontSize: '200%', position: 'absolute', top: xPos + 'px', left: yPos+ 'px', width: width, height: height});
 	},
 	
+	_placeImageObject = function(obj, container) {
+		view = new AnswerView( { model: obj.model } );
+		$(container).append(view.render(obj.model.get('content')).el);
+	},
+	
 	fillMap = function() {
 		var tilemap = app.tilemap,
 			map = tilemap.map(),
-			freeTiles;
+			freeHTiles;
 		
 		function recursive(line, col) {
 			
-			freeTiles = tilemap.freeHorizontal( { x:line, y:col } );
+			freeHTiles = tilemap.freeHorizontal( { x:line, y:col } );
 			
-			_.each(freeTiles, function(free) {
-				var object = app.stringtester.stringThatFits(free.count, 50);
+			_.each(freeHTiles, function(free) {
+				var	freeVTiles = tilemap.freeVertical( free.tile, {x:free.tile.x, y:free.tile.y + free.count } ),
+					object = app.stringtester.stringThatFits(free.count, freeVTiles);
 				
 				if (object) {					
 					if (tilemap.isTileFree(free.tile)) _placeObject(object, free.tile);
-					/*
-					for (var l=free.tile.x, len=free.tile.x + object.maxVTiles; l<=len; l++) {
-						for (var c=free.tile.y; c <= free.tile.y + object.maxHTiles; c++) {
-							tilemap.occupyTile({x:l, y:c});
-						}
-					}
-					*/
+
 					for (var l=free.tile.x, len=free.tile.x + object.maxVTiles-1; l<=len; l++) {
 						for (var c=free.tile.y; c <= free.tile.y + object.maxHTiles-1; c++) {
 							tilemap.occupyTile({x:l, y:c});
@@ -277,11 +278,65 @@ function(){
 			recursive(l, 0);
 		}
 		
+		_.each(app.config.tilemap.imageSlots, function(slot) {
+			var slotWidth = slot.lines.stop - slot.lines.start,
+				slotHeight = slot.columns.stop - slot.columns.start,
+				objects = app.imagetester.imagesThatFit( slotWidth, slotHeight);
+			
+			_.each(objects, function(object) {
+				_placeImageObject(object, $('[data-imageratio="' + object.ratio + '"][data-hTiles="' + slotHeight +'"][data-vTiles="'+ slotWidth +'"]').find('ul'));
+			});
+		});
+		
 		tilemap.clear($('#tilemap').get(0));
 		tilemap.render($('#tilemap').get(0));
 	};
 	
-	app.answers.collection.bind('reset', function() {
+	app.answers.collection.bind('reset', function(collection) {
+		var imageCollection = _(collection.filter(function(answer) { return answer.has('image') })),
+			ratios = [],
+			allowedSlots = [];
+			
+		$('.tiled-answers').empty();
+		
+		imageCollection.each(function(answer) {
+			ratios.push(
+				Math.max(answer.get('image').width, answer.get('image').height) /
+				Math.min(answer.get('image').width, answer.get('image').height)
+			)
+		});
+		
+		_.each(app.config.tilemap.imageSlots, function(slot) {
+			var width = slot.lines.stop - slot.lines.start,
+				height = slot.columns.stop - slot.columns.start,
+				ratio = Math.max(width, height) / Math.min(width, height),
+				$container;
+			
+			if (_.include(ratios, ratio)) {
+				allowedSlots.push(slot);
+				
+				//render the container
+				$container = $('<li><ul></ul></li>');
+				
+				$container
+				.css({
+					width: app.tilemap.tilesToPixels(height),
+					height: app.tilemap.tilesToPixels(width),
+					position: 'absolute',
+					top: app.tilemap.tilesToPixels(slot.lines.start),
+					left: app.tilemap.tilesToPixels(slot.columns.start)
+				})
+				.addClass('slideshow')
+				.attr('data-imageratio', ratio)
+				.attr('data-hTiles', height)
+				.attr('data-vTiles', width);
+				
+				$('.tiled-answers').append($container);
+			}
+		});
+		
+		app.tilemap.addImageSlots(allowedSlots);
+			
 		setTimeout(fillMap, 500);
 	});
 	

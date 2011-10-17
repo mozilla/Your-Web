@@ -125,6 +125,11 @@ function() {
 							{\
 								"content":"Books",\
 								"weight":0,\
+								"image": {\
+											"url": "http://placekitten.com/500/500",\
+											"width": 500,\
+											"height": 500\
+										  },\
 								"usertype":"designer",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"en-US",\
@@ -153,6 +158,11 @@ function() {
 							{\
 								"content":"Browsers",\
 								"weight":0,\
+								"image": {\
+											"url": "http://placekitten.com/400/300",\
+											"width": 400,\
+											"height": 300\
+										  },\
 								"usertype":"designer",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"pt-PT",\
@@ -164,7 +174,11 @@ function() {
 		answersFor2 = '[\
 							{\
 								"content":"Moar Lulz!",\
-								"image":"http://placekitten.com/200/300",\
+								"image": {\
+											"url": "http://placekitten.com/200/300",\
+											"width": 200,\
+											"height": 300\
+										  },\
 								"weight":0,\
 								"usertype":"developer",\
 								"created":"2011-10-04T16:13:12.492Z",\

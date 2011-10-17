@@ -75,6 +75,34 @@ function(){
 		},
 		
 		/**
+		 * Adds image slots from config to random places on the map
+		 * 
+		 */
+		addImageSlots = function(slots) {
+			var	fill = function(slot) {
+				var occupiedColumns,
+					occupiedLines;
+					
+				// Create the preoccupied ranges from config
+				if (slot.lines) {
+					occupiedLines = _.range(slot.lines.start, slot.lines.stop, slot.lines.step || 1);
+				}
+				
+				if (slot.columns) {
+					occupiedColumns = _.range(slot.columns.start, slot.columns.stop, slot.columns.step || 1);
+				}
+				
+				for (var l=0; l < _lines; l++) {			
+					for (var c=0; c < _columns; c++) {
+						if ( _.include(occupiedLines, l, true) && _.include(occupiedColumns, c, true) ) occupyTile({x: l, y: c});
+					}
+				}
+			};
+			
+			_.each(slots, fill);
+		},
+		
+		/**
 		 * Adds random padding (occupied tiles) to the map on its edges
 		 * 
 		 */
@@ -210,8 +238,41 @@ function(){
 		 *
 		 * @param {int} from 	Tile to start searching from
 		 */
-		freeVertical = function(from) {
-		
+		freeVertical = function(from, until) {
+			from = from || {x:0, y:0};
+			until = until || {x:tilemap.length, y:tilemap[0].length};
+			
+			//app.log(from, until);
+			
+			var line = tilemap[from.x],
+				col = line[from.y],
+				freeTiles = [],
+				currentTiles = [],
+				vTiles = 0,
+				vTilesArr = [],
+				freeTilesCount = 0,
+				nextTile,
+				tile;
+			
+			for (var c=from.y, clen=until.y; c<clen; c++) {
+				vTiles = 0;
+				for (var l=from.x, llen=tilemap.length; l<llen; l++) {
+					tile = {x: l, y: c};
+
+					if (_isTileFree( tile )) {
+						vTiles++;
+					} else {
+						break;
+					}
+				}
+				vTilesArr.push(vTiles);
+			}
+			
+			vTilesArr = vTilesArr.sort(function(a, b) {
+				return a-b;
+			});
+			
+			return vTilesArr[0];
 		},
 		
 		clearMap = function(canvas) {
@@ -266,6 +327,7 @@ function(){
 			freeHorizontal		:	freeHorizontal,
 			freeVertical		:	freeVertical,
 			buildMap			:	buildTileMap,
+			addImageSlots		: 	addImageSlots,
 			isTileFree			:	_isTileFree,
 			map					:	function() {
 										return tilemap;
