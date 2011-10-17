@@ -1,11 +1,8 @@
 .tiled-answers {
-  list-style-type: none;
-  width: 200px; }
+  list-style-type: none; }
   .tiled-answers li {
-    position: absolute;
     color: white;
-    font-size: 24px;
-    line-height: 32px; }
+    line-height: 24px; }
     .tiled-answers li article {
       display: inline; }
   .tiled-answers .meta {

@@ -24,7 +24,7 @@ function(){
 	AppView,
 	//templates
 	questionTemplate = '{{content}}',
-	answerTemplate = '<article>{{#if image}}<img src="{{image}}" />{{/if}}{{content}}<p class="meta">Submitted by a {{usertype}} on {{created}}</p></article>';
+	answerTemplate = '<article>{{#if image}}<img src="{{image}}" />{{/if}}{{{layout}}}<p class="meta">Submitted by a {{usertype}} on {{created}}</p></article>';
 	
 	app.namespace('views');
 	
@@ -49,7 +49,7 @@ function(){
 			this.model.bind('destroy', this.remove, this);
 		},
 		
-		render: function() {
+		render: function(layout) {
 			var modelData = this.model.toJSON(),
 			created = new Date(modelData.created),
 			classes = ['red', 'yellow', 'green', 'blue', 'pink'],
@@ -57,6 +57,8 @@ function(){
 			color = classes[randomInt];
 			
 			modelData.created = created.strftime('%A %d, %B %Y');
+			
+			modelData.layout = layout;
 			
 			$(this.el).html( this.template( modelData ) );
 			
@@ -138,8 +140,6 @@ function(){
 			
 			this.input.val('');
 			
-			
-			
 			return app.answers.create({content: text, usertype: usertype}, {
 				success: function(model, response) {
 					app.events.publish('answer/saved', [model, response]);
@@ -220,19 +220,26 @@ function(){
 		var tilemap = app.tilemap,
 			xPos = tilemap.tilesToPixels(location.x),
 			yPos = tilemap.tilesToPixels(location.y),
-			$el = $('<span>'),
+			width = tilemap.tilesToPixels(obj.maxHTiles),
+			height = tilemap.tilesToPixels(obj.maxVTiles),
+			$el,
+			view,
+			grids = obj.grid,
 			content = '';
 			
-		_.each(obj.grid, function(line) {
+		_.each(grids, function(line) {
 			_.each(line, function(word) {
 				content += word.text + ' ';
 			});
 			content += '<br />';
 		});
-			
+		
+		view = new AnswerView( { model: obj.model } );
+		$el = $(view.render(content).el);
+					
 		$('.tiled-answers').append($el);
 			
-		$el.html(content).css({fontSize: '200%', position: 'absolute', top: xPos + 'px', left: yPos+ 'px'});
+		$el.css({fontSize: '200%', position: 'absolute', top: xPos + 'px', left: yPos+ 'px', width: width, height: height});
 	},
 	
 	fillMap = function() {
@@ -249,13 +256,18 @@ function(){
 				
 				if (object) {					
 					if (tilemap.isTileFree(free.tile)) _placeObject(object, free.tile);
-					
+					/*
 					for (var l=free.tile.x, len=free.tile.x + object.maxVTiles; l<=len; l++) {
 						for (var c=free.tile.y; c <= free.tile.y + object.maxHTiles; c++) {
 							tilemap.occupyTile({x:l, y:c});
 						}
 					}
-					
+					*/
+					for (var l=free.tile.x, len=free.tile.x + object.maxVTiles-1; l<=len; l++) {
+						for (var c=free.tile.y; c <= free.tile.y + object.maxHTiles-1; c++) {
+							tilemap.occupyTile({x:l, y:c});
+						}
+					}
 					recursive(line, free.tile.y + object.maxHTiles);
 				}
 			});

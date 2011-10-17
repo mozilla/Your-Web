@@ -79,7 +79,6 @@ function(){
 		 * 
 		 */
 		_padMap = function(map) {
-			// Math.round(Math.random())
 			var isTopEdge = function(line) {
 				return (line == 0);
 			},
@@ -101,7 +100,7 @@ function(){
 						isLeftEdge(c) || 
 						isRightEdge(l, c)
 					) {
-						if (Math.round(Math.random())) {
+						if (Math.round(Math.random() * .6)) {
 							occupyTile( {x:l, y:c} );
 						}
 					}
@@ -165,10 +164,6 @@ function(){
 				x: point.x * _PXINTILE,
 				y: point.y * _PXINTILE
 			}
-		},
-		
-		_addRandomPadding = function() {
-		
 		},
 		
 		/**
