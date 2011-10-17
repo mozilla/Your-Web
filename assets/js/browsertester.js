@@ -1,11 +1,10 @@
 /**
- * The Hash module defines States to retrieve and 
- * store from the url hash. It exposes a public API to interact with
- * these states.
+ * The Browsertester module checks the used browser against the spects 
+ * and both publishes an event and has a public method for running the test
  *
- * @module Hash
+ * @module Browsertester
  * @namespace APP
- * @class hash
+ * @class browsertester
  */
  define(
 //Module dependencies
