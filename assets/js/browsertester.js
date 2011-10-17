@@ -40,6 +40,8 @@ function(){
             android 2.1+
             */
             
+            // Currently supported browsers + versions
+            
             _supported:  {
                 "webkit" : {"min":3.2}, //tested
                 "mobile-safari" : {"min":3.2}, //tested
@@ -53,10 +55,11 @@ function(){
             },      
             
             /**
-			 * Update the current state
-			 * Returns a collection of the update state collection
+			 * Checks the currently used browser against the specs
+			 * Returns a boolean wether the browser is valid and publishes an event with the same boolean as a payload
 			 *
 			 * @method test
+             * @returns {Boolean}  flag wether the used browser is valid according to the spects
 			 */
             test: function() {
 
@@ -66,12 +69,21 @@ function(){
                     this._valid = (parseFloat(this._browser.version) > this._supported[this._browser.browser].min) ? true: false;
                  } 
                     
-              
+                //publish validated event with the result boolean as a payload.
                 app.events.publish('browsertester/validated', this._valid);    
                 return this._valid; 
                                 
             },
             
+            /**
+			 * Checks the currently used browser against a series of regex
+			 * Returns a browser identifier object
+			 *
+			 * @method uaMatch
+             * @param {String} lowercase user agent string
+             * @returns {Object} an object with the browser label and version number 
+			 */
+             
             uaMatch: function( ua ) {
             
                 var matched = false;
@@ -83,23 +95,22 @@ function(){
                 rmsie = /(msie) ([\w.]+)/,
                 rmozilla = /(mozilla)(?:.*? rv:([\w.]+))?/;
             
-                    
-                   
-
+                //run the Regex
                 var match = android.exec( ua ) || rchrome.exec( ua ) || rwebkit.exec( ua ) ||
                 ropera.exec( ua ) ||
                 rmsie.exec( ua ) ||
                 ua.indexOf("compatible") < 0 && rmozilla.exec( ua ) ||
                 [];
                 
-
+                //double check for mobile version
                 if(match[1] == "opera" && ua.indexOf("mobi") != -1) {
                     match[1] = "opera-mobile";
                 }
                 if(match[1] == "webkit" && ua.indexOf("mobile") != -1) {
                     match[1] = "mobile-safari";
                 }
-            
+                
+                //if there is no match return an object with an empty label and 0 version number
                 return { 
                     browser: match[1] || "", 
                     version: match[2] || "0"};
@@ -112,13 +123,14 @@ function(){
             /**
 			 * Set up the instance
 			 * Publishes an event once the browser test is done, 
-			 * with the validaty of the browser as a parameter.
+			 * with the validity of the browser as a parameter.
 			 *
 			 * @method init
 			 */
             init: function() {
                
-            // Browser events
+            // Default valid value is false
+            // setup and immediately validate
                 this._valid = false;
                         
                 $(function() {
@@ -147,6 +159,7 @@ function(){
 			 * Public method for manual checking
 			 *
 			 * @method test
+             * @returns {Boolean}  flag wether the used browser is valid according to the spects
 			 */
 			test: function() {
 				return _browsertester.test();
