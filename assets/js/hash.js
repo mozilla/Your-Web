@@ -140,11 +140,39 @@ function(){
 
                 });
                 
-                 app.events.subscribe('answers/new', function(payload) {
+                app.events.subscribe('answers/new', function(payload) {
                  
                     app.hash.setProperty("userAnswered",app.answers.getActive().get('id'));  
                                   
                     app.hash.refresh();
+
+                });
+                
+                app.events.subscribe('tile/select', function(payload) {
+                    //
+                    var currentTiles = app.hash.description().important;
+                    if(jQuery.inArray( payload[0].get('id'), currentTiles ) == -1) {
+
+                        currentTiles.push(payload[0].get('id'));
+                        app.hash.setProperty("important",currentTiles);  
+                        
+                        app.hash.refresh();
+                    }
+
+                });
+                
+                app.events.subscribe('tile/deselect', function(payload) {
+                 
+                    var currentTiles = app.hash.description().important;
+                    if(jQuery.inArray(payload[0].get('id'), currentTiles ) != -1) {
+
+                        currentTiles.splice(jQuery.inArray(payload[0].get('id'), currentTiles ),1); 
+
+                        app.hash.setProperty("important",currentTiles);  
+                        
+                        app.hash.refresh();
+                    }
+
 
                 });
                 
@@ -178,7 +206,25 @@ function(){
 			 */
             
             refresh: function() {
-                this._state = "&tl="+this._language.join(",")+"&ut="+this._usertype.join(",")+"&f="+this._important.join(",")+"&a="+this._userAnswered+"&q="+this._currentQuestion;
+                this._state = "";
+                if(this._language.join(",").length > 0) {
+                    this._state += "&tl="+this._language.join(",");
+                }
+                if(this._usertype.join(",").length > 0) {
+                    this._state +="&ut="+this._usertype.join(",")
+                }
+                if(this._important.join(",").length > 0) {
+                    this._state +="&f="+this._important.join(",")
+                }
+                if(this._userAnswered.length > 0) {
+                   this._state += "&a="+this._userAnswered;
+                } 
+                if(this._currentQuestion.length > 0) {
+                    this._state +="&q="+this._currentQuestion;
+                }
+                
+                
+                
                 window.location.hash = this._state;
             },
             
