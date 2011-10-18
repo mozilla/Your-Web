@@ -31,8 +31,7 @@ function() {
 				return {
 					content	: 'Which is the best Star Wars movie?',
 					active	: false,
-					created	: new Date(),
-					language: 'en-US'
+					created	: new Date()
 				}
 			},
 

@@ -149,7 +149,11 @@ function(){
 					usertype: 'Other',
 					created	: new Date(),
 					language: 'en-US',
-					important: false
+					important: false,
+					statistics: {
+						designers: 0,
+						developers: 0
+					}
 				}
 			}
 		});	
@@ -162,7 +166,7 @@ function(){
 			//localStorage: new Store('answers'),
 			
 			url: function( models ) {
-				return '/answers/' + app.questions.getActive().get('id');
+				return '/answers/' + app.questions.getActive().get('id') + app.ui.serializeFilters();
 			},
 			
 			/**
