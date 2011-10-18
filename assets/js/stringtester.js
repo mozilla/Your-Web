@@ -151,7 +151,7 @@ function(){
 			return permArr;
 		},
 		
-		test = function(string, model) {
+		test = function(string, model, silent) {
 			if (!string || !model) return false;
 			
 			var words = _breakWords(string);
@@ -171,6 +171,10 @@ function(){
 			
 			_cache[string].combos = _generateCombos(_cache[string].words);
 			_cache[string].model = model;
+			
+			if (!silent) {
+				app.events.publish('string/test', [_cache[string]]);
+			}
 		},
 		
 		stringThatFits = function(hTiles, vTiles) {
@@ -223,7 +227,7 @@ function(){
 			_(collection.filter(function(answer) {
 				return !answer.get('image');
 			})).each(function(model){
-				test(model.get('content'), model);
+				test(model.get('content'), model, true);
 			});
 		});
 		

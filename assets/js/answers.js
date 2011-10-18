@@ -234,7 +234,7 @@ function(){
 			create: function(model) {
 				var newModel = new Answer(model),
 				newAnswer = _answers.create(newModel);
-				app.events.publish('answers/new', [newAnswer]);
+				//app.events.publish('answers/new', [newAnswer]);
 				return newAnswer;
 			},
 			

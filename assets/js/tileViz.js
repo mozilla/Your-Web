@@ -18,6 +18,7 @@ function(){
 	var app = window.APP,
 	instance = this,
 	map,
+	_placedObjects = [],
 	AnswerView,
 	AnswerListView,
 	QuestionView,
@@ -138,7 +139,7 @@ function(){
 		render: function(answers) {
 			//this.$('.tiled-answers').empty();
 			//answers.each(this.addOne);			
-			renderTilesOnMap(answers);
+			renderTilesOnMap(answers, true);
 		},
 		
 		createOnEnter: function(e) {
@@ -242,11 +243,15 @@ function(){
 		});
 		
 		view = new AnswerView( { model: obj.model } );
-		$el = $(view.render(content).el);
+		$el = $(view.render(content).el).hide();
 					
 		$('.tiled-answers').append($el);
 			
 		$el.css({fontSize: '200%', position: 'absolute', top: xPos + 'px', left: yPos+ 'px', width: width, height: height});
+		
+		$el.fadeIn('fast');
+		
+		_placedObjects.push({object: obj, location: location, element: $el.get(0)});
 	},
 	
 	_placeImageObject = function(obj, container) {
@@ -257,7 +262,8 @@ function(){
 	fillMap = function() {
 		var tilemap = app.tilemap,
 			map = tilemap.map(),
-			freeHTiles;
+			freeHTiles,
+			mapWasFull = true;
 		
 		function recursive(line, col) {
 			
@@ -269,6 +275,8 @@ function(){
 				
 				if (object) {					
 					if (tilemap.isTileFree(free.tile)) _placeObject(object, free.tile);
+					
+					mapWasFull = false;
 
 					for (var l=free.tile.x, len=free.tile.x + object.maxVTiles-1; l<=len; l++) {
 						for (var c=free.tile.y; c <= free.tile.y + object.maxHTiles-1; c++) {
@@ -284,7 +292,25 @@ function(){
 			recursive(l, 0);
 		}
 		
-		_.each(app.config.tilemap.imageSlots, function(slot) {
+		// If the map was already full and our objects didn't make it, substitute older tiles
+		if (mapWasFull) {
+			_.each(_placedObjects, function(old) {
+				// See if there's an unused tile that would fit in here.
+				var newObject = app.stringtester.stringThatFits(old.object.maxHTiles, old.object.maxVTiles);
+				
+				//Substitute old for new
+				if (newObject) {
+					$(old.element).fadeOut('fast', function() {
+						$(this).remove();
+						
+						_placeObject(newObject, old.location);
+					});
+				}
+			});
+		}
+		
+		// Add images to their slots
+		_.each(app.tilemap.imageSlots, function(slot) {
 			var slotWidth = slot.lines.stop - slot.lines.start,
 				slotHeight = slot.columns.stop - slot.columns.start,
 				objects = app.imagetester.imagesThatFit( slotWidth, slotHeight);
@@ -341,6 +367,8 @@ function(){
 			}
 		});
 		
+		app.tilemap.imageSlots = allowedSlots;
+		
 		app.tilemap.addImageSlots(allowedSlots);
 			
 		setTimeout(fillMap, 500);
@@ -348,7 +376,7 @@ function(){
 	
 	app.answers.collection.bind('reset', function(collection) {
 		app.events.publish('tiles/reset', [collection]);
-		renderTilesOnMap(collection)
+		renderTilesOnMap(collection, true)
 	});
 	
 	// Subscribe to interesting events
@@ -377,6 +405,8 @@ function(){
 		app.events.publish('tiles/reset', [resultCollection]);
 		app.views.answerListView.render(resultCollection);
 	});
+	
+	app.events.subscribe('string/test', fillMap);
 	
 	// Instantiate the Question List View
 	app.views.QuestionListView = new QuestionListView;
