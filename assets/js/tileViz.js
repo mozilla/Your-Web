@@ -30,7 +30,8 @@ function(){
 	app.namespace('views');
 	
 	// Generate the tilemap
-	app.tilemap.buildMap(app.config.tilemap.lines, app.config.tilemap.columns, app.config.tilemap.preoccupied);	
+	app.tilemap.buildMap(app.config.tilemap.lines, app.tilemap.pixelsToTiles($('#content').width()), app.config.tilemap.preoccupied);
+	
 	app.tilemap.render($('#tilemap').get(0));
 	$('.tiled-answers').css({width: $('#tilemap').width(), height: $('#tilemap').height()});
 		
@@ -40,7 +41,7 @@ function(){
 		tagName: 'li',
 		
 		events: {
-
+			'click': 'handleClick'
 		},
 		
 		template: Handlebars.compile(answerTemplate),
@@ -66,6 +67,10 @@ function(){
 			$(this.el).addClass(color);
 			
 			return this;
+		},
+		
+		handleClick: function() {
+			app.events.publish('tile/select', [this, this.el]);
 		},
 		
 		remove: function() {
@@ -132,7 +137,8 @@ function(){
 		
 		render: function(answers) {
 			//this.$('.tiled-answers').empty();
-			answers.each(this.addOne);
+			//answers.each(this.addOne);			
+			renderTilesOnMap(answers);
 		},
 		
 		createOnEnter: function(e) {
@@ -290,9 +296,9 @@ function(){
 		
 		tilemap.clear($('#tilemap').get(0));
 		tilemap.render($('#tilemap').get(0));
-	};
+	},
 	
-	app.answers.collection.bind('reset', function(collection) {
+	renderTilesOnMap = function(collection) {
 		var imageCollection = _(collection.filter(function(answer) { return answer.has('image') })),
 			ratios = [],
 			allowedSlots = [];
@@ -326,7 +332,7 @@ function(){
 					top: app.tilemap.tilesToPixels(slot.lines.start),
 					left: app.tilemap.tilesToPixels(slot.columns.start)
 				})
-				.addClass('slideshow')
+				.addClass('image')
 				.attr('data-imageratio', ratio)
 				.attr('data-hTiles', height)
 				.attr('data-vTiles', width);
@@ -338,6 +344,11 @@ function(){
 		app.tilemap.addImageSlots(allowedSlots);
 			
 		setTimeout(fillMap, 500);
+	};
+	
+	app.answers.collection.bind('reset', function(collection) {
+		app.events.publish('tiles/reset', [collection]);
+		renderTilesOnMap(collection)
 	});
 	
 	// Subscribe to interesting events
@@ -363,7 +374,8 @@ function(){
 			resultCollection = resultCollection[ functionMap[ key ] ]( filters[key] );
 		}
 		
-		APP.views.answerListView.render(resultCollection);
+		app.events.publish('tiles/reset', [resultCollection]);
+		app.views.answerListView.render(resultCollection);
 	});
 	
 	// Instantiate the Question List View

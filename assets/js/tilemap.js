@@ -18,7 +18,7 @@ function(){
 	_.extend(app.tilemap, (function(){
 		
 		// number of pixels in a tile.
-		var _PXINTILE = 24,
+		var _PXINTILE = app.config.tilemap.pixelsInTile || 24,
 		
 		/* Tile Map is a multidimensional array.
 		 * Occupied tiles have a value of 1, unoccupied tiles have a value of 0.
@@ -30,6 +30,8 @@ function(){
 		
 		_columns = 0,
 		_height = 0,
+		
+		_occupiedCache = [];
 		
 		/**
 		 * Builds a tilemap with X lines and Y columns
@@ -94,7 +96,7 @@ function(){
 				
 				for (var l=0; l < _lines; l++) {			
 					for (var c=0; c < _columns; c++) {
-						if ( _.include(occupiedLines, l, true) && _.include(occupiedColumns, c, true) ) occupyTile({x: l, y: c});
+						if ( _.include(occupiedLines, l, true) && _.include(occupiedColumns, c, true) ) occupyTile({x: l, y: c}, true);
 					}
 				}
 			};
@@ -129,7 +131,7 @@ function(){
 						isRightEdge(l, c)
 					) {
 						if (Math.round(Math.random() * .6)) {
-							occupyTile( {x:l, y:c} );
+							occupyTile( {x:l, y:c}, true );
 						}
 					}
 				}
@@ -144,8 +146,12 @@ function(){
 		 * @param {Object} tile Hashed representation of a tile with "x" and "y" values.
 		 						ie. {x: 2, y: 5} for a tile on line 2 and column 5.
 		 */
-		occupyTile = function(tile) {
+		occupyTile = function(tile, skipCache) {
 			tilemap[tile.x][tile.y] = 1;
+			
+			if (!skipCache) {
+				_occupiedCache.push(tile);
+			}
 		},
 		
 		/**
@@ -321,6 +327,13 @@ function(){
 			}
 			
 		};
+		
+		//Subscribe to interesting events
+		app.events.subscribe('tiles/reset', function(collection) {
+			//_occupiedCache.each(freeTile);
+			//clearMap(canvas);
+			_.each(_occupiedCache, freeTile);
+		});
 		
 		// Public API
 		return {

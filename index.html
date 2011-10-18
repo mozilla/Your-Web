@@ -9,20 +9,6 @@
 <h1>Your Web</h1>
 
 <div id="content">
-	<!--
-	<form id="submitQuestion">
-		<div class="clearfix">
-			<label for="new-question">Add a new question</label>
-			<div class="input"><input type="text" id="new-question" placeholder="How do you see the web in 3 years?" /></div>
-		</div>
-		<div class="clearfix">
-			<div class="input">
-				<input type="checkbox" name="" id="question_active" value="">
-				<span>Make active question?</span>
-			</div>
-        </div>
-	</form>
-	-->
 	<div class="question-list">
 	</div>
 	<div id="submitAnswer-modal" class="modal hide fade">
@@ -61,7 +47,10 @@
 		</div>
 	</div>
 	
-	<a class="btn" data-controls-modal="submitAnswer-modal" data-backdrop="static" >Submit your answer!</a>
+	<form>
+		<input type="text" class="pre-answer">
+		<a class="btn" data-controls-modal="submitAnswer-modal" data-backdrop="static" >Submit your answer!</a>
+	</form>
 	
 	<div id="filters">
 		<div class="input">
@@ -97,8 +86,8 @@
 			language: ['en-US']
 		},
 		tilemap: {
+			pixelsInTile: 24,
 			lines: 20,
-			columns: 40,
 			preoccupied: {
 				lines: {
 					start: 0,

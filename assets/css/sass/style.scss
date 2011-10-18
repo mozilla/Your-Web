@@ -14,7 +14,7 @@
 		display: none;
 	}
 	
-	li.slideshow {
+	li.image {
 		
 		ul {
 			list-style-type: none;
@@ -53,6 +53,10 @@
 	}
 }
 
+#content {
+	width: 960px;
+}
+
 #tilemap {
 	position: relative;
 }
@@ -61,6 +65,21 @@
 	position: absolute;
 	z-index:10;
 	margin: 0;
-	top:199px;
+	top:217px;
 	left: 0;
+}
+
+.tooltip {
+	height: 300px;
+	width: 300px;
+	background: rgba(0,0,0,.5);
+	position: relative;
+	
+	.arrow {
+		background: rgba(0,0,0,.8);
+		width: 40px;
+		height: 20px;
+		position: absolute;
+		top: -20px;
+	}
 }
