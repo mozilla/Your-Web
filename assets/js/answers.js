@@ -11,8 +11,8 @@
 //Module dependencies
 [
 	'libs/backbone-0.5.3.min',
-	//'libs/backbone-localstorage',
 	'libs/underscore.min',
+	'hash',
 	'core'
 ],
 function(){
@@ -166,7 +166,8 @@ function(){
 			//localStorage: new Store('answers'),
 			
 			url: function( models ) {
-				return '/answers/' + app.questions.getActive().get('id') + app.ui.serializeFilters();
+				app.log(app.ui);
+				return '/answers/' + app.questions.getActive().get('id') + '?' + app.ui.getSerializedFilters();
 			},
 			
 			/**
@@ -217,6 +218,12 @@ function(){
 		// Subscribe to interesting events
 		_answers.bind('reset', function() {
 			app.events.publish('answers/refresh', [_answers]);
+		});
+		
+		app.events.subscribe('filters/change', function() {
+			_answers.url = function() {
+				return '/answers/' + app.questions.getActive().get('id') + '?' + app.ui.getSerializedFilters();
+			}
 		});
 				
 		// Public API

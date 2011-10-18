@@ -15,12 +15,12 @@ function(){
 	_.extend(app.ui, (function() {
 		
 		var serializeFilters = function() {
-			//app.log(app.config.filters);
+			return $.param(filters);
 		}
 		
 		// Public API
 		return {
-			serializeFilters: serializeFilters
+			getSerializedFilters: serializeFilters
 		}
 	})());
 	
