@@ -36,8 +36,8 @@ function(){
             _language: new Array(),
             /** Array with selected user types for filtering. */
             _usertype: new Array(),
-            /** Array of selected tile ids. */
-            _important: new Array(),
+            /** Selected tile id. */
+            _important: "",
             /** The id of tile created by a user */
             _userAnswered: "",
             /** The id of question selected by a user */
@@ -63,7 +63,7 @@ function(){
                         } else if(component[0] == "ut") {
                             this._usertype = component[1].split(",");
                         } else if(component[0] == "f") {
-                            this._important = (component[1].split(",").length > 0) ? component[1].split(",") : new Array();
+                            this._important = (component[1].length > 0) ? component[1] : "";
                         } else if(component[0] == "a") {
                             this._userAnswered = (component[1].length > 0) ? component[1] : "";
                         } else if(component[0] == "q") {
@@ -142,7 +142,7 @@ function(){
                 
                 app.events.subscribe('answers/new', function(payload) {
                  
-                    app.hash.setProperty("userAnswered",app.answers.getActive().get('id'));  
+                    app.hash.setProperty("userAnswered",payload.get('id'));  
                                   
                     app.hash.refresh();
 
@@ -150,28 +150,18 @@ function(){
                 
                 app.events.subscribe('tile/select', function(payload) {
                     //
-                    var currentTiles = app.hash.description().important;
-                    if(jQuery.inArray( payload[0].get('id'), currentTiles ) == -1) {
 
-                        currentTiles.push(payload[0].get('id'));
-                        app.hash.setProperty("important",currentTiles);  
-                        
-                        app.hash.refresh();
-                    }
+                    app.hash.setProperty("important",payload.model.get('id'));  
+                    app.hash.refresh();
+                    
 
                 });
                 
                 app.events.subscribe('tile/deselect', function(payload) {
                  
-                    var currentTiles = app.hash.description().important;
-                    if(jQuery.inArray(payload[0].get('id'), currentTiles ) != -1) {
 
-                        currentTiles.splice(jQuery.inArray(payload[0].get('id'), currentTiles ),1); 
-
-                        app.hash.setProperty("important",currentTiles);  
-                        
+                        app.hash.setProperty("important","");  
                         app.hash.refresh();
-                    }
 
 
                 });
@@ -211,10 +201,10 @@ function(){
                     this._state += "&tl="+this._language.join(",");
                 }
                 if(this._usertype.join(",").length > 0) {
-                    this._state +="&ut="+this._usertype.join(",")
+                    this._state +="&ut="+this._usertype.join(",");
                 }
-                if(this._important.join(",").length > 0) {
-                    this._state +="&f="+this._important.join(",")
+                if(this._important.length > 0) {
+                    this._state +="&f="+this._important;
                 }
                 if(this._userAnswered.length > 0) {
                    this._state += "&a="+this._userAnswered;
