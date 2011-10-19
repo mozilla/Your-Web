@@ -248,8 +248,6 @@ function(){
 			from = from || {x:0, y:0};
 			until = until || {x:tilemap.length, y:tilemap[0].length};
 			
-			//app.log(from, until);
-			
 			var line = tilemap[from.x],
 				col = line[from.y],
 				freeTiles = [],

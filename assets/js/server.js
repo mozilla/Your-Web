@@ -147,7 +147,7 @@ function() {
 								"id":"44cc74df-1e8e-0a24-fc8e-a73a50130d1d"\
 							},\
 							{\
-								"content":"No more mouses",\
+								"content":"No more mice",\
 								"weight":0,\
 								"usertype":"designer",\
 								"created":"2011-10-04T16:13:02.284Z",\

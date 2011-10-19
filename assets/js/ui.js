@@ -18,6 +18,14 @@ function(){
 			return $.param(filters);
 		}
 		
+		// Event subscription
+		app.events.subscribe('hash/done', function(state) {
+			filters.usertype = [];
+			_.each(state.usertype, function(type) {
+				filters.usertype.push(type);
+			});
+		});
+		
 		// Public API
 		return {
 			getSerializedFilters: serializeFilters
@@ -37,7 +45,6 @@ function(){
 				filter = app.config.filters[filterType];
 				
 			$(this).attr('value', $(this).val());
-			
 			filter = [];		
 			$filterCollection.each(function() {
 				

@@ -115,7 +115,6 @@ function(){
                 this._currentQuestion = "";  
 
             // Publish the done event with the current state as a payload
-                
                 app.events.publish('hash/done', this.state());
 
             // Subscribe to interesting events

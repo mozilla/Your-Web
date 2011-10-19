@@ -406,7 +406,12 @@ function(){
 		app.views.answerListView.render(resultCollection);
 	});
 	
+	app.events.subscribe('hash/done', function(state) {
+		
+	});
+	
 	app.events.subscribe('string/test', fillMap);
+	
 	
 	// Instantiate the Question List View
 	app.views.QuestionListView = new QuestionListView;

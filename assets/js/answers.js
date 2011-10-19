@@ -166,7 +166,6 @@ function(){
 			//localStorage: new Store('answers'),
 			
 			url: function( models ) {
-				app.log(app.ui);
 				return '/answers/' + app.questions.getActive().get('id') + '?' + app.ui.getSerializedFilters();
 			},
 			
