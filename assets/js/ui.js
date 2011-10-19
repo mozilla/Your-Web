@@ -4,7 +4,8 @@ define(
 	'libs/jquery-1.6.3.min',
 	'libs/underscore.min',
 	'libs/handlebars',
-	'core'
+	'core',
+	'hash'
 ],
 function(){
 	var app = window.APP,
