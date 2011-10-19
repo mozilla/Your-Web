@@ -80,6 +80,7 @@ function() {
     	events: (function(){
     		// the topic/subscription hash
         	var _cache = {},
+        		_noSubsTopics = {},
         		_that = this,
 
             /**
@@ -96,9 +97,16 @@ function() {
      		 *
              */
         	publish = function(topic, args){
+        		args = (_.isArray(args)) ? args : [args];
+        		
         		_cache[topic] && _.each(_cache[topic], function(callback){
         			callback.apply(_that, args || []);
         		});
+        		
+        		//If there's no subscribers yet, cache it so we can send it to the first function that subscribes
+        		if (!_cache[topic]) {
+        			_noSubsTopics[topic] = args;
+        		}
         	},
 
             /**
@@ -121,6 +129,13 @@ function() {
         			_cache[topic] = [];
         		}
         		_cache[topic].push(callback);
+        		
+        		// Publish cached publications to this subscriber now!
+        		if (_noSubsTopics[topic]) {
+        			publish(topic, [_noSubsTopics[topic]]);
+        			_noSubsTopic[topic] = null;
+        		}
+        		
         		return [topic, callback];
         	},
 
