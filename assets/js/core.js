@@ -133,7 +133,7 @@ function() {
         		// Publish cached publications to this subscriber now!
         		if (_noSubsTopics[topic]) {
         			publish(topic, [_noSubsTopics[topic]]);
-        			_noSubsTopic[topic] = null;
+        			_noSubsTopics[topic] = null;
         		}
         		
         		return [topic, callback];
