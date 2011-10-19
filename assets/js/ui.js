@@ -4,6 +4,7 @@ define(
 	'libs/jquery-1.6.3.min',
 	'libs/underscore.min',
 	'libs/handlebars',
+	'libs/jquery.cycle.lite',
 	'core',
 	'hash'
 ],
@@ -17,6 +18,10 @@ function(){
 		
 		var serializeFilters = function() {
 			return $.param(filters);
+		},
+		
+		makeSlideShow = function(element) {
+			$(element).cycle();
 		}
 		
 		// Event subscription
@@ -42,7 +47,8 @@ function(){
 		
 		// Public API
 		return {
-			getSerializedFilters: serializeFilters
+			getSerializedFilters: serializeFilters,
+			makeSlideShow		: makeSlideShow
 		}
 	})());
 	
@@ -67,7 +73,7 @@ function(){
 					if ($(this).is(':checked')) {
 						filter.push($(this).val());
 					}
-				} else {			 
+				} else {
 					filter.push($(this).val());
 				}
 			});

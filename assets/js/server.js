@@ -139,6 +139,11 @@ function() {
 							{\
 								"content":"Keypads",\
 								"weight":0,\
+								"image": {\
+											"url": "http://placekitten.com/300/300",\
+											"width": 500,\
+											"height": 500\
+										  },\
 								"usertype":"developer",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\

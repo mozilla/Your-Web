@@ -257,6 +257,7 @@ function(){
 	_placeImageObject = function(obj, container) {
 		view = new AnswerView( { model: obj.model } );
 		$(container).append(view.render(obj.model.get('content')).el);
+		app.ui.makeSlideShow(container);
 	},
 	
 	fillMap = function() {
@@ -316,7 +317,7 @@ function(){
 				objects = app.imagetester.imagesThatFit( slotWidth, slotHeight);
 			
 			_.each(objects, function(object) {
-				_placeImageObject(object, $('[data-imageratio="' + object.ratio + '"][data-hTiles="' + slotHeight +'"][data-vTiles="'+ slotWidth +'"]').find('ul'));
+				_placeImageObject(object, $('[data-imageratio="' + object.ratio + '"][data-hTiles="' + slotHeight +'"][data-vTiles="'+ slotWidth +'"]').find('.image-list'));
 			});
 		});
 		
@@ -337,18 +338,19 @@ function(){
 				Math.min(answer.get('image').width, answer.get('image').height)
 			)
 		});
-		
+			
 		_.each(app.config.tilemap.imageSlots, function(slot) {
 			var width = slot.lines.stop - slot.lines.start,
 				height = slot.columns.stop - slot.columns.start,
 				ratio = Math.max(width, height) / Math.min(width, height),
 				$container;
-			
-			if (_.include(ratios, ratio)) {
+				
+				
+			if (_.include(ratios, ratio) && !$('[data-imageratio="'+ ratio +'"][data-hTiles="'+ height +'"][data-vTiles="'+ width +'"]').length) {
 				allowedSlots.push(slot);
 				
 				//render the container
-				$container = $('<li><ul></ul></li>');
+				$container = $('<li><ul class="image-list"></ul></li>');
 				
 				$container
 				.css({
@@ -363,7 +365,7 @@ function(){
 				.attr('data-hTiles', height)
 				.attr('data-vTiles', width);
 				
-				$('.tiled-answers').append($container);
+				$('.tiled-answers').append($container);				
 			}
 		});
 		
@@ -376,7 +378,7 @@ function(){
 	
 	app.answers.collection.bind('reset', function(collection) {
 		app.events.publish('tiles/reset', [collection]);
-		renderTilesOnMap(collection, true)
+		//renderTilesOnMap(collection, true)
 	});
 	
 	// Subscribe to interesting events
