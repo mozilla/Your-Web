@@ -96,9 +96,7 @@ function() {
      		 *		                 arguments on the subscribed functions.
      		 *
              */
-        	publish = function(topic, args){
-        		args = (_.isArray(args)) ? args : [args];
-        		
+        	publish = function(topic, args){        		
         		_cache[topic] && _.each(_cache[topic], function(callback){
         			callback.apply(_that, args || []);
         		});
