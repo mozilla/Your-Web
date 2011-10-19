@@ -96,9 +96,10 @@ function() {
      		 *		                 arguments on the subscribed functions.
      		 *
              */
-        	publish = function(topic, args){        		
+        	publish = function(topic, args){
+        		args = args || [];     		
         		_cache[topic] && _.each(_cache[topic], function(callback){
-        			callback.apply(_that, args || []);
+        			callback.apply(_that, args);
         		});
         		
         		//If there's no subscribers yet, cache it so we can send it to the first function that subscribes
@@ -131,7 +132,7 @@ function() {
         		// Publish cached publications to this subscriber now!
         		if (_noSubsTopics[topic]) {
         			publish(topic, [_noSubsTopics[topic]]);
-        			_noSubsTopics[topic] = null;
+        			//_noSubsTopics[topic] = null;
         		}
         		
         		return [topic, callback];

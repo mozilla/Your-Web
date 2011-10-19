@@ -211,8 +211,8 @@ function(){
 		
 		// Instantiate AnswerList collection
 		_answers = new AnswerList;
-		
 		_.extend(_answers, filterList);
+		
 		
 		// Subscribe to interesting events
 		_answers.bind('reset', function() {

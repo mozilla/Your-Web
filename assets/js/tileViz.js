@@ -126,19 +126,13 @@ function(){
 			
 			this.collection.bind('add',   this.addOne);
 			this.collection.bind('reset', this.applyFilters);
-			this.collection.fetch();
-			//app.answers.refresh();
 		},
 		
 		addOne: function(answer) {
 			var view = new AnswerView( { model: answer } );
-						
-			//this.$('.tiled-answers').append(view.render().el);
 		},
 		
 		render: function(answers) {
-			//this.$('.tiled-answers').empty();
-			//answers.each(this.addOne);			
 			renderTilesOnMap(answers, true);
 		},
 		
@@ -172,17 +166,10 @@ function(){
 	QuestionListView = Backbone.View.extend({
 		el: $('#content'),
 		
-		events: {
-			'keypress #new-question': 'createOnEnter'
-		},
-		
 		initialize: function() {			
 			this.input = this.$('#new-question');
-
 			app.questions.collection.bind('reset', this.addActive, this);
-			app.questions.collection.bind('render', this.render, this);
-			
-			app.questions.refresh();
+			this.render();
 		},
 		
 		render: function() {
@@ -207,20 +194,6 @@ function(){
 		
 		clear: function() {
 			this.$('.question-list').html('');
-		},
-		
-		createOnEnter: function(e) {
-			var text = this.input.val(),
-				active = $('#question_active').is(':checked'),
-				newQuestion;
-				
-			if (!text || e.keyCode != 13) return;
-			
-			newQuestion = app.questions.create({content: text});
-			
-			if (active) app.questions.setActive(newQuestion);
-			
-			this.input.val('');
 		}
 	}),
 	
@@ -378,12 +351,6 @@ function(){
 	
 	app.answers.collection.bind('reset', function(collection) {
 		app.events.publish('tiles/reset', [collection]);
-		//renderTilesOnMap(collection, true)
-	});
-	
-	// Subscribe to interesting events
-	app.events.subscribe('questions/refresh', function() {
-		if (app.questions.getActive()) app.views.answerListView = new AnswerListView({collection: app.answers.collection});
 	});
 	
 	app.events.subscribe('questions/active', function() {
@@ -408,9 +375,19 @@ function(){
 		app.views.answerListView.render(resultCollection);
 	});
 	
-	app.events.subscribe('hash/done', function(state) {
-		
-	});
+	// Subscribe to interesting events
+	app.events.subscribe('questions/refresh', function() {
+		if (app.questions.getActive()) {
+			app.views.answerListView = new AnswerListView({collection: app.answers.collection});
+			
+			// Bootstrap answer list from config, else fetch it
+			if (app.config.answers) {
+				app.answers.collection.reset(app.config.answers);
+			} else {
+				app.answers.collection.fetch();
+			}
+		}
+	});	
 	
 	app.events.subscribe('string/test', fillMap);
 	

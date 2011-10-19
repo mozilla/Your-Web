@@ -71,6 +71,14 @@ function() {
 		// Instantiate QuestionList collection
 		questions = new QuestionList;
 		
+		// Bootstrap question list from config, else fetch it
+		if (app.config.questions) {
+			questions.reset(app.config.questions);
+			app.events.publish('questions/refresh');
+		} else {
+			app.log('fetching');
+		}
+		
 		// Subscribe to interesting events
 		questions.bind('reset', function() {
 			app.events.publish('questions/refresh', [questions]);

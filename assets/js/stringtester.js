@@ -223,7 +223,6 @@ function(){
 		// Test strings on first reset
 		app.events.subscribe('tiles/reset', function(collection) {
 			_cache = {};
-			
 			_(collection.filter(function(answer) {
 				return !answer.get('image');
 			})).each(function(model){
