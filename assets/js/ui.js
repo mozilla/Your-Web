@@ -27,6 +27,19 @@ function(){
 			});
 		});
 		
+		app.events.subscribe('answer/saved', function() {
+			// Clear the forms, hide the modal
+			$('#submitAnswer-modal').modal('hide');
+			
+			$(':input','#submitAnswer')
+			 .not(':button, :submit, :reset, :hidden')
+			 .val('')
+			 .removeAttr('checked')
+			 .removeAttr('selected');
+			 
+			$('#pre-answer').val('');
+		});
+		
 		// Public API
 		return {
 			getSerializedFilters: serializeFilters
@@ -68,11 +81,11 @@ function(){
 		$('#submitAnswer-modal').modal({
 			backdrop: true,
 			keyboard: true
-		});	
+		});
 		
-		$('#submitQuestion, #submitAnswer').bind('submit', function() {
-			$('#submitAnswer-modal').modal('hide');
-			return false;
+		$('#submitAnswer-modal').bind('show', function() {
+			// Populate the answer field with the pre-answer value
+			$('#new-answer').val($('#pre-answer').val());			
 		});
 		
 		

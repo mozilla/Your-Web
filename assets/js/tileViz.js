@@ -118,7 +118,7 @@ function(){
 		el: $('body'),
 		
 		events: {
-			'click #saveAnswer'	: 'createOnEnter'
+			'click #saveAnswer'	: 'createAnswer'
 		},
 		
 		initialize: function() {							
@@ -142,7 +142,7 @@ function(){
 			renderTilesOnMap(answers, true);
 		},
 		
-		createOnEnter: function(e) {
+		createAnswer: function(e) {
 			var text = this.input.val(),
 				usertype = $('#usertype').val();
 			
