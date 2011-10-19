@@ -56,7 +56,8 @@ function(){
 		$('.filter').bind('change', function() {
 			var filterType = $(this).attr('data-filter-type'),
 				$filterCollection = $('[data-filter-type="' + filterType + '"]'),
-				filter = app.config.filters[filterType];
+				filter = app.config.filters[filterType],
+				checkedNr = $('.filter[type="checkbox"]:checked').length;
 				
 			$(this).attr('value', $(this).val());
 			filter = [];		
@@ -70,6 +71,13 @@ function(){
 					filter.push($(this).val());
 				}
 			});
+			
+			// Prevent last checked filter from being unchecked
+			if (checkedNr == 1) {
+				$('.filter[type="checkbox"]:checked').attr('disabled', '');
+			} else {
+				$('.filter[type="checkbox"]').removeAttr('disabled');
+			}
 			
 			app.config.filters[filterType] = filter;
 			
