@@ -28,7 +28,7 @@ function(){
         
 		
 		// Set up the main Hash Model
-		Hash = Backbone.Model.extend({
+		Hash = {
 			
             /** Holds the current state in the form of a hash */
             _state: "",
@@ -229,10 +229,10 @@ function(){
                 
             }
             
-		});	
+		}	
         
         
-        _hash = new Hash();
+        _hash = Hash;
         _hash.init();
 
 
