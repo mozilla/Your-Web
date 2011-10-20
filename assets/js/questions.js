@@ -13,6 +13,7 @@ define(
 	'libs/backbone-0.5.3.min',
 	//'libs/backbone-localstorage',
 	'libs/underscore.min',
+	'hash',
 	'core'
 ],
 function() {
@@ -64,7 +65,7 @@ function() {
 				});
 				
 				question.toggleActive();
-				this.trigger('render');
+				app.views.QuestionListView.addAll();
 			}
 		});
 		
@@ -73,14 +74,25 @@ function() {
 		
 		// Bootstrap question list from config, else fetch it
 		if (app.config.questions) {
+			// If the hash has an active question, set it as active
+			var hashActiveQuestion = app.hash.retrieve().currentQuestion;
+			
+			if (hashActiveQuestion) {
+				_.each(app.config.questions, function(question) {
+					question.active = false;
+					if (question.id == hashActiveQuestion) {
+						question.active = true;
+					}
+				})
+			}
+			
 			questions.reset(app.config.questions);
-			app.events.publish('questions/refresh');
 		} else {
-			app.log('fetching');
+			questions.fetch();
 		}
 		
 		// Subscribe to interesting events
-		questions.bind('reset', function() {
+		questions.bind('reset', function() {			
 			app.events.publish('questions/refresh', [questions]);
 		});
 		

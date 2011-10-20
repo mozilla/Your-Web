@@ -1,165 +1,621 @@
 <!doctype html>
-<html>
-<head>
-	<title>Your Web</title>
-	<link rel="stylesheet" href="assets/lib/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" href="assets/css/compiled/style.css">
-</head>
-<body>
-<h1>Your Web</h1>
-
-<div id="content">
-	<div class="question-list">
-	</div>
-	<div id="submitAnswer-modal" class="modal hide fade">
-	 	<div class="modal-header">
-		  <a href="#" class="close">&times;</a>
-		  <h3>Submit your answer!</h3>
-		</div>
-		<div class="modal-body">
-			<form id="submitAnswer">
-				<div class="clearfix">
-					<label for="new-answer">My answer is</label>
-					<div class="input"><input type="text" id="new-answer" placeholder="Full of kittens!" /></div>
-				</div>
-				<div class="clearfix">
-					<label for="usertype">I am a</label>
-					<div class="input">
-						<select type="text" id="usertype">
-							<option value="designer">Designer</option>
-							<option value="developer" selected>Developer</option>
-						</select>
-					</div>
-				</div>
-				<div class="clearfix">
-					<label for="usertype">I'm writing in</label>
-					<div class="input">
-						<select type="text">
-							<option value="en-US">English (US)</option>
-							<option value="pt-PT" selected>Portuguese (European)</option>
-						</select>
-					</div>
-				</div>
-			</form>
-		</div>
-		<div class="modal-footer">
-			<button class="btn primary" id="saveAnswer">Submit!</button>
-		</div>
-	</div>
-	
-	<form>
-		<input type="text" id="pre-answer">
-		<a class="btn" data-controls-modal="submitAnswer-modal" data-backdrop="static" >Submit your answer!</a>
-	</form>
-	
-	<div id="filters">
-		<div class="input">
-			<input class="filter" type="checkbox" name="" data-filter-type="usertype" value="designer">
-			<span>Designers</span>
-		</div>
-		<div class="input">
-			<input class="filter" type="checkbox" name="" data-filter-type="usertype" value="developer">
-			<span>Developers</span>
-		</div>
-		<div class="input">
-			<select class="filter" type="text" data-filter-type="language" value="en-US">
-				<option value="en-US" selected>English (US)</option>
-				<option value="pt-PT">Portuguese (European)</option>
-			</select>
-		</div>
-	</div>
-	
-	<canvas id="tilemap"></canvas>
-	<ul class="tiled-answers">
-	</ul>
-	<!--
-	<ul class="answer-list">
-	</ul>
-	-->
-</div>
-
-<script data-main="assets/js/main.js" src="assets/js/libs/requirejs/require.js"></script>
-<script>
-	var APP_CONFIG = {
-		questions: [
-			{
-				"id":"7bd1255f-6efe-983a-6918-52b213d8d176",
-				"content":"This is a test",
-				"active":true,
-				"created":"2011-10-04T15:48:22.507Z",
-				"language":"en-US"
-			},
-			{
-				"id":"7bd1255f-6efe-983a-6918-91e017177342",
-				"content":"This is another question",
-				"active":false,
-				"created":"2011-10-04T16:48:22.507Z",
-				"language":"en-US"
-			}
-		],
-		/*
-		answers: [
-			{
-				"content":"Bootstrapped answer",
-				"weight":0,
-				"usertype":"developer",
-				"created":"2011-10-04T16:12:53.228Z",
-				"language":"en-US",
-				"id":"44cc74df-1e8e-0abb-fc8e-a45a50130d4d"
-			}
-		],
-		*/
-		filters: {
-			usertype: ['designer', 'developer'],
-			language: ['en-US']
-		},
-		tilemap: {
-			pixelsInTile: 24,
-			lines: 20,
-			preoccupied: {
-				lines: {
-					start: 0,
-					stop: 4
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>YourWeb</title>
+    <meta name="description" content="">
+    <meta name="author" content="Quodis">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/uniform.yourweb.css">
+    <link rel="stylesheet" href="assets/css/validationEngine.jquery.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,700,300">
+  </head>
+  
+  <body>
+    
+    <!-- page -->
+    <div id="page">
+    
+      <!-- wrapper -->
+      <div id="wrapper">
+      
+        <!-- brand -->
+        <header id="brand">
+          <hgroup>
+            <h1 id="main-brand-name"><a href="/" title="YourWeb">Your<span>Web</span></a></h1>
+            <h2 id="sub-brand-name"><a href="http://mozilla.com" title="Visit Mozilla" class="ir"><span class="visually-hidden">By</span> Mozilla</a></h2>
+            <h3 id="brand-tagline">Lorem ipsum dolor sit amet, consectetur ipsum urna arcu, sagittis eu euismod eget lorem ipsum dictum sit amet.</h3>
+            <h4 id="current-question"><a href="#primary-nav-wrapper" class="current-question-btn" title="Current Question"></a></h4>
+          </hgroup>
+          <nav id="primary-nav-wrapper" role="navigation" class="visuallyhidden">
+            <ul id="primary-nav">
+            </ul>
+          </nav>
+          <form id="answer-form-shortcut">
+            <fieldset>
+              <legend class="visuallyhidden">What's your Answer?</legend>
+              <p>
+                <label class="visuallyhidden">Answer:</label>
+                <input type="text" class="answer-pre-text" placeholder="Your Answer...">
+              </p>
+              <p>
+                <input type="submit" value="Submit">
+              </p>
+            </fieldset>
+          </form>
+          <nav id="secondary-nav-wrapper" role="navigation">
+            <form id="filters">
+              <fieldset>
+                <legend class="visuallyhidden">Filters</legend>
+                <ol>
+                  <li class="usertype">
+                    <fieldset>
+                      <legend class="visuallyhidden">User Types</legend>
+                      <label for="web-beginners"><input id="web-beginners" class="filter" type="checkbox" data-filter-type="usertype" value="web-beginner"> Web Beginners</label>
+                      <label for="web-intermediates"><input id="web-intermediates" class="filter" type="checkbox" data-filter-type="usertype" value="web-intermediate"> Web Intermediates</label>
+                      <label for="web-experts"><input id="web-experts" class="filter" type="checkbox" data-filter-type="usertype" value="web-expert"> Web Experts</label>
+                      <label for="web-creators"><input id="web-creators" class="filter" type="checkbox" data-filter-type="usertype" value="web-creator"> Web Creators</label>
+                    </fieldset>
+                  </li>
+                  <li class="lang">
+                    <label>From people who speak:</label>
+                    <select class="filter" data-filter-type="language">
+                      <option value="en-US">English (US)</option>
+                      <option value="pt-PT">Português (PT)</option>
+                    </select>
+                  </li>
+                </ol>
+              </fieldset>
+            </form>
+          </nav>
+        </header>
+        <!-- /brand -->
+        
+        <!-- main -->
+        <div id="main" role="main">
+    
+          <p id="tile-cta-bttn-wrapper"><a href="#" title="Submit your Answer" id="tile-cta-bttn">Submit your Answer</a></p>
+        	
+        	<canvas id="tilemap"></canvas>
+          <ul class="tiles-list clearfix"></ul>
+          
+        	<div id="submitAnswer-modal" class="modal hide fade"></div>
+          
+          
+        </div>
+        <!-- /main -->
+        
+        <!-- colophon -->
+        <footer id="colophon">
+          
+          <!-- credits -->
+          <section id="credits">
+            <h1 class="main-title">About Mozilla</h1>
+            <div class="prose">
+              <p>We're a non-profit organization that believes the Web should be open, accessible, transparent, safe and — most of all — a force for the good of humanity. We're the proud makers of Firefox and, every day, we strive to create innovations that make the Web a better place for the billions of people who use it. Learn more: <a href="http://www.mozilla.org" title="Visit Mozilla">www.mozilla.org</a></p>
+            </div>
+            <nav id="legal-nav-wrapper" role="navigation">
+              <ul id="legal-nav">
+                <li><a href="#" title="">Privacy Policy</a></li>
+                <li><a href="#" title="">Legal Notices</a></li>
+              </ul>
+            </nav>
+            <div class="prose license">
+              <p>Except where otherwise <a href="#" title="noted">noted</a>, content on this site is licensed under the <a href="#" title="View license">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.</p>
+            </div>
+          </section>
+          <!-- /credits -->
+          
+          <!-- share-options -->
+          <nav id="share-options" role="navigation">
+            <h1 class="main-title">Share with Friends</h1>
+            <ul id="share-options-nav">
+              <li>Facebook</li>
+              <li><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a></li>
+            </ul>
+          </nav>
+          <!-- /share-options -->
+          
+          <!-- lang-options -->
+          <nav id="lang-options" role="navigation">
+            <h1 class="main-title">Other Languages</h1>
+            <form id="language-options-form">
+              <label class="visuallyhidden">Language:</label>
+              <select>
+                <option>English (US)</option>
+                <option>Português</option>
+              </select>
+            </form>
+          </nav>
+          <!-- /lang-options -->
+          
+        </footer>
+        <!-- /colophon -->
+      
+      </div>
+      <!-- /wrapper -->
+      
+    </div>
+    <!-- /page -->
+  
+    <!-- scripts -->
+    <script data-main="assets/js/main.js" src="assets/js/libs/requirejs/require.js"></script>
+	<script>
+		var APP_CONFIG = {
+			questions: [
+				{
+					"id":"7bd1255f-6efe-983a-6918-52b213d8d176",
+					"content":"This is a test",
+					"active":true,
+					"created":"2011-10-04T15:48:22.507Z",
+					"language":"en-US"
 				},
-				columns: {
-					start: 0,
-					stop: 10
+				{
+					"id":"7bd1255f-6efe-983a-6918-91e017177342",
+					"content":"This is another question",
+					"active":false,
+					"created":"2011-10-04T16:48:22.507Z",
+					"language":"en-US"
+				}
+			],
+			/*
+			answers: [
+				{
+					"content":"Bootstrapped answer",
+					"weight":0,
+					"usertype":"developer",
+					"created":"2011-10-04T16:12:53.228Z",
+					"language":"en-US",
+					"id":"44cc74df-1e8e-0abb-fc8e-a45a50130d4d"
+				}
+			],
+			*/
+			filters: {
+				usertype: ['web-beginner', 'web-intermediate', 'web-expert', 'web-creator'],
+				language: ['en-US']
+			},
+			validation: {
+				scroll: false
+			},
+			strings: {
+				formSubmitLoading: 'Sending...',
+				validation: {
+					"required": { // Add your regex rules here, you can take telephone as an example
+						"regex": "none",
+						"alertText": "* This field is required",
+						"alertTextCheckboxMultiple": "* Please select an option",
+						"alertTextCheckboxe": "* This checkbox is required",
+						"alertTextDateRange": "* Both date range fields are required"
+					},
+					"dateRange": {
+						"regex": "none",
+						"alertText": "* Invalid ",
+						"alertText2": "Date Range"
+					},
+					"dateTimeRange": {
+						"regex": "none",
+						"alertText": "* Invalid ",
+						"alertText2": "Date Time Range"
+					},
+					"minSize": {
+						"regex": "none",
+						"alertText": "* Minimum ",
+						"alertText2": " characters allowed"
+					},
+					"maxSize": {
+						"regex": "none",
+						"alertText": "* Maximum ",
+						"alertText2": " characters allowed"
+					},
+					"groupRequired": {
+						"regex": "none",
+						"alertText": "* You must fill one of the following fields"
+					},
+					"min": {
+						"regex": "none",
+						"alertText": "* Minimum value is "
+					},
+					"max": {
+						"regex": "none",
+						"alertText": "* Maximum value is "
+					},
+					"past": {
+						"regex": "none",
+						"alertText": "* Date prior to "
+					},
+					"future": {
+						"regex": "none",
+						"alertText": "* Date past "
+					},	
+					"maxCheckbox": {
+						"regex": "none",
+						"alertText": "* Maximum ",
+						"alertText2": " options allowed"
+					},
+					"minCheckbox": {
+						"regex": "none",
+						"alertText": "* Please select ",
+						"alertText2": " options"
+					},
+					"equals": {
+						"regex": "none",
+						"alertText": "* Fields do not match"
+					},
+					"phone": {
+						// credit: jquery.h5validate.js / orefalo
+						"regex": /^([\+][0-9]{1,3}[ \.\-])?([\(]{1}[0-9]{2,6}[\)])?([0-9 \.\-\/]{3,20})((x|ext|extension)[ ]?[0-9]{1,4})?$/,
+						"alertText": "* Invalid phone number"
+					},
+					"email": {
+						// Shamelessly lifted from Scott Gonzalez via the Bassistance Validation plugin http://projects.scottsplayground.com/email_address_validation/
+						"regex": /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i,
+						"alertText": "* Invalid email address"
+					},
+					"integer": {
+						"regex": /^[\-\+]?\d+$/,
+						"alertText": "* Not a valid integer"
+					},
+					"number": {
+						// Number, including positive, negative, and floating decimal. credit: orefalo
+						"regex": /^[\-\+]?(([0-9]+)([\.,]([0-9]+))?|([\.,]([0-9]+))?)$/,
+						"alertText": "* Invalid floating decimal number"
+					},
+					"date": {
+						"regex": /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/,
+						"alertText": "* Invalid date, must be in YYYY-MM-DD format"
+					},
+					"ipv4": {
+						"regex": /^((([01]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))[.]){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))$/,
+						"alertText": "* Invalid IP address"
+					},
+					"url": {
+						"regex": /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i,
+						"alertText": "* Invalid URL"
+					},
+					"onlyNumberSp": {
+						"regex": /^[0-9\ ]+$/,
+						"alertText": "* Numbers only"
+					},
+					"onlyLetterSp": {
+						"regex": /^[a-zA-Z\ \']+$/,
+						"alertText": "* Letters only"
+					},
+					"onlyLetterNumber": {
+						"regex": /^[0-9a-zA-Z]+$/,
+						"alertText": "* No special characters allowed"
+					},
+					// --- CUSTOM RULES -- Those are specific to the demos, they can be removed or changed to your likings
+					"ajaxUserCall": {
+						"url": "ajaxValidateFieldUser",
+						// you may want to pass extra data on the ajax call
+						"extraData": "name=eric",
+						"alertText": "* This user is already taken",
+						"alertTextLoad": "* Validating, please wait"
+					},
+					"ajaxUserCallPhp": {
+						"url": "phpajax/ajaxValidateFieldUser.php",
+						// you may want to pass extra data on the ajax call
+						"extraData": "name=eric",
+						// if you provide an "alertTextOk", it will show as a green prompt when the field validates
+						"alertTextOk": "* This username is available",
+						"alertText": "* This user is already taken",
+						"alertTextLoad": "* Validating, please wait"
+					},
+					"ajaxNameCall": {
+						// remote json service location
+						"url": "ajaxValidateFieldName",
+						// error
+						"alertText": "* This name is already taken",
+						// if you provide an "alertTextOk", it will show as a green prompt when the field validates
+						"alertTextOk": "* This name is available",
+						// speaks by itself
+						"alertTextLoad": "* Validating, please wait"
+					},
+					 "ajaxNameCallPhp": {
+							// remote json service location
+							"url": "phpajax/ajaxValidateFieldName.php",
+							// error
+							"alertText": "* This name is already taken",
+							// speaks by itself
+							"alertTextLoad": "* Validating, please wait"
+						},
+					"validate2fields": {
+						"alertText": "* Please input HELLO"
+					},
+					//tls warning:homegrown not fielded 
+					"dateFormat":{
+						"regex": /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$|^(?:(?:(?:0?[13578]|1[02])(\/|-)31)|(?:(?:0?[1,3-9]|1[0-2])(\/|-)(?:29|30)))(\/|-)(?:[1-9]\d\d\d|\d[1-9]\d\d|\d\d[1-9]\d|\d\d\d[1-9])$|^(?:(?:0?[1-9]|1[0-2])(\/|-)(?:0?[1-9]|1\d|2[0-8]))(\/|-)(?:[1-9]\d\d\d|\d[1-9]\d\d|\d\d[1-9]\d|\d\d\d[1-9])$|^(0?2(\/|-)29)(\/|-)(?:(?:0[48]00|[13579][26]00|[2468][048]00)|(?:\d\d)?(?:0[48]|[2468][048]|[13579][26]))$/,
+						"alertText": "* Invalid Date"
+					},
+					//tls warning:homegrown not fielded 
+					"dateTimeFormat": {
+						"regex": /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])\s+(1[012]|0?[1-9]){1}:(0?[1-5]|[0-6][0-9]){1}:(0?[0-6]|[0-6][0-9]){1}\s+(am|pm|AM|PM){1}$|^(?:(?:(?:0?[13578]|1[02])(\/|-)31)|(?:(?:0?[1,3-9]|1[0-2])(\/|-)(?:29|30)))(\/|-)(?:[1-9]\d\d\d|\d[1-9]\d\d|\d\d[1-9]\d|\d\d\d[1-9])$|^((1[012]|0?[1-9]){1}\/(0?[1-9]|[12][0-9]|3[01]){1}\/\d{2,4}\s+(1[012]|0?[1-9]){1}:(0?[1-5]|[0-6][0-9]){1}:(0?[0-6]|[0-6][0-9]){1}\s+(am|pm|AM|PM){1})$/,
+						"alertText": "* Invalid Date or Date Format",
+						"alertText2": "Expected Format: ",
+						"alertText3": "mm/dd/yyyy hh:mm:ss AM|PM or ", 
+						"alertText4": "yyyy-mm-dd hh:mm:ss AM|PM"
+					}
 				}
 			},
-			imageSlots: [
-				{
+			endpoints: {
+				emailSubscription: {
+					url: 'http://example.com/emailSubscribe',
+					dataType: 'json'
+				},
+				translationSubmission: {
+					url: 'http://example.com/translationSubmit',
+					dataType: 'json'
+				}
+			},
+			tilemap: {
+				pixelsInTile: 24,
+				lines: 20,
+				preoccupied: {
 					lines: {
-						start: 8,
-						stop: 20
+						start: 0,
+						stop: 4
 					},
 					columns: {
-						start: 1,
+						start: 0,
 						stop: 10
 					}
 				},
-				{
-					lines: {
-						start: 1,
-						stop: 10
+				imageSlots: [
+					{
+						lines: {
+							start: 8,
+							stop: 20
+						},
+						columns: {
+							start: 1,
+							stop: 9
+						}
 					},
-					columns: {
-						start: 22,
-						stop: 34
-					}
-				},
-				{
-					lines: {
-						start: 11,
-						stop: 19
+					{
+						lines: {
+							start: 1,
+							stop: 9
+						},
+						columns: {
+							start: 22,
+							stop: 34
+						}
 					},
-					columns: {
-						start: 30,
-						stop: 38
+					{
+						lines: {
+							start: 11,
+							stop: 19
+						},
+						columns: {
+							start: 30,
+							stop: 38
+						}
 					}
-				}
-			]
+				]
+			}
 		}
-	}
-</script>
-</body>
+	</script>
+	
+	<script type="text/template" id="submitAnswer-template">
+		 <!-- tooltip answer step 1 -->
+			  <section id="answer-step-1" class="tooltip large">
+				<header>
+				  <hgroup>
+					<h1 class="sup-title">Question:</h1>
+					<h2 class="main-title">What do you love about the Web?</h2>
+				  </hgroup>
+				</header>
+				<form class="clearfix">
+				  <fieldset>
+					<legend class="visuallyhidden">Mandatory fields:</legend>
+					<ol>
+					  <li class="answer">
+						<label>My answer: <small class="counter answer-text-counter" data-counter-limit="30"><span class="count">30</span> characters left</small></label>
+						<input type="text" id="submitAnswer-text" class="answer-text validate[required]">
+					  </li>
+					  <li class="usertype">
+								<fieldset>
+									<legend>I am a:</legend>
+									<label for="web-beginner"><input type="radio" id="web-beginner" name="usertype" class="validate[required]" checked> Web Beginner</label>
+									<label for="web-intermediate"><input type="radio" id="web-intermediate" name="usertype" class="validate[required]"> Web Intermediate</label>
+									<label for="web-expert"><input type="radio" id="web-expert" name="usertype" class="validate[required]"> Web Expert</label>
+									<label for="web-creator"><input type="radio" id="web-creator" name="usertype" class="validate[required]"> Web Creator</label>
+								</fieldset>
+							</li>
+					  <li class="language">
+						<label>I speak:</label>
+						<select class="validate[required]" id="submitAnswer-language">
+						  <option value="en-US">English (US)</option>
+						  <option value="pt-PT">Português (PT)</option>
+						</select>
+					  </li>
+					  <li class="privacy">
+								<fieldset>
+									<legend class="visuallyhidden">Privacy Policy:</legend>
+									<label for="policy-okay"><input class="validate[required]" name="policy-okay" id="policy-okay" type="checkbox"> I’m okay with you handling this info as you explain in your <a href="#" title="Privacy Policy">Privacy Policy</a>.</label>
+								</fieldset>
+							</li>
+					</ol>
+				  </fieldset>
+				  <fieldset class="optional">
+					<legend class="inner-title">I have a photo <small>(optional)</small></legend>
+					<p class="note">It would be cool to have a picture of your answer too.</p>
+					<ol>
+					  <li>
+						<label>Select an image on your computer:</label>
+						<input type="file">
+					  </li>
+					</ol>
+					<p class="img-placeholder"></p>
+				  </fieldset>
+				  <p class="submit-wrapper"><input type="submit" value="Submit your Answer"></p>
+				</form>
+				<footer>
+				  <p class="tooltip-close-bttn-wrapper"><a href="#" title="Close" class="close-bttn ir">Close</a></p>
+				</footer>
+			  </section>
+			  <!-- /tooltip answer step 1 -->
+			  
+			  <!-- tooltip answer step 2 -->
+			  <section id="answer-step-2" class="tooltip large hidden">
+				<header>
+				  <hgroup>
+					<h1 class="sup-title">Hey,</h1>
+					<h2 class="main-title">Congrats!</h2>
+				  </hgroup>
+				</header>
+				<div class="prose">
+				  <p>Thanks for participating in YourWeb. We’ll show your submission in just a moment.</p>
+				  <p>If you’d like to get email updates about Mozilla and Firefox, you can sign up here.</p>
+				  <p class="tooltip-skip-bttn-wrapper"><a href="#" title="Skip" class="skip-bttn">Skip and go straight to my submission</a></p>
+				</div>
+				<form class="clearfix">
+				  <fieldset class="optional">
+					<legend class="inner-title">Get email news <small>(optional)</small></legend>
+					<ol>
+					  <li>
+						<label>My email:</label>
+						<input type="text" name="email">
+					  </li>
+					  <li>
+						<label>Send me news in:</label>
+						<select name="language">
+						  <option value="en-US">English (US)</option>
+						  <option value="pt-PT">Português (PT)</option>
+						</select>
+					  </li>
+					  <li>
+								<fieldset>
+									<legend>Send me news about:</legend>
+									<label for="news-tips"><input id="news-tips" type="checkbox" name="news-tips"> Firefox tips and tricks</label>
+									<label for="news-mission"><input id="news-mission" type="checkbox" name="news-mission"> Mozilla and its mission</label>
+								</fieldset>
+							</li>
+							<li>
+								<fieldset>
+									<legend class="visuallyhidden">Privacy Policy:</legend>
+									<label for="policy-okay"><input id="policy-okay" type="checkbox" name="policy"> I’m okay with you handling this info as you explain in your <a href="#" title="Privacy Policy">Privacy Policy</a>.</label>
+								</fieldset>
+							</li>
+						</ol>
+				  </fieldset>
+				  <p class="submit-wrapper"><input type="submit" value="Sign me up"></p>
+				</form>
+				<footer>
+				  <p class="tooltip-close-bttn-wrapper"><a href="#" title="Close" class="close-bttn ir">Close</a></p>
+				</footer>
+			  </section>
+			  <!-- /tooltip answer step 2 -->
+	</script>
+	
+	<script type="text/template" id="tile-detail-template">
+		<div id="tile-detail-main">
+		<!-- tooltip tile details -->
+            <header>
+              <hgroup>
+                <h1 class="sup-title">You and {{statistics.total}} people answered:</h1>
+                <h2 class="main-title">{{content}}</h2>
+              </hgroup>
+            </header>
+            <div class="prose">
+              <ul id="user-stats">
+              	{{#if statistics.web-beginner}}
+	                <li class="orange">{{statistics.web-beginner}} Web Beginners</li>
+	            {{/if}}
+	            
+	            {{#if statistics.web-intermediate}}
+    	            <li class="yellow">{{statistics.web-intermediate}} Web Intermediates</li>
+                {{/if}}
+                
+                {{#if statistics.web-expert}}
+	                <li class="green">{{statistics.web-expert}} Web Experts</li>
+	            {{/if}}
+                
+                {{#if statistics.web-creator}}
+                	<li class="blue">{{statistics.web-creator}} Web Creators</li>
+                {{/if}}
+              </ul>
+            </div>
+            <nav id="tooltip-options-nav-wrapper" role="navigation">
+              <h1 class="inner-title">Share with Friends</h1>
+              <ul id="tooltip-share-options-nav">
+                <li class="facebook">Facebook</li>
+                <li class="twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a></li>
+              </ul>
+              <p class="tooltip-translation-bttn-wrapper"><a href="#" title="Submit a translation" class="translation-bttn">Submit a translation</a></p>
+            </nav>
+            <footer>
+              <p class="tooltip-close-bttn-wrapper"><a href="#" title="Close" class="close-bttn ir">Close</a></p>
+            </footer>
+          <!-- /tooltip tile details -->
+          </div>
+          <!-- tooltip translation step 1 -->
+          <section id="translation-step-1" class="tooltip hidden">
+            <header>
+              <hgroup>
+                <h1 class="sup-title">Add a translation:</h1>
+                <h2 class="main-title">{{content}}</h2>
+              </hgroup>
+            </header>
+            <form class="clearfix">
+              <fieldset>
+                <legend class="visuallyhidden">Mandatory fields:</legend>
+                <ol>
+            			<li>
+                    <label>Translation for:</label>
+                    <select>
+                      <option value="en-US">English (US)</option>
+                      <option value="pt-PT">Português (PT)</option>
+                    </select>
+                  </li>
+                  <li>
+                    <label>My translation:</label>
+                    <input type="text" id="new-translation" class="validate[required]">
+                  </li>
+                  <li>
+            				<fieldset>
+            					<legend class="visuallyhidden">Privacy Policy:</legend>
+            					<label for="policy-okay"><input id="policy-okay" type="checkbox"> I’m okay with you handling this info as you explain in your <a href="#" title="Privacy Policy">Privacy Policy</a>.</label>
+            				</fieldset>
+            			</li>
+                </ol>
+              </fieldset>
+              <p class="submit-wrapper"><input type="submit" value="Submit your Translation"></p>
+            </form>
+            <footer>
+              <p class="tooltip-close-bttn-wrapper"><a href="#" title="Close" class="close-bttn ir">Close</a></p>
+            </footer>
+          </section>
+          <!-- /tooltip translation step 1 -->
+          
+          <!-- tooltip translation step 2 -->
+          <section id="translation-step-2" class="tooltip hidden">
+            <header>
+              <hgroup>
+                <h1 class="sup-title">Hey,</h1>
+                <h2 class="main-title">Congrats!</h2>
+              </hgroup>
+            </header>
+            <div>
+              <p class="prose">Thank you for submitting a translation.</p>
+            </div>
+            <footer>
+              <p class="tooltip-close-bttn-wrapper"><a href="#" title="Close" class="close-bttn ir">Close</a></p>
+            </footer>
+          </section>
+          <!-- /tooltip translation step 2 -->
+	</script>
+
+	<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <!-- /scripts-->
+    
+  </body>
+
 </html>

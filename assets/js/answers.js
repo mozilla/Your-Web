@@ -19,6 +19,7 @@ function(){
 	var app = window.APP;
 
 	app.namespace('answers');
+	
 	_.extend(app.answers, (function(){
 		var Answer,
 		_answers,
@@ -146,13 +147,15 @@ function(){
 					content	: 'My Answer',
 					image	: null,
 					weight	: 0,
-					usertype: 'Other',
+					usertype: 'web-beginner',
 					created	: new Date(),
 					language: 'en-US',
 					important: false,
 					statistics: {
-						designers: 0,
-						developers: 0
+						"web-intermediate": 0,
+						"web-expert": 0,
+						"web-creator": 0,
+						"web-beginner": 0
 					}
 				}
 			}
@@ -238,9 +241,50 @@ function(){
  			 * @returns {Object} newAnswer Newly created Answer Model instance.
 			 */
 			create: function(model) {
-				var newModel = new Answer(model),
-				newAnswer = _answers.create(newModel);
-				//app.events.publish('answers/new', [newAnswer]);
+				var newModel,
+					alreadyExists,
+					statistics,
+					newAnswer,
+					filters = app.config.filters;
+				
+				// Check if answer already exists in current collection
+				alreadyExists = _answers.filter(function(answer){
+					return answer.get('content').toLowerCase() == model.content.toLowerCase() && answer.get('language') == model.language;
+				});
+				
+				if (alreadyExists.length) {
+					newModel = alreadyExists[0];
+					
+					statistics = newModel.get('statistics');
+					statistics[model.usertype] += 1;
+					
+					newModel.set({usertype: model.usertype, statistics: statistics, important: true});
+					
+				} else {
+					newModel = new Answer(model),
+					newAnswer = _answers.create(newModel, {success: function(model) {
+						app.events.publish('answers/new', [model]);
+					}});
+				}
+				
+				// If this answer is in an inactive filter or language, activate it!
+				if (!_.include(filters.language, model.language)) {
+					$('.lang .filter').val(model.language);
+					
+					app.config.filters.language = [model.language];
+					//Publish an event saying the filters changed
+					app.events.publish('filters/change', [app.config.filters]);
+				}
+				
+				
+				if (!_.include(filters.usertype, model.usertype)) {
+					$('.filter[value="' + model.usertype + '"]').attr('checked', '');
+					
+					app.config.filters.usertype.push(model.usertype);
+					//Publish an event saying the filters changed
+					app.events.publish('filters/change', [app.config.filters]);
+				}
+				
 				return newAnswer;
 			},
 			
@@ -253,7 +297,9 @@ function(){
 			 */
 			refresh: function() {
 				_answers.fetch();
-			}
+			},
+			
+			createdByUser: []
 		}
 	})());	
 });

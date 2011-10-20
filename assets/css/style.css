@@ -1,0 +1,901 @@
+/* 
+ * HTML5 ✰ Boilerplate
+ *
+ * What follows is the result of much research on cross-browser styling. 
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ *
+ * Detailed information about this CSS: h5bp.com/css
+ * 
+ * ==|== normalize ==========================================================
+ */
+
+
+/* =============================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display: block; }
+audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; }
+audio:not([controls]) { display: none; }
+[hidden] { display: none; }
+
+/* =============================================================================
+   Base
+   ========================================================================== */
+
+/*
+ * 1. Correct text resizing oddly in IE6/7 when body font-size is set using em units
+ * 2. Force vertical scrollbar in non-IE
+ * 3. Prevent iOS text size adjust on device orientation change, without disabling user zoom: h5bp.com/g
+ */
+
+html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+
+body { margin: 0; font-size: 13px; line-height: 1.231; }
+
+body, button, input, select, textarea { font-family: sans-serif; color: #222; }
+
+/* 
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection declarations have to be separate
+ * Also: hot pink! (or customize the background color to match your design)
+ */
+
+::-moz-selection { background: #fe57a1; color: #fff; text-shadow: none; }
+::selection { background: #fe57a1; color: #fff; text-shadow: none; }
+
+
+/* =============================================================================
+   Links
+   ========================================================================== */
+
+a { color: #00e; }
+a:visited { color: #551a8b; }
+a:hover { color: #06e; }
+a:focus { outline: thin dotted; }
+
+/* Improve readability when focused and hovered in all browsers: h5bp.com/h */
+a:hover, a:active { outline: 0; }
+
+
+/* =============================================================================
+   Typography
+   ========================================================================== */
+
+abbr[title] { border-bottom: 1px dotted; }
+
+b, strong { font-weight: bold; }
+
+blockquote { margin: 1em 40px; }
+
+dfn { font-style: italic; }
+
+hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0; }
+
+ins { background: #ff9; color: #000; text-decoration: none; }
+
+mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+
+/* Redeclare monospace font family: h5bp.com/j */
+pre, code, kbd, samp { font-family: monospace, monospace; _font-family: 'courier new', monospace; font-size: 1em; }
+
+/* Improve readability of pre-formatted text in all browsers */
+pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; }
+
+q { quotes: none; }
+q:before, q:after { content: ""; content: none; }
+
+small { font-size: 85%; }
+
+/* Position subscript and superscript content without affecting line-height: h5bp.com/k */
+sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+
+/* =============================================================================
+   Lists
+   ========================================================================== */
+
+ul, ol { margin: 1em 0; padding: 0 0 0 40px; }
+dd { margin: 0 0 0 40px; }
+nav ul, nav ol { list-style: none; list-style-image: none; margin: 0; padding: 0; }
+
+
+/* =============================================================================
+   Embedded content
+   ========================================================================== */
+
+/*
+ * 1. Improve image quality when scaled in IE7: h5bp.com/d
+ * 2. Remove the gap between images and borders on image containers: h5bp.com/e 
+ */
+
+img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+
+/*
+ * Correct overflow not hidden in IE9 
+ */
+
+svg:not(:root) { overflow: hidden; }
+
+
+/* =============================================================================
+   Figures
+   ========================================================================== */
+
+figure { margin: 0; }
+
+
+/* =============================================================================
+   Forms
+   ========================================================================== */
+
+form { margin: 0; }
+fieldset { border: 0; margin: 0; padding: 0; }
+
+/* Indicate that 'label' will shift focus to the associated form element */
+label { cursor: pointer; }
+
+/* 
+ * 1. Correct color not inheriting in IE6/7/8/9 
+ * 2. Correct alignment displayed oddly in IE6/7 
+ */
+
+legend { border: 0; *margin-left: -7px; padding: 0; }
+
+/*
+ * 1. Correct font-size not inheriting in all browsers
+ * 2. Remove margins in FF3/4 S5 Chrome
+ * 3. Define consistent vertical alignment display in all browsers
+ */
+
+button, input, select, textarea { font-size: 100%; margin: 0; vertical-align: baseline; *vertical-align: middle; }
+
+/*
+ * 1. Define line-height as normal to match FF3/4 (set using !important in the UA stylesheet)
+ * 2. Correct inner spacing displayed oddly in IE6/7
+ */
+
+button, input { line-height: normal; *overflow: visible; }
+
+/*
+ * Reintroduce inner spacing in 'table' to avoid overlap and whitespace issues in IE6/7
+ */
+
+table button, table input { *overflow: auto; }
+
+/*
+ * 1. Display hand cursor for clickable form elements
+ * 2. Allow styling of clickable form elements in iOS
+ */
+
+button, input[type="button"], input[type="reset"], input[type="submit"] { cursor: pointer; -webkit-appearance: button; }
+
+/*
+ * Consistent box sizing and appearance
+ */
+
+input[type="checkbox"], input[type="radio"] { box-sizing: border-box; }
+input[type="search"] { -webkit-appearance: textfield; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; box-sizing: content-box; }
+input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; }
+
+/* 
+ * Remove inner padding and border in FF3/4: h5bp.com/l 
+ */
+
+button::-moz-focus-inner, input::-moz-focus-inner { border: 0; padding: 0; }
+
+/* 
+ * 1. Remove default vertical scrollbar in IE6/7/8/9 
+ * 2. Allow only vertical resizing
+ */
+
+textarea { overflow: auto; vertical-align: top; resize: vertical; }
+
+/* Colors for form validity */
+input:valid, textarea:valid {  }
+input:invalid, textarea:invalid { background-color: #f0dddd; }
+
+
+/* =============================================================================
+   Tables
+   ========================================================================== */
+
+table { border-collapse: collapse; border-spacing: 0; }
+td { vertical-align: top; }
+
+
+/* ==|== primary styles =====================================================
+   Author: Quodis / quodis.com
+   ========================================================================== */
+
+/* ==== reset-reset ==== */
+
+a { color: #48BBE7; text-decoration: none; }
+a:visited { color: #48BBE7; }
+a:hover { color: #48BBE7; opacity: .8; }
+a:focus { outline: 0; }
+
+ul, ol { margin: 0 0 20px 0; padding: 0; list-style: none; list-style-image: none; }
+dd { margin: 0 0 20px 0; }
+
+h1, h2, h3, h4, h5, h6 { font-weight: normal; }
+p { margin: 0 0 20px 0; }
+
+/* ==== forms global components ==== */
+
+input:-moz-placeholder { color: inherit; }
+::-webkit-input-placeholder { color: inherit; }
+
+input[type="text"] {
+  height: 20px;
+  line-height: 20px;
+  padding: 5px;
+  border: 0;
+  font-size: 14px;
+  font-style: italic;
+  font-family: inherit;
+  color: #668FAC;
+  background: #FFF;
+  border-radius: 4px;
+  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.4), 0 2px 0 0 rgba(255, 255, 255, 0.3), 0 0 2px 0 rgba(0, 0, 0, 0.4) inset;
+  margin: 0;
+}
+
+input[type="text"]:focus {
+  background: #DDF2FA;
+  color: #668FAC;
+  outline: 0;
+  border: 0;
+}
+
+input[type="submit"] {
+  padding: 0 20px;
+  height: 30px;
+  line-height: 30px;
+  border: 0;
+  font-size: 14px;
+  font-style: italic;
+  font-family: inherit;
+  color: #FFF;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.4) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.2) inset;
+  background: rgb(62,172,230); /* Old browsers */
+  background: -moz-linear-gradient(top, rgba(62,172,230,1) 0%, rgba(38,124,194,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(62,172,230,1)), color-stop(100%,rgba(38,124,194,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(62,172,230,1) 0%,rgba(38,124,194,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(62,172,230,1) 0%,rgba(38,124,194,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(62,172,230,1) 0%,rgba(38,124,194,1) 100%); /* IE10+ */
+  background: linear-gradient(top, rgba(62,172,230,1) 0%,rgba(38,124,194,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3eace6', endColorstr='#267cc2',GradientType=0 ); /* IE6-9 */  
+}
+
+/* ==== structure components ==== */
+
+body {
+  height: 100%;
+  background-color: #002D4D;
+  background: url(../img/layout/moz-tab-gray-bg-pttrn.png) center top repeat-x, url(../img/layout/swirls-bg.png) center top no-repeat, url(../img/layout/grunge-bg-pttrn.png) center top repeat-x;
+  color: #FFF;
+  font-size: 14px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+#page { }
+
+#wrapper {
+  width: 960px;
+  margin: 0 auto;
+  line-height: 20px;
+  position: relative;
+}
+
+#brand {
+  position: relative;
+  padding: 50px 0 0 0;
+  background: transparent url(../img/layout/brand-bg.png) 670px 20px no-repeat;
+  margin: 0 0 40px 0;
+}
+
+#brand:before, #brand:after { content: ""; display: table; }
+#brand:after { clear: both; }
+#brand { zoom: 1; }
+
+#main {
+  position: relative;
+  clear: both;
+  margin: 0 0 20px 0;
+  padding: 0 0 20px 0;
+  background: transparent url(../img/layout/hr-sep.png) no-repeat center bottom;
+}
+
+#colophon {
+  width: 960px;
+  clear: both;
+  background: transparent url(../img/layout/colophon-bg.png) 580px 150px no-repeat;
+  overflow: hidden;
+}
+
+/* ==== brand components ==== */
+
+#main-brand-name {
+  float: left;
+  font-size: 86px;
+  line-height: 80px;
+  color: #FFF;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 700;
+  margin: 0 30px 40px 0;
+  text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+#main-brand-name a,
+#main-brand-name a:hover,
+#main-brand-name a:visited {
+  color: #FFF;
+}
+
+#main-brand-name a span,
+#main-brand-name a:hover span
+#main-brand-name a:visited span {
+  color: #FFC20F;
+}
+
+#sub-brand-name {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  z-index: 900;
+}
+
+#sub-brand-name a {
+  width: 118px;
+  height: 50px;
+  background: transparent url(../img/layout/mozilla-tab.png) center top no-repeat;
+}
+
+#brand-tagline {
+  float: left;
+  width: 320px;
+  clear: right;
+  line-height: 20px;
+  margin: 0 0 40px 0;
+  font-size: 16px;
+  padding: 10px 0;
+}
+
+#current-question {
+  float: left;
+  clear: left;
+  margin: 0 10px 0 0;
+}
+
+#current-question a,
+#current-question a:visited
+#current-question a:hover {
+  display: block;
+  color: #FFF;
+  height: 60px;
+  width: 458px;
+  line-height: 60px;
+  font-size: 34px;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 400;
+  background: url(../img/layout/current-question-icon.png) 10px center no-repeat, url(../img/layout/current-question-bg.png) center center no-repeat;
+  padding: 0 20px 0 42px;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+#answer-form-shortcut {
+  float: left;
+  width: 430px;
+}
+
+#answer-form-shortcut p {
+  float: left;
+  margin: 0 10px 0 0;
+  padding: 10px 0;
+}
+
+#answer-form-shortcut p:last-child {
+  margin: 0;
+}
+
+#answer-form-shortcut input[type="text"] {
+  width: 240px;
+  height: 30px;
+  line-height: 30px;
+  padding: 5px 10px;
+  font-size: 20px;
+  border-radius: 6px;
+  box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.4), 0 2px 0 0 rgba(255, 255, 255, 0.3), 0 0 4px 0 rgba(0, 0, 0, 0.4) inset;
+}
+
+#answer-form-shortcut input[type="submit"] {
+  width: 160px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 20px;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.2), 0 2px 0 0 rgba(255, 255, 255, 0.4) inset, 0 -4px 0 0 rgba(0, 0, 0, 0.2) inset;
+}
+
+#secondary-nav-wrapper {
+  float: left;
+  width: 960px;
+  clear: both;
+  background: transparent url(../img/layout/hr-sep.png) no-repeat center top;
+  margin: 15px 0 0 0;
+  padding: 15px 0 0 0;
+}
+
+#filters li.usertype {
+  float: left;
+}
+
+#filters li.usertype label {
+  font-style: italic;
+  margin: 0 20px 0 0;
+}
+
+#filters li.usertype input[type="checkbox"] {
+  margin: 0 5px 0 0;
+}
+
+#filters li.lang {
+  float: right;
+}
+
+#filters li.lang label {
+  margin: 0 5px 0 0;
+}
+
+/* ==== tile components ==== */
+
+.tiles-list {
+  position: relative;
+}
+
+.tile-wrapper {
+/*
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+*/
+  float: left;
+  margin: 2px;
+}
+
+.tile {
+  position: relative;
+  float: left;
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  /*
+  animation: mymove 5s infinite;
+  -moz-animation: mymove 5s infinite; /* Firefox */
+  /*-webkit-animation: mymove 5s infinite; /* Safari and Chrome */
+}
+
+@keyframes mymove {
+  0% { top: 0; left: 0; }  
+  30% { top: 50px; }  
+  68%, 72% { left: 50px; }  
+  80% { top: 100px; left: 100px; } 
+  100% {top: 0; left: 0;}
+}
+
+/* Firefox */
+@-moz-keyframes mymove {
+    0% { top: 0; left: 0; }  
+  30% { top: 50px; }  
+  68%, 72% { left: 50px; }  
+  80% { top: 100px; left: 100px; } 
+  100% {top: 0; left: 0;}
+}
+
+/* Safari and Chrome */
+@-webkit-keyframes mymove {
+  0% { top: 0; left: 0; }  
+  30% { top: 50px; }  
+  68%, 72% { left: 50px; }  
+  80% { top: 100px; left: 100px; } 
+  100% {top: 0; left: 0;}
+}
+
+.tile .main-title, .mock-tile {
+  margin: 0;
+  padding: 10px;
+  line-height: 20px;
+  font-weight: 300;
+  color: #FFF;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+}
+
+.mock-tile {
+	padding: 10px 0;
+	font-size: 14px;
+}
+
+.tile .main-title img {
+	max-width: 100%;
+}
+
+.tile.orange { background-image: url(../img/layout/tile-orange.png); }
+.tile.yellow { background-image: url(../img/layout/tile-yellow.png); }
+.tile.green { background-image: url(../img/layout/tile-green.png); }
+.tile.blue { background-image: url(../img/layout/tile-blue.png); }
+
+#tile-cta-bttn-wrapper {
+	position: absolute;
+	top: -5px;
+	left: 20px;
+	z-index: 9999;
+}
+
+#tile-cta-bttn,
+#tile-cta-bttn:visited,
+#tile-cta-bttn:hover {
+  display: block;
+  width: 140px;
+  height: 60px;
+  background: url(../img/layout/tile-answer-cta-icon.png) 15px 17px no-repeat, url(../img/layout/tile-answer-cta-bg.png) center center no-repeat;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 500;
+  line-height: 30px;
+  font-size: 28px;
+  color: #FFF;
+  padding: 15px 20px 25px 40px;
+}
+
+/* ==== tooltip components ==== */
+
+.tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 900;
+  padding: 20px;
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(../img/layout/tooltip-bg.png);
+}
+
+.tooltip.large { width: 560px; }
+
+.tooltip:before, .tooltip:after { content: ""; display: table; }
+.tooltip:after { clear: both; }
+.tooltip { zoom: 1; }
+
+.tooltip .tooltip-close-bttn-wrapper {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.tooltip .close-bttn {
+  width: 20px;
+  height: 20px;
+  background: transparent url(../img/layout/tooltip-close-icon.png) right top no-repeat;
+}
+
+.tooltip .sup-title {
+  margin: -35px 0 0 0;
+  padding: 35px 0 0 0;
+  font-size: 14px;
+  background: transparent url(../img/layout/tooltip-arr.png) left 2px no-repeat;
+}
+
+.tooltip .main-title {
+  margin: 0 0 20px 0;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 500;
+  line-height: 40px;
+  font-size: 34px;
+}
+
+.tooltip .inner-title {
+  margin: 0;
+  padding: 0 0 10px 0;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 500;
+  line-height: 30px;
+  font-size: 24px;
+}
+
+.tooltip .inner-title small {
+  color: #FFC20F;
+  font-size: 20px;
+}
+
+.tooltip .prose {
+  float: left;
+  width: 260px;
+}
+
+.tooltip .note {
+  font-size: 12px;
+  font-style: italic;
+  color: #99B4C7;
+  margin: 0 0 10px 0;
+}
+
+.tooltip .img-placeholder {
+  width: 260px;
+  height: 200px;
+  background: transparent url(../img/layout/tooltip-img-placeholder.png) center center no-repeat;
+  margin: 0;
+}
+
+.tooltip#answer-step-2 form {
+  float: left;
+  width: 300px;
+}
+
+.tooltip form ol {
+  margin: 0;
+}
+
+.tooltip form ol li {
+  margin: 0 0 10px 0;
+}
+
+.tooltip fieldset {
+  float: left;
+  width: 260px;
+  overflow: hidden;
+}
+
+.tooltip fieldset fieldset {
+  margin: 0 0 10px 0;
+  float: none;
+}
+
+.tooltip fieldset.optional {
+  background: transparent url(../img/layout/px-pttrn-dashed-1x6.png) left top repeat-y;
+  padding: 0 0 0 20px;
+  margin: 0 0 0 20px;
+}
+
+.tooltip fieldset fieldset legend {
+  display: block;
+  padding: 0 0 10px 0;
+}
+
+.tooltip label {
+  display: block;
+  margin: 0 0 10px 0;
+}
+
+.tooltip label .counter {
+  float: right;
+  font-size: 12px;
+  font-style: italic;
+  color: #99B4C7;
+}
+
+.tooltip fieldset fieldset label {
+  position: relative;
+  padding: 0 0 0 20px;
+  margin: 0;
+  font-style: italic;
+}
+
+.tooltip fieldset fieldset label input[type="checkbox"],
+.tooltip fieldset fieldset label input[type="radio"] {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  z-index: 10;
+}
+
+.tooltip input[type="text"] { width: 250px; }
+.tooltip input[type="file"] { width: 80px; }
+.tooltip input[type="submit"] { padding: 0 30px; }
+
+.tooltip .submit-wrapper {
+  clear: both;
+  text-align: center;
+  margin: 0;
+  padding: 20px 0 0 0;
+}
+
+.tooltip#answer-step-2 .submit-wrapper { padding: 20px 0 0 40px; }
+
+#user-stats li {
+  display: block;
+  margin: 0 0 10px 0;
+  background: transparent url(../img/layout/tooltip-user-tags.png) left top no-repeat;  
+  padding: 0 0 0 35px;
+}
+
+#user-stats li.orange { background-position: 0 0 }
+#user-stats li.yellow { background-position: 0 -30px }
+#user-stats li.green { background-position: 0 -60px }
+#user-stats li.blue { background-position: 0 -90px }
+
+#tooltip-options-nav-wrapper {
+  margin: 0;
+  padding: 20px 0 0 0;
+  background: transparent url(../img/layout/px-pttrn-dashed-6x1.png) left top repeat-x;
+  clear: both;
+}
+
+#tooltip-share-options-nav {
+  margin: 0 0 20px 0;
+  overflow: hidden;
+}
+
+#tooltip-share-options-nav li {
+  float: left;
+  margin: 0 15px 0 0;
+}
+
+.tooltip-translation-bttn-wrapper {
+  clear: both;
+  margin: 0;
+  padding: 20px 0 0 0;
+  background: transparent url(../img/layout/px-pttrn-dashed-6x1.png) left top repeat-x;
+}
+
+.translation-bttn,
+.translation-bttn:visited,
+.translation-bttn:hover {
+  display: block;
+  width: 210px;
+  height: 25px;
+  background: url(../img/layout/tooltip-translation-cta-icon.png) 15px 17px no-repeat, url(../img/layout/tooltip-translation-cta-bg.png) center center no-repeat;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 500;
+  line-height: 25px;
+  font-size: 22px;
+  color: #FFF;
+  padding: 10px 15px 20px 35px;
+}
+
+.tooltip .skip-bttn,
+.tooltip .skip-bttn:visited,
+.tooltip .skip-bttn:hover {
+  display: block;
+  width: 200px;
+  height: 50px;
+  background: url(../img/layout/tooltip-skip-cta-icon.png) 15px 15px no-repeat, url(../img/layout/tooltip-skip-cta-bg.png) center center no-repeat;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 500;
+  line-height: 25px;
+  font-size: 22px;
+  color: #FFF;
+  padding: 10px 15px 20px 45px;
+}
+
+/* ==== colophon components ==== */
+
+#colophon .main-title {
+  font-size: 28px;
+  line-height: 30px;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 400;
+  margin: 0 0 20px 0;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3); 
+}
+
+#share-options {
+  float: right;
+  width: 200px;
+  margin: 0 0 20px 0;
+}
+
+#share-options-nav li {
+  float: left;
+  margin: 0 15px 0 0;
+}
+
+#lang-options {
+  float: right;
+  width: 200px;
+}
+
+.prose.license,
+#legal-nav-wrapper {
+  font-size: 12px;
+  opacity: 0.6;
+  width: 440px;
+  margin: 0 0 10px 0;
+  overflow: hidden;
+}
+
+#legal-nav-wrapper li {
+  float: left;
+  padding: 0 10px 0 0;
+  margin: 0 10px 0 0;
+  border-right: 1px solid #80A1B9;
+}
+
+#legal-nav-wrapper li:last-child {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+#credits {
+  float: left;
+  width: 560px;
+  padding: 0 180px 60px 0;
+}
+
+
+/* ==|== non-semantic helper classes ========================================
+   Please define your styles before this section.
+   ========================================================================== */
+
+/* For image replacement */
+.ir { display: block; border: 0; text-indent: -999em; overflow: hidden; background-color: transparent; background-repeat: no-repeat; text-align: left; direction: ltr; }
+.ir br { display: none; }
+
+/* Hide from both screenreaders and browsers: h5bp.com/u */
+.hidden { display: none !important; visibility: hidden; }
+
+/* Hide only visually, but have it available for screenreaders: h5bp.com/v */
+.visuallyhidden { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+
+/* Extends the .visuallyhidden class to allow the element to be focusable when navigated to via the keyboard: h5bp.com/p */
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus { clip: auto; height: auto; margin: 0; overflow: visible; position: static; width: auto; }
+
+/* Hide visually and from screenreaders, but maintain layout */
+.invisible { visibility: hidden; }
+
+/* Contain floats: h5bp.com/q */ 
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+
+
+/* ==|== media queries ======================================================
+   PLACEHOLDER Media Queries for Responsive Design.
+   These override the primary ('mobile first') styles
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 480px) {
+  /* Style adjustments for viewports 480px and over go here */
+
+}
+
+@media only screen and (min-width: 768px) {
+  /* Style adjustments for viewports 768px and over go here */
+
+}
+
+
+
+/* ==|== print styles =======================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+ 
+@media print {
+  * { background: transparent !important; color: black !important; text-shadow: none !important; filter:none !important; -ms-filter: none !important; } /* Black prints faster: h5bp.com/s */
+  a, a:visited { text-decoration: underline; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }  /* Don't show links for images, or javascript/internal links */
+  pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
+  thead { display: table-header-group; } /* h5bp.com/t */
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  @page { margin: 0.5cm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+}

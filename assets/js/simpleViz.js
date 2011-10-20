@@ -1,7 +1,7 @@
 define(
 //Module dependencies
 [
-	'libs/jquery-1.6.3.min',
+	'libs/jquery-1.6.4.min',
 	'libs/backbone-0.5.3.min',
 	'libs/underscore.min',
 	'libs/handlebars',

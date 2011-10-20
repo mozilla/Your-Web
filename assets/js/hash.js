@@ -141,7 +141,7 @@ function(){
                 
                 app.events.subscribe('answers/new', function(payload) {
                  
-                    app.hash.setProperty("userAnswered",payload.get('id'));  
+                    app.hash.setProperty("userAnswered", payload.get('id'));  
                                   
                     app.hash.refresh();
 
@@ -150,7 +150,7 @@ function(){
                 app.events.subscribe('tile/select', function(payload) {
                     //
 
-                    app.hash.setProperty("important",payload.model.get('id'));  
+                    app.hash.setProperty("important",payload.get('id'));  
                     app.hash.refresh();
                     
 

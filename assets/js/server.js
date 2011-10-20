@@ -31,80 +31,130 @@ function() {
 							{\
 								"content":"Kittens",\
 								"weight":0,\
-								"usertype":"developer",\
+								"usertype":"web-expert",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
+								"statistics": {\
+									"web-intermediate": 12,\
+									"web-creator": 3,\
+									"web-beginner": 20\
+								},\
 								"id":"44cc74df-1e8e-0abb-fc8e-a45a50130d1d"\
 							},\
 							{\
 								"content":"Foxes on Fire!!",\
 								"weight":0,\
-								"usertype":"designer",\
+								"usertype":"web-creator",\
 								"created":"2011-10-04T16:13:02.284Z",\
+								"statistics": {\
+									"web-intermediate": 1,\
+									"web-expert": 2\
+								},\
 								"id":"c0176d62-782f-d0b7-1a57-91e017177342"\
 							},\
 							{\
 								"content":"Open Source",\
 								"weight":0,\
-								"usertype":"developer",\
+								"usertype":"web-expert",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
+								"statistics": {\
+									"web-intermediate": 12,\
+									"web-expert": 50,\
+									"web-creator": 32,\
+									"web-beginner": 11\
+								},\
 								"id":"44cc74df-1e8e-0abb-fc8e-a43a50130d1d"\
 							},\
 							{\
 								"content":"Free",\
 								"weight":0,\
-								"usertype":"designer",\
+								"usertype":"web-expert",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"en-US",\
+								"statistics": {\
+									"web-intermediate": 12,\
+									"web-expert": 50,\
+									"web-creator": 32,\
+									"web-beginner": 11\
+								},\
 								"id":"c0176d62-782f-d0b7-1a57-91e017177642"\
 							},\
 							{\
 								"content":"Beer",\
 								"weight":0,\
-								"usertype":"developer",\
+								"usertype":"web-beginner",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
+								"statistics": {\
+									"web-intermediate": 120\
+								},\
 								"id":"44cc74df-1e8e-0abb-fc8e-a73a50130d1d"\
 							},\
 							{\
 								"content":"Giga Puddi",\
 								"weight":0,\
-								"usertype":"designer",\
+								"usertype":"web-intermediate",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"en-US",\
+								"statistics": {\
+									"web-intermediate": 5,\
+									"web-beginner": 7\
+								},\
 								"id":"c0176d62-782f-d0b7-1a27-91e017177642"\
 							},\
 							{\
 								"content":"Raposas!!",\
 								"weight":0,\
-								"usertype":"designer",\
+								"usertype":"web-intermediate",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"pt-PT",\
+								"statistics": {\
+									"web-intermediate": 12,\
+									"web-expert": 0,\
+									"web-creator": 3,\
+									"web-beginner": 20\
+								},\
 								"id":"c0176d62-782f-d0b7-1a57-91e017177342"\
 							},\
 							{\
 								"content":"Kittens gone wild",\
 								"weight":0,\
-								"usertype":"developer",\
+								"usertype":"web-creator",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
+								"statistics": {\
+									"web-intermediate": 5,\
+									"web-beginner": 7\
+								},\
 								"id":"44cc74df-1e8e-02bb-fc8e-a45a50130d1d"\
 							},\
 							{\
 								"content":"Communication",\
 								"weight":0,\
-								"usertype":"designer",\
+								"usertype":"web-creator",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"en-US",\
+								"statistics": {\
+									"web-intermediate": 12,\
+									"web-expert": 50,\
+									"web-creator": 32,\
+									"web-beginner": 11\
+								},\
 								"id":"c0176d62-782f-d027-1a57-91e017177342"\
 							},\
 							{\
 								"content":"Openness!",\
 								"weight":0,\
-								"usertype":"developer",\
+								"usertype":"web-expert",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
+								"statistics": {\
+									"web-intermediate": 12,\
+									"web-expert": 24,\
+									"web-creator": 52,\
+									"web-beginner": 1\
+								},\
 								"id":"44cc74df-1e8e-0a2b-fc8e-a43a50130d1d"\
 							},\
 							{\
@@ -115,9 +165,13 @@ function() {
 											"width": 500,\
 											"height": 500\
 										  },\
-								"usertype":"designer",\
+								"usertype":"web-intermediate",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"en-US",\
+								"statistics": {\
+									"web-creator": 2,\
+									"web-beginner": 55\
+								},\
 								"id":"c0176d62-782f-d027-1a57-91e017177642"\
 							},\
 							{\
@@ -128,17 +182,27 @@ function() {
 											"width": 500,\
 											"height": 500\
 										  },\
-								"usertype":"developer",\
+								"usertype":"web-intermediate",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
+								"statistics": {\
+									"web-intermediate": 12,\
+									"web-expert": 50,\
+									"web-creator": 32,\
+									"web-beginner": 11\
+								},\
 								"id":"44cc74df-1e8e-0a24-fc8e-a73a50130d1d"\
 							},\
 							{\
 								"content":"No more mice",\
 								"weight":0,\
-								"usertype":"designer",\
+								"usertype":"web-beginner",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"en-US",\
+								"statistics": {\
+									"web-intermediate": 1,\
+									"web-expert": 2\
+								},\
 								"id":"c0176d62-782f-d0f7-1a27-91e017177642"\
 							},\
 							{\
@@ -149,9 +213,14 @@ function() {
 											"width": 400,\
 											"height": 300\
 										  },\
-								"usertype":"designer",\
+								"usertype":"web-beginner",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"pt-PT",\
+								"statistics": {\
+									"web-intermediate": 122,\
+									"web-expert": 41,\
+									"web-beginner": 11\
+								},\
 								"id":"c0176d62-732f-d0b7-1a57-91e017177342"\
 							}\
 						]',
@@ -165,10 +234,16 @@ function() {
 											"height": 300\
 										  },\
 								"weight":0,\
-								"usertype":"developer",\
+								"usertype":"web-creator",\
 								"created":"2011-10-04T16:13:12.492Z",\
 								"language":"en-US",\
-								"id":"0e010311-d281-7185-f91a-1c3131ce9ddb",\
+								"statistics": {\
+									"web-intermediate": 12,\
+									"web-expert": 50,\
+									"web-creator": 32,\
+									"web-beginner": 11\
+								},\
+								"id":"0e010311-d281-7185-f91a-1c3131ce9ddb"\
 							}\
 						]',
 		

@@ -80,6 +80,7 @@ function() {
     	events: (function(){
     		// the topic/subscription hash
         	var _cache = {},
+        		_topics = {},
         		_noSubsTopics = {},
         		_that = this,
 
@@ -97,7 +98,7 @@ function() {
      		 *
              */
         	publish = function(topic, args){
-        		args = args || [];     		
+        		args = args || [];
         		_cache[topic] && _.each(_cache[topic], function(callback){
         			callback.apply(_that, args);
         		});

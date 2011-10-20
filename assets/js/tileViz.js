@@ -1,7 +1,7 @@
 define(
 //Module dependencies
 [
-	'libs/jquery-1.6.3.min',
+	'libs/jquery-1.6.4.min',
 	'libs/backbone-0.5.3.min',
 	'libs/underscore.min',
 	'libs/handlebars',
@@ -20,22 +20,23 @@ function(){
 	map,
 	_placedObjects = [],
 	AnswerView,
+	AnswerDetailView,
 	AnswerListView,
 	QuestionView,
 	QuestionListView,
 	AppView,
 	//templates
-	questionTemplate = '{{content}}',
-	answerTemplate = '<article>{{#if image}}<img src="{{image.url}}" />{{/if}}{{{layout}}}<p class="meta">Submitted by a {{usertype}} on {{created}}</p></article>';
+	questionTemplate = '<li class="question"><a href="#current-question" id="question-{{id}}">{{content}}</a></li>',
+	activeQuestionTemplate = '{{content}}',
+	answerTemplate = '<a href="#" title="{{content}}" class="block"><article class="tile {{color}}"><h1 class="main-title">{{#if image}}<img src="{{image.url}}" />{{else}}{{{layout}}}{{/if}}</h1></article></a>',
+	answerDetailTemplate = $('#tile-detail-template').text();
 	
 	app.namespace('views');
 	
 	// Generate the tilemap
-	app.tilemap.buildMap(app.config.tilemap.lines, app.tilemap.pixelsToTiles($('#content').width()), app.config.tilemap.preoccupied);
-	
+	app.tilemap.buildMap(app.config.tilemap.lines, app.tilemap.pixelsToTiles($('#main').width()), app.config.tilemap.preoccupied);
 	app.tilemap.render($('#tilemap').get(0));
-	$('.tiled-answers').css({width: $('#tilemap').width(), height: $('#tilemap').height()});
-		
+	$('.tiles-list').css({width: $('#tilemap').width(), height: $('#tilemap').height(), position: 'absolute', top: '0'});
 	// Set up a simple view
 	AnswerView = Backbone.View.extend({
 		
@@ -48,30 +49,34 @@ function(){
 		template: Handlebars.compile(answerTemplate),
 		
 		initialize: function() {
-			this.model.bind('change', this.render, this);
 			this.model.bind('destroy', this.remove, this);
 		},
 		
 		render: function(layout) {
 			var modelData = this.model.toJSON(),
 			created = new Date(modelData.created),
-			classes = ['red', 'yellow', 'green', 'blue', 'pink'],
-			randomInt = Math.round(Math.random() * 4),
-			color = classes[randomInt];
+			classes = {
+				'web-beginner'		: 'orange',
+				'web-intermediate'	: 'yellow',
+				'web-expert'		: 'green',
+				'web-creator'		: 'blue'
+			},
+			color = classes[modelData.usertype];
 			
 			modelData.created = created.strftime('%A %d, %B %Y');
 			
 			modelData.layout = layout;
 			
-			$(this.el).html( this.template( modelData ) );
+			modelData.color = color;
 			
-			$(this.el).addClass(color);
+			$(this.el).attr('data-tile', modelData.id).html( this.template( modelData ) );
 			
 			return this;
 		},
 		
 		handleClick: function() {
-			app.events.publish('tile/select', [this, this.el]);
+			app.events.publish('tile/select', [this.model, this.el]);
+			return false;
 		},
 		
 		remove: function() {
@@ -83,9 +88,54 @@ function(){
 		}
 	});
 	
-	QuestionView = Backbone.View.extend({
-		tagName: 'h1',
+	AnswerDetailView = Backbone.View.extend({
+		tagName: 'article',
 		
+		className: 'tooltip',
+		
+		events: {
+			'click .translation-bttn': 'showTranslate'
+		},
+		
+		template: Handlebars.compile(answerDetailTemplate),
+		
+		initialize: function() {
+			this.model.bind('change', this.render, this);
+			this.model.bind('destroy', this.remove, this);
+		},
+		
+		render: function() {
+			var modelData = this.model.toJSON(),
+				total = 0;
+			
+			modelData.statistics.total = 0;
+			
+			_.each(modelData.statistics, function(part) {
+				total += parseInt(part, 10);
+			});
+			
+			modelData.statistics.total = total;
+			
+			$(this.el).attr('id', 'tile-details').html( this.template( modelData ) );
+			
+			return this;
+		},
+		
+		showTranslate: function() {
+			$(this.el).find('#tile-detail-main').addClass('hidden');
+			$(this.el).find('#translation-step-1').removeClass('hidden');
+			
+			return false;
+		},
+		
+		remove: function() {
+			$(this.el).remove();
+		}
+	});
+	
+	app.views.AnswerDetailView = AnswerDetailView;
+	
+	QuestionView = Backbone.View.extend({			
 		template: Handlebars.compile(questionTemplate),
 		
 		initialize: function() {
@@ -99,9 +149,12 @@ function(){
 			
 			modelData.created = created.strftime('%A %d, %B %Y');
 			
-			$(this.el).html( this.template( modelData ) );
+			if (modelData.active) {
+				
+				this.template = Handlebars.compile(activeQuestionTemplate);
+			}
 			
-			return this;
+			return this.template( modelData );
 		},
 		
 		remove: function() {
@@ -124,8 +177,8 @@ function(){
 		initialize: function() {							
 			this.input = this.$('#new-answer');
 			
-			this.collection.bind('add',   this.addOne);
-			this.collection.bind('reset', this.applyFilters);
+			this.collection.bind('add',   this.addOne, this);
+			this.collection.bind('reset', this.applyFilters, this);
 		},
 		
 		addOne: function(answer) {
@@ -154,7 +207,7 @@ function(){
 		},
 		
 		empty: function() {
-			this.$('.tiled-answers').empty();
+			this.$('.tiles-list').empty();
 		},
 		
 		applyFilters: function() {
@@ -164,28 +217,29 @@ function(){
 	
 	// Set up the Question List view
 	QuestionListView = Backbone.View.extend({
-		el: $('#content'),
+		el: '#primary-nav',
 		
 		initialize: function() {			
-			this.input = this.$('#new-question');
-			app.questions.collection.bind('reset', this.addActive, this);
-			this.render();
-		},
-		
-		render: function() {
-			this.clear();
-			this.addActive();
+			app.questions.collection.bind('reset', this.clear, this);
+			app.questions.collection.bind('reset', this.addAll, this);
+			app.questions.collection.trigger('reset');
 		},
 		
 		addOne: function(question) {
+			var view;
 			if (question) {
-				var view = new QuestionView( { model: question } );
-				this.$('.question-list').append(view.render().el);
+				view = new QuestionView( { model: question } );
+				if (!question.get('active')) {
+					$(this.el).append(view.render());
+				} else {
+					$('#current-question .current-question-btn').html(view.render());
+				}
 			}
 		},
 		
 		addAll: function() {
-			app.questions.collection.each(this.addOne);
+			this.clear();
+			app.questions.collection.each(this.addOne, this);
 		},
 		
 		addActive: function() {
@@ -193,7 +247,7 @@ function(){
 		},
 		
 		clear: function() {
-			this.$('.question-list').html('');
+			$('#primary-nav').html('');
 		}
 	}),
 	
@@ -218,9 +272,9 @@ function(){
 		view = new AnswerView( { model: obj.model } );
 		$el = $(view.render(content).el).hide();
 					
-		$('.tiled-answers').append($el);
+		$('.tiles-list').append($el);
 			
-		$el.css({fontSize: '200%', position: 'absolute', top: xPos + 'px', left: yPos+ 'px', width: width, height: height});
+		$el.css({position: 'absolute', top: xPos + 'px', left: yPos+ 'px', width: width, height: height});
 		
 		$el.fadeIn('fast');
 		
@@ -261,7 +315,7 @@ function(){
 				}
 			});
 		}
-		
+				
 		for (var l=0, len=map.length; l<len; l++) {
 			recursive(l, 0);
 		}
@@ -303,7 +357,7 @@ function(){
 			ratios = [],
 			allowedSlots = [];
 			
-		$('.tiled-answers').empty();
+		$('.tiles-list').empty();
 		
 		imageCollection.each(function(answer) {
 			ratios.push(
@@ -317,7 +371,6 @@ function(){
 				height = slot.columns.stop - slot.columns.start,
 				ratio = Math.max(width, height) / Math.min(width, height),
 				$container;
-				
 				
 			if (_.include(ratios, ratio) && !$('[data-imageratio="'+ ratio +'"][data-hTiles="'+ height +'"][data-vTiles="'+ width +'"]').length) {
 				allowedSlots.push(slot);
@@ -338,7 +391,7 @@ function(){
 				.attr('data-hTiles', height)
 				.attr('data-vTiles', width);
 				
-				$('.tiled-answers').append($container);				
+				$('.tiles-list').append($container);				
 			}
 		});
 		
@@ -346,15 +399,16 @@ function(){
 		
 		app.tilemap.addImageSlots(allowedSlots);
 			
-		setTimeout(fillMap, 500);
+		_.defer(fillMap, 500);
 	};
 	
 	app.answers.collection.bind('reset', function(collection) {
+		
 		app.events.publish('tiles/reset', [collection]);
 	});
 	
 	app.events.subscribe('questions/active', function() {
-		if (app.questions.getActive()) {
+		if (app.questions.getActive()) {		
 			app.views.answerListView.empty();
 			app.answers.refresh();
 		}
@@ -370,7 +424,7 @@ function(){
 		for (var key in filters) {
 			resultCollection = resultCollection[ functionMap[ key ] ]( filters[key] );
 		}
-		
+
 		app.events.publish('tiles/reset', [resultCollection]);
 		app.views.answerListView.render(resultCollection);
 	});
@@ -393,5 +447,7 @@ function(){
 	
 	
 	// Instantiate the Question List View
-	app.views.QuestionListView = new QuestionListView;
+	$(document).ready(function() {
+		app.views.QuestionListView = new QuestionListView;
+	});
 });

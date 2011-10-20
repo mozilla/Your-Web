@@ -11,7 +11,7 @@
 //Module dependencies
 [
 	'core',
-	'libs/jquery-1.6.3.min',
+	'libs/jquery-1.6.4.min',
 	'libs/underscore.min',
 	'tilemap'
 ],
@@ -33,15 +33,21 @@ function(){
 		
 		_renderWord = function(word) {
 			// Create a mock element
-			var $el = $('<span style="font-size: 200%">' + word + '</span>').css({visibility: 'hidden'}),
-			width;
+			var $el = $('<article class="mock-tile" style="display:inline">' + word + '</span>').css({visibility: 'hidden'}),
+			height = 0,
+			width = 0,
+			returnable = {};
 			
 			$('body').append($el);
-			width = Math.ceil($el.width());
+			width = Math.ceil($el.outerWidth());
+			height = Math.ceil($el.outerHeight());
 			$el.remove();
 			
-			// Return width, in tiles
-			return tilemap.pixelsToTiles(width);
+			returnable.hTiles = tilemap.pixelsToTiles(width), 10;
+			returnable.vTiles = tilemap.pixelsToTiles(height), 10;
+			
+			// Return properties in tiles
+			return returnable;
 		},
 		
 		_buildMatrix = function(words, combo, numberOfBreaks) {
@@ -49,7 +55,7 @@ function(){
 				column = 1,
 				maxCols = 1,
 				maxHTiles = 1,
-				maxVTiles = 1,
+				maxVTiles = 2,
 				colTiles = 1,
 				matrix = {
 					grid: {}
@@ -64,6 +70,7 @@ function(){
 					line++;
 					column = 1;
 					maxHTiles = (maxHTiles < words[w].hTiles) ? words[w].hTiles : maxHTiles;
+					maxVTiles += words[w].vTiles - 1;
 				} else {
 					column += 1;
 					maxHTiles += words[w].hTiles;
@@ -77,9 +84,9 @@ function(){
 			}
 				
 			matrix.columns = maxCols;
-			matrix.maxHTiles = maxHTiles;
+			matrix.maxHTiles = maxHTiles + 1;
 			matrix.lines = line;
-			matrix.maxVTiles = line;
+			matrix.maxVTiles = maxVTiles;
 
 			return matrix;
 		},
@@ -162,10 +169,13 @@ function(){
 			};
 			_cache[string].words = [];
 			
-			_.each(words, function(word) {			
+			_.each(words, function(word) {
+				var rendered = _renderWord(word);
+						
 				_cache[string].words.push({
 					text: word,
-					hTiles: _renderWord(word)
+					hTiles: rendered.hTiles,
+					vTiles: rendered.vTiles
 				});
 			});
 			
