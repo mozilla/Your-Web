@@ -60,6 +60,7 @@ function(){
 				'web-expert'		: 'green',
 				'web-creator'		: 'blue'
 			},
+			animationClasses = ['animation-a', 'animation-b', 'animation-c', 'animation-d'],
 			ids = [];
 			color = classes[modelData.usertype];
 			
@@ -84,6 +85,12 @@ function(){
 			}
 			
 			$(this.el).attr('data-tile', modelData.id || this.model.cid).html( this.template( modelData ) );
+			
+			/*
+			if (Math.round(Math.random())) {
+				$(this.el).find('article').addClass(animationClasses[Math.round(Math.random() * 3)]);
+			}
+			*/
 			
 			if (modelData.important) {
 				$(this.el).addClass('important');

@@ -23,7 +23,7 @@ div.uploader,
 div.uploader span.action,
 div.button,
 div.button span {
-  background-image: url(../images/sprite.png);
+  background-image: url(../img/uniform/sprite.png);
   background-repeat: no-repeat;
   -webkit-font-smoothing: antialiased;
 }
@@ -53,8 +53,8 @@ textarea.uniform {
   font-weight: normal;
   padding: 3px;
   color: #777;
-  background: url('../images/bg-input-focus.png') repeat-x 0px 0px;
-  background: url('../images/bg-input.png') repeat-x 0px 0px;
+  background: url('../img/uniform/bg-input-focus.png') repeat-x 0px 0px;
+  background: url('../img/uniform/bg-input.png') repeat-x 0px 0px;
   border-top: solid 1px #aaa;
   border-left: solid 1px #aaa;
   border-bottom: solid 1px #ccc;
@@ -73,7 +73,7 @@ textarea.uniform:focus {
   -moz-box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
   box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
   border-color: #999;
-  background: url('../images/bg-input-focus.png') repeat-x 0px 0px;
+  background: url('../img/uniform/bg-input-focus.png') repeat-x 0px 0px;
 }
 
 /* SPRITES */
@@ -606,5 +606,246 @@ div.uploader input {
   float: right;
   height: 25px;
   border: none;
+  cursor: default;
+}
+
+/* override selector */
+
+div.selector,
+div.selector:hover,
+div.selector.hover,
+div.selector.hover.active,
+div.selector:active,
+div.selector.active,
+div.selector:focus,
+div.selector.focus {
+  background-color: #145B89;
+  background-image: none; 
+  border-radius: 4px;
+  width: 160px;
+  height: 30px;
+  line-height: 30px;
+  font-style: italic;
+  font-family: inherit;
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.3) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.2) inset;
+  padding: 0;
+}
+
+div.selector.hover.active,
+div.selector:active,
+div.selector.active,
+div.selector:focus,
+div.selector.focus {
+  ackground-color: #145B89;
+  background-image: none; 
+  border-radius: 4px;
+  width: 160px;
+  height: 30px;
+  line-height: 30px;
+  font-style: italic;
+  font-family: inherit;
+  box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.2), 0 -1px 0 0 rgba(255, 255, 255, 0.2) inset, 0 2px 0 0 rgba(0, 0, 0, 0.2) inset;
+  padding: 0;
+}
+
+div.selector span {
+  cursor: pointer;
+  display: block;
+  background-repeat: no-repeat;
+  background-position: 128px -773px;
+  width: auto;
+  height: 30px;
+  line-height: 30px;
+  color: #FFF;
+  font-size: 14px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+  padding: 0 30px 0 10px;
+}
+
+div.selector:hover span,
+div.selector.hover span,
+div.selector.hover.active span,
+div.selector:active span,
+div.selector.active span,
+div.selector:focus span,
+div.selector.focus span {
+  background-repeat: no-repeat;
+  background-position: 128px -773px; 
+}
+
+div.selector select {
+  background: #FFF;
+  height: 30px;
+  width: 160px;
+  min-width: 160px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+div.selector select option {
+  padding: 5px;
+  font-style: italic;
+}
+
+.tooltip fieldset fieldset label div.radio,
+.tooltip fieldset fieldset label div.checker {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  z-index: 10;
+}
+
+.tooltip fieldset fieldset label {
+  padding: 0 0 0 25px;
+}
+
+/* override usertypes checker */
+
+.usertype div.checker {
+  height: 20px;
+  width: 25px;
+  margin: 0;
+}
+
+.usertype div.checker span {
+  height: 20px;
+  width: 25px;
+}
+
+.usertype .orange div.checker span { background-position: -10px -820px; }
+.usertype .orange div.checker span.checked { background-position: -130px -820px; }
+
+.usertype .yellow div.checker span { background-position: -40px -820px; }
+.usertype .yellow div.checker span.checked { background-position: -160px -820px; }
+
+.usertype .green div.checker span { background-position: -70px -820px; }
+.usertype .green div.checker span.checked { background-position: -190px -820px; }
+
+.usertype .blue div.checker span { background-position: -100px -820px; }
+.usertype .blue div.checker span.checked { background-position: -220px -820px; }
+
+.usertype div.checker input[type="checkbox"] {
+  height: 20px;
+  width: 25px;
+  cursor: pointer;
+}
+
+/* override usertypes radio */
+
+.usertype div.radio {
+  height: 20px;
+  width: 20px;
+  margin: 0;
+}
+
+.tooltip fieldset fieldset label div.radio {
+  top: 0;
+}
+
+.usertype div.radio span {
+  height: 20px;
+  width: 20px;
+  line-height: 20px;
+}
+
+.usertype .orange div.radio span { background-position: -250px -820px; }
+.usertype .orange div.radio span.checked { background-position: -370px -820px; }
+
+.usertype .yellow div.radio span { background-position: -280px -820px; }
+.usertype .yellow div.radio span.checked { background-position: -400px -820px; }
+
+.usertype .green div.radio span { background-position: -310px -820px; }
+.usertype .green div.radio span.checked { background-position: -430px -820px; }
+
+.usertype .blue div.radio span { background-position: -340px -820px; }
+.usertype .blue div.radio span.checked { background-position: -460px -820px; }
+
+.usertype div.radio input[type="radio"] {
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+}
+
+.tooltip .usertype label {
+  margin: 0 0 5px 0;
+  line-height: 20px;
+}
+
+.tooltip .usertype label:last-child {
+  margin: 0;
+}
+
+
+/* override uploader */
+
+div.uploader {
+  background: 0;
+  height: auto;
+  width: 260px;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  cursor: default;
+}
+
+div.uploader span.filename {
+  width: 125px;
+  height: 20px;
+  line-height: 20px;
+  padding: 5px 10px;
+  border: 0;
+  font-size: 14px;
+  font-style: italic;
+  font-family: inherit;
+  color: #668FAC;
+  background: #FFF;
+  border-radius: 4px;
+  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.4), 0 2px 0 0 rgba(255, 255, 255, 0.3), 0 0 2px 0 rgba(0, 0, 0, 0.4) inset;
+  margin: 0 5px 0 0;
+  text-shadow: none;
+  cursor: default;
+}
+
+.tooltip fieldset fieldset label {
+    padding: 0 0 0 25px;
+}
+
+div.uploader span.action,
+div.uploader:hover span.action,
+div.uploader.hover span.action,
+div.uploader.focus span.action,
+div.uploader.active span.action,
+div.uploader.focus.active span.action {
+  display: block;
+  overflow: visible;
+  padding: 0;
+  width: 110px;
+  height: 30px;
+  line-height: 30px;
+  border: 0;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: normal;
+  font-family: inherit;
+  color: #FFF;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.4) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.2) inset;
+  background: rgb(62,172,230); /* Old browsers */
+  background: -moz-linear-gradient(top, rgba(62,172,230,1) 0%, rgba(38,124,194,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(62,172,230,1)), color-stop(100%,rgba(38,124,194,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(62,172,230,1) 0%,rgba(38,124,194,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(62,172,230,1) 0%,rgba(38,124,194,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(62,172,230,1) 0%,rgba(38,124,194,1) 100%); /* IE10+ */
+  background: linear-gradient(top, rgba(62,172,230,1) 0%,rgba(38,124,194,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3eace6', endColorstr='#267cc2',GradientType=0 ); /* IE6-9 */
+  cursor: pointer;
+}
+
+div.uploader input {
+  width: 260px;
+  height: 30px;
   cursor: default;
 }

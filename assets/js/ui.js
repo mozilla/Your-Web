@@ -64,7 +64,8 @@ function(){
 				className: 'tooltip',
 				appendTo: 'body',
 				offsetTop: 0,
-				show: true
+				show: true,
+				effect: 'fadein'
 			});
 			
 			elPos = $(element).offset();
@@ -76,7 +77,7 @@ function(){
 				$(options.appendTo).find('.tooltip').remove();
 			}
 			
-			$tooltip.get(0).className = 'tooltip ' + options.className;
+			$tooltip.get(0).className = options.className;
 			
 			$tooltip
 			.css({
@@ -89,7 +90,17 @@ function(){
 			$tooltip.appendTo(options.appendTo);
 			
 			if (options.show) {
-				$tooltip.css({visibility: 'visible'}).hide().fadeIn('fast');
+				$tooltip.css({visibility: 'visible'}).hide();
+				
+				if (options.effect == 'fadein') {
+					$tooltip.fadeIn('fast');
+				} 
+				else if (options.effect == 'slidedown') {
+					$tooltip.slideDown('fast');
+				}
+				else {
+					$tooltip.show();
+				}
 			}
 			
 			leftAdjust = ( Math.max($(element).width(), $tooltip.width()) - Math.min($(element).width(), $tooltip.width()) ) / 2;
@@ -127,7 +138,15 @@ function(){
 			
 			return {
 				show: function() {
-					$tooltip.fadeIn('fast');
+					if (options.effect == 'fadein') {
+						$tooltip.fadeIn('fast');
+					} 
+					else if (options.effect == 'slide') {
+						$tooltip.slideDown('fast');
+					}
+					else {
+						$tooltip.show();
+					}
 				},
 				element: $tooltip.get(0)
 			};
@@ -153,13 +172,17 @@ function(){
 		}
 	})());
 	
-	$(document).ready(function() {	
+	$(document).ready(function() {
+		//Uniform
+		$('select, input:checkbox, input:radio, input:file').uniform();
+	
 		//Initial bootstrapping from APP.config.filters
 		for (var key in filters) {
 			$('.filter[data-filter-type="' + key + '"]').val(filters[key]);
+			$.uniform.update($('.filter[data-filter-type="' + key + '"]'));
 		}
 		
-		//Binding filters change event
+		//Binding filters change event		
 		$('.filter').bind('change', function() {
 			var filterType = $(this).attr('data-filter-type'),
 				$filterCollection = $('[data-filter-type="' + filterType + '"]'),
@@ -190,12 +213,14 @@ function(){
 			
 			//Publish an event saying the filters changed
 			app.events.publish('filters/change', [app.config.filters]);
+			
+			return false;
 		});
 		
 		
 		// Question List tooltip
 		$('#current-question .current-question-btn').bind('click', function() {
-			var tooltip = app.ui.makeTooltip($('#primary-nav-wrapper').html(), $('#current-question'), {exclusive: true, className: 'questionList', appendTo: $('#wrapper')});
+			var tooltip = app.ui.makeTooltip('<nav id="primary-nav-wrapper">' + $('#primary-nav-wrapper').html() + '</nav>', $('#current-question'), {exclusive: true, className: 'questionList', appendTo: $('#wrapper'), effect: 'fadein', offsetTop: 5});
 			
 			$('#primary-nav .question a').unbind();
 			
@@ -204,7 +229,7 @@ function(){
 					id = $this.attr('id').replace('question-', ''),
 					question = app.questions.collection.get(id);
 					
-				app.questions.setActive(question);
+				if (app.questions.getActive().id != id) app.questions.setActive(question);
 				
 				$(tooltip.element).remove();
 				
@@ -214,11 +239,15 @@ function(){
 			return false;
 		});
 		
+		$('body').bind('click', function() {
+			var $questionlist = $('.questionList');
+			$questionlist.remove();
+		});		
 		
 		// Submit tooltips
 		$('#tile-cta-bttn, #answer-form-shortcut input[type="submit"]').bind('click', function() {
 			var offsetTop = ($(this).attr('id') == 'tile-cta-bttn') ? 60 : 20,			
-				submitAnswerTooltip = app.ui.makeTooltip($('#submitAnswer-template').text(), $(this), {exclusive: true, className: 'submitAnswer large', offsetTop: offsetTop, appendTo: $('#wrapper')}),
+				submitAnswerTooltip = app.ui.makeTooltip($('#submitAnswer-template').text(), $(this), {exclusive: true, className: 'tooltip submitAnswer large', offsetTop: offsetTop, appendTo: $('#wrapper')}),
 				$element = $(submitAnswerTooltip.element),
 				model;
 				
@@ -380,7 +409,9 @@ function(){
 			
 			$tooltip.find('form').validationEngine(app.config.validation);
 			
-			$('.tooltip-close-bttn-wrapper a').trigger('click');
+			$('.tooltip').remove();
+			
+			//$('.tooltip-close-bttn-wrapper a').trigger('click');
 			
 			$tooltip
 			.attr('data-tile', model.get('id') || model.cid)
