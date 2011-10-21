@@ -35,8 +35,7 @@ function(){
 	
 	// Generate the tilemap
 	app.tilemap.buildMap(app.config.tilemap.lines, app.tilemap.pixelsToTiles($('#main').width()), app.config.tilemap.preoccupied);
-	app.tilemap.render($('#tilemap').get(0));
-	$('.tiles-list').css({width: $('#tilemap').width(), height: $('#tilemap').height(), position: 'absolute', top: '0'});
+	$('.tiles-list').css({ height: app.tilemap.tilesToPixels(app.config.tilemap.lines) });
 	// Set up a simple view
 	AnswerView = Backbone.View.extend({
 		
@@ -125,18 +124,20 @@ function(){
 		
 		render: function() {
 			var modelData = this.model.toJSON(),
+				usertypeStrings = app.config.strings.usertypes,
 				total = 0;
 			
-			modelData.statistics.total = 0;
+			delete modelData.statistics.total;
+			modelData.usertypes = {};
 			
-			_.each(modelData.statistics, function(part) {
+			_.each(modelData.statistics, function(part, key) {
+				modelData.usertypes[key] = (part > 1) ? usertypeStrings[key].plural : usertypeStrings[key].singular;
 				total += parseInt(part, 10);
 			});
 			
 			modelData.statistics.total = total;
 			
 			modelData.moreThanOne = (total > 1) ? true : false;
-			
 			$(this.el).attr('id', 'tile-details').html( this.template( modelData ) );
 			
 			return this;
@@ -164,15 +165,16 @@ function(){
 			this.model.bind('destroy', this.remove, this);
 		},
 		
-		render: function() {
+		render: function(type) {
 			var modelData = this.model.toJSON(),
 			created = new Date(modelData.created);
 			
 			modelData.created = created.strftime('%A %d, %B %Y');
 			
-			if (modelData.active) {
-				
+			if (type == 'header') {
 				this.template = Handlebars.compile(activeQuestionTemplate);
+			} else {
+				this.template = Handlebars.compile(questionTemplate);
 			}
 			
 			return this.template( modelData );
@@ -222,14 +224,19 @@ function(){
 		},
 		
 		addOne: function(question) {
-			var view;
+			var view,
+				el;
 			if (question) {
 				view = new QuestionView( { model: question } );
-				if (!question.get('active')) {
-					$(this.el).append(view.render());
-				} else {
-					$('#current-question .current-question-btn').html(view.render());
+				el = view.render(),
+				$el = $(el);
+
+				if (question.get('active')) {
+					$('#current-question .current-question-btn').html(view.render('header'));
+					$el.addClass('selected');
 				}
+				
+				$(this.el).append($el);
 			}
 		},
 		
@@ -283,15 +290,19 @@ function(){
 	},
 	
 	_placeImageObject = function(obj, container) {
-		view = new AnswerView( { model: obj.model } );
-		$(container).append(view.render(obj.model.get('content')).el);
-		app.ui.makeSlideShow(container);
+		var view = new AnswerView( { model: obj.model } ),
+		el = view.render(obj.model.get('content')).el;
+		
+		$(container).append(el);
+		
+		$(el).hide();
 	},
 	
 	fillMap = function() {
 		var tilemap = app.tilemap,
 			map = tilemap.map(),
 			freeHTiles,
+			tasks = [],
 			mapWasFull = true;
 		
 		function recursive(line, col) {
@@ -304,7 +315,10 @@ function(){
 				
 				if (object) {
 					if (tilemap.isTileFree(free.tile)) {
-						_placeObject(object, free.tile);
+						tasks.push(function() {
+							_placeObject(object, free.tile)
+						});
+						
 						mapWasFull = false;
 
 						for (var l=free.tile.x, len=free.tile.x + object.maxVTiles-1; l<=len; l++) {
@@ -346,12 +360,15 @@ function(){
 				objects = app.imagetester.imagesThatFit( slotWidth, slotHeight);
 			
 			_.each(objects, function(object) {
-				_placeImageObject(object, $('[data-imageratio="' + object.ratio + '"][data-hTiles="' + slotHeight +'"][data-vTiles="'+ slotWidth +'"]').find('.image-list'));
+				tasks.push(function() {
+					_placeImageObject(object, $('[data-imageratio="' + object.ratio + '"][data-hTiles="' + slotHeight +'"][data-vTiles="'+ slotWidth +'"]').find('.image-list'));
+				});
 			});
 		});
 		
-		tilemap.clear($('#tilemap').get(0));
-		tilemap.render($('#tilemap').get(0));
+		app.multistep(_.shuffle(tasks), null, function() {
+			app.ui.makeSlideShow('.tiles-list .image-list');
+		}, 125);
 	},
 	
 	renderTilesOnMap = function(collection) {
@@ -436,7 +453,6 @@ function(){
 	});	
 	
 	app.events.subscribe('string/test', fillMap);
-	
 	
 	// Instantiate the Question List View
 	$(document).ready(function() {

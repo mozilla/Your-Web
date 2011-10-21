@@ -83,7 +83,6 @@
     
           <p id="tile-cta-bttn-wrapper"><a href="#" title="Submit your Answer" id="tile-cta-bttn">Submit your Answer</a></p>
         	
-        	<canvas id="tilemap"></canvas>
           <ul class="tiles-list clearfix"></ul>
           
         	<div id="submitAnswer-modal" class="modal hide fade"></div>
@@ -185,6 +184,24 @@
 				scroll: false
 			},
 			strings: {
+				usertypes: {
+					'web-beginner': {
+						singular: 'Web Beginner',
+						plural: 'Web Beginners'
+					},
+					'web-intermediate': {
+						singular: 'Web Intermediate',
+						plural: 'Web Intermediates'
+					},
+					'web-expert': {
+						singular: 'Web Expert',
+						plural: 'Web Experts'
+					},
+					'web-creator': {
+						singular: 'Web Creator',
+						plural: 'Web Creator'
+					}
+				},
 				formSubmitLoading: 'Sending...',
 				validation: {
 					"required": { // Add your regex rules here, you can take telephone as an example
@@ -412,7 +429,7 @@
 					<h2 class="main-title">What do you love about the Web?</h2>
 				  </hgroup>
 				</header>
-				<form class="clearfix">
+				<form class="clearfix" action="http://dojo.lan/~brunoabrantes/upload.php">
 				  <fieldset>
 					<legend class="visuallyhidden">Mandatory fields:</legend>
 					<ol>
@@ -450,7 +467,7 @@
 					<ol>
 					  <li>
 						<label>Select an image on your computer:</label>
-						<input type="file">
+						<input type="file" name="userfile" id="imageUpload">
 					  </li>
 					</ol>
 					<p class="img-placeholder"></p>
@@ -527,19 +544,19 @@
             <div class="prose">
               <ul id="user-stats">
               	{{#if statistics.web-beginner}}
-	                <li class="orange">{{statistics.web-beginner}} Web Beginners</li>
+	                <li class="orange">{{statistics.web-beginner}} {{usertypes.web-beginner}}</li>
 	            {{/if}}
 	            
 	            {{#if statistics.web-intermediate}}
-    	            <li class="yellow">{{statistics.web-intermediate}} Web Intermediates</li>
+    	            <li class="yellow">{{statistics.web-intermediate}} {{usertypes.web-intermediate}}</li>
                 {{/if}}
                 
                 {{#if statistics.web-expert}}
-	                <li class="green">{{statistics.web-expert}} Web Experts</li>
+	                <li class="green">{{statistics.web-expert}} {{usertypes.web-expert}}</li>
 	            {{/if}}
                 
                 {{#if statistics.web-creator}}
-                	<li class="blue">{{statistics.web-creator}} Web Creators</li>
+                	<li class="blue">{{statistics.web-creator}} {{usertypes.web-creator}}</li>
                 {{/if}}
               </ul>
             </div>

@@ -76,6 +76,26 @@ function() {
 		
 			return parent;			
 		},
+		
+		multistep: function(steps, args, callback, time) {
+			var tasks = steps.concat(); //clone array
+			
+			time = time || 25;
+			
+			setTimeout(function() {
+				var task;
+				//execute next task
+				task = tasks.shift();
+				task.apply(null, args || []);
+				
+				//determine if there are more tasks
+				if (tasks.length) {
+					setTimeout(arguments.callee, 25);
+				} else {
+					if (typeof callback == 'function') callback();
+				}
+			}, time);
+		},
     	
     	events: (function(){
     		// the topic/subscription hash

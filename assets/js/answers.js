@@ -287,25 +287,24 @@ function(){
 						
 						//Publish an event
 						app.events.publish('answers/new', [model]);
+						
+						// If this answer is in an inactive filter or language, activate it!
+						if (!_.include(filters.language, model.get('language'))) {
+							$('.lang .filter').val(model.get('language'));
+							
+							app.config.filters.language = [model.get('language')];
+							//Publish an event saying the filters changed
+							app.events.publish('filters/change', [app.config.filters]);
+						}
+						
+						if (!_.include(filters.usertype, model.get('usertype'))) {
+							$('.filter[value="' + model.get('usertype') + '"]').attr('checked', '');
+							
+							app.config.filters.usertype.push(model.get('usertype'));
+							//Publish an event saying the filters changed
+							app.events.publish('filters/change', [app.config.filters]);
+						}
 					}});
-				}
-				
-				// If this answer is in an inactive filter or language, activate it!
-				if (!_.include(filters.language, model.language)) {
-					$('.lang .filter').val(model.language);
-					
-					app.config.filters.language = [model.language];
-					//Publish an event saying the filters changed
-					app.events.publish('filters/change', [app.config.filters]);
-				}
-				
-				
-				if (!_.include(filters.usertype, model.usertype)) {
-					$('.filter[value="' + model.usertype + '"]').attr('checked', '');
-					
-					app.config.filters.usertype.push(model.usertype);
-					//Publish an event saying the filters changed
-					app.events.publish('filters/change', [app.config.filters]);
 				}
 				
 				return newAnswer;

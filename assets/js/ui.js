@@ -7,6 +7,7 @@ define(
 	'libs/jquery.cycle.lite',
 	'libs/jquery.uniform',
 	'libs/jquery.validationEngine',
+	'libs/ajaxupload',
 	'core',
 	'hash'
 ],
@@ -32,7 +33,9 @@ function(){
 		},
 		
 		makeSlideShow = function(element) {
-			$(element).cycle({
+			$(element)
+			.hide()
+			.cycle({
 				before: function(oldImg, newImg) {
 					var oldTooltip = $('#tile-details[data-tile="' + $(oldImg).attr('data-tile') + '"]');
 					
@@ -41,7 +44,8 @@ function(){
 						$(newImg).find('a').trigger('click');
 					}
 				}
-			});
+			})
+			.fadeIn('fast');
 		},
 		
 		makeTooltip = function(content, element, options) {
@@ -215,26 +219,46 @@ function(){
 		$('#tile-cta-bttn, #answer-form-shortcut input[type="submit"]').bind('click', function() {
 			var offsetTop = ($(this).attr('id') == 'tile-cta-bttn') ? 60 : 20,			
 				submitAnswerTooltip = app.ui.makeTooltip($('#submitAnswer-template').text(), $(this), {exclusive: true, className: 'submitAnswer large', offsetTop: offsetTop, appendTo: $('#wrapper')}),
+				$element = $(submitAnswerTooltip.element),
 				model;
 				
 			//Validation
-			$(submitAnswerTooltip.element).find('form').validationEngine(app.config.validation);
+			$element.find('form').validationEngine(app.config.validation);
 			$('form').validationEngine('hide');
 			
 			// Populate the answer field with the pre-answer value
-			$(submitAnswerTooltip.element).find('.answer-text').val($('#answer-form-shortcut .answer-pre-text').val());
+			$element.find('.answer-text').val($('#answer-form-shortcut .answer-pre-text').val());
 			
 			// Populate the question field with the active question
-			$(submitAnswerTooltip.element).find('#answer-step-1 .main-title').text(app.questions.getActive().get('content'));
+			$element.find('#answer-step-1 .main-title').text(app.questions.getActive().get('content'));
 			
-			app.events.subscribe('answer/saved', function() {
+			// Generate the upload form            
+            new AjaxUpload('imageUpload', {
+				action: $element.find('form').attr('action'),
+				name: 'userfile',
+				onSubmit: function(file, extension) {
+					$element.find('.img-placeholder').addClass('loading');
+				},
+				onComplete: function(file, response) {
+					var $thumb = $element.find('.img-placeholder');
+					
+					$thumb.find('.img-placeholder').load(function(){
+						$element.find('.img-placeholder').removeClass('loading');
+						$thumb.unbind();
+					});
+					
+					$thumb.attr('src', response);
+				}
+			});
+			
+			var saveSubscription = app.events.subscribe('answer/saved', function() {
 				// Clear the forms, hide the modal
-				$(submitAnswerTooltip.element).find('.tooltip-close-bttn-wrapper').trigger('click');
+				$element.find('.tooltip-close-bttn-wrapper').trigger('click');
 							 
 				$('#answer-form-shortcut .answer-pre-text').val('');
 			});
 			
-			$(submitAnswerTooltip.element).delegate('.answer-text', 'keyup', function() {
+			$element.delegate('.answer-text', 'keyup', function() {
 				var $this = $(this),
 					charCount = $(this).val().length,
 					$counter = $('.answer-text-counter'),
@@ -254,20 +278,24 @@ function(){
 				}				
 			});
 		
-			$(submitAnswerTooltip.element).delegate('.tooltip-close-bttn-wrapper', 'click', function() {
+			$element.delegate('.tooltip-close-bttn-wrapper', 'click', function() {
 				if (model) {
 					app.answers.create(model);
 					model = null;
 				}
 				
-				$(submitAnswerTooltip.element).find('form').validationEngine('hide');
+				$element.find('form').validationEngine('hide');
 				
-				$(submitAnswerTooltip.element).fadeOut('fast');
+				$element.fadeOut('fast', function() {
+					$element.remove();
+				});
+				
+				app.events.unsubscribe(saveSubscription);
 				
 				return false;
 			});
 			
-			$(submitAnswerTooltip.element).delegate('#answer-step-1 form', 'submit', function() {
+			$element.delegate('#answer-step-1 form', 'submit', function() {
 				$('#answer-step-1').addClass('hidden');
 				$('#answer-step-2').removeClass('hidden');
 				
@@ -281,18 +309,20 @@ function(){
 				return false;
 			});
 			
-			$(submitAnswerTooltip.element).delegate('#answer-step-2 .tooltip-skip-bttn-wrapper', 'click', function() {
+			$element.delegate('#answer-step-2 .tooltip-skip-bttn-wrapper', 'click', function() {
 				if (model) {
 					app.answers.create(model);
 					model = null;
 				}
 				
-				$(submitAnswerTooltip.element).fadeOut('fast');
+				$(submitAnswerTooltip.element).fadeOut('fast', function() {
+					$element.remove();
+				});
 				
 				return false;
 			});
 			
-			$(submitAnswerTooltip.element).delegate('#answer-step-2 form', 'submit', function() {
+			$element.delegate('#answer-step-2 form', 'submit', function() {
 				var endpoint = app.config.endpoints.emailSubscription,
 					formData = $(this).serialize();
 					
@@ -307,7 +337,9 @@ function(){
 							app.answers.create(model);
 						}
 						
-						$(submitAnswerTooltip.element).fadeOut('fast');
+						$element.fadeOut('fast', function() {
+							$element.remove();
+						});
 						
 						return false;
 					}
