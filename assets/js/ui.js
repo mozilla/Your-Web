@@ -256,8 +256,8 @@ function(){
 		
 			$(submitAnswerTooltip.element).delegate('.tooltip-close-bttn-wrapper', 'click', function() {
 				if (model) {
-					app.answers.createdByUser.push(model);
 					app.answers.create(model);
+					model = null;
 				}
 				
 				$(submitAnswerTooltip.element).find('form').validationEngine('hide');
@@ -284,11 +284,10 @@ function(){
 			$(submitAnswerTooltip.element).delegate('#answer-step-2 .tooltip-skip-bttn-wrapper', 'click', function() {
 				if (model) {
 					app.answers.create(model);
+					model = null;
 				}
 				
 				$(submitAnswerTooltip.element).fadeOut('fast');
-				
-				return false;
 				
 				return false;
 			});
@@ -324,7 +323,6 @@ function(){
 		$('.tiles-list').delegate('.tooltip-close-bttn-wrapper a', 'click', function() {
 			var $details = $('#tile-details');
 			$details.find('form').validationEngine('hide');
-			app.log($details);
 			$details.remove();
 			
 			return false;
@@ -339,6 +337,7 @@ function(){
 			leftAdjust,
 			canvasWidth = $('.tiles-list').width(),
 			$closestImage = $(element).closest('.image'),
+			tweet_button,
 			elPos;
 			
 			if ($closestImage.length) {
@@ -352,7 +351,7 @@ function(){
 			$('.tooltip-close-bttn-wrapper a').trigger('click');
 			
 			$tooltip
-			.attr('data-tile', model.get('id'))
+			.attr('data-tile', model.get('id') || model.cid)
 			.css({
 				position: 'absolute',
 				zIndex: 4000,
@@ -408,6 +407,7 @@ function(){
 				$.ajax({
 					url: endpoint.url,
 					dataType: endpoint.dataType,
+					method: 'POST',
 					data: formData,
 					success: function() {
 						$('#translation-step-1').addClass('hidden');

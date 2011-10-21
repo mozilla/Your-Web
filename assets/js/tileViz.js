@@ -61,6 +61,7 @@ function(){
 				'web-expert'		: 'green',
 				'web-creator'		: 'blue'
 			},
+			ids = [];
 			color = classes[modelData.usertype];
 			
 			modelData.created = created.strftime('%A %d, %B %Y');
@@ -69,7 +70,25 @@ function(){
 			
 			modelData.color = color;
 			
-			$(this.el).attr('data-tile', modelData.id).html( this.template( modelData ) );
+			//If its in the createdByUser array, treat it specially
+			if (app.answers.createdByUser().length) {
+				ids = _.pluck(app.answers.createdByUser(), 'id');
+				if (_.include(ids, modelData.id)) {					
+					this.model.set({createdByUser: true}, {silent: true});
+					
+					if (modelData.statistics.total <= 1) {
+						modelData.statistics.total = 0;
+						
+						this.model.set({statistics: modelData.statistics}, {silent: true});
+					}
+				}
+			}
+			
+			$(this.el).attr('data-tile', modelData.id || this.model.cid).html( this.template( modelData ) );
+			
+			if (modelData.important) {
+				$(this.el).addClass('important');
+			}
 			
 			return this;
 		},
@@ -115,6 +134,8 @@ function(){
 			});
 			
 			modelData.statistics.total = total;
+			
+			modelData.moreThanOne = (total > 1) ? true : false;
 			
 			$(this.el).attr('id', 'tile-details').html( this.template( modelData ) );
 			
@@ -170,48 +191,23 @@ function(){
 	AnswerListView = Backbone.View.extend({
 		el: $('body'),
 		
-		events: {
-			'click #saveAnswer'	: 'createAnswer'
-		},
-		
-		initialize: function() {							
+		initialize: function() {
+			var that = this;
+										
 			this.input = this.$('#new-answer');
-			
-			this.collection.bind('add',   this.addOne, this);
-			this.collection.bind('reset', this.applyFilters, this);
-		},
-		
-		addOne: function(answer) {
-			var view = new AnswerView( { model: answer } );
+
+			this.collection.bind('reset', function(collection) {
+				app.events.publish('tiles/reset', [collection]);
+				that.render(collection);
+			});
 		},
 		
 		render: function(answers) {
 			renderTilesOnMap(answers, true);
 		},
 		
-		createAnswer: function(e) {
-			var text = this.input.val(),
-				usertype = $('#usertype').val();
-			
-			this.input.val('');
-			
-			return app.answers.create({content: text, usertype: usertype}, {
-				success: function(model, response) {
-					app.events.publish('answer/saved', [model, response]);
-				},
-				
-				error: function(model, response) {
-					app.events.publish('answer/saveerror', [model, response]);
-				}
-			});
-		},
-		
 		empty: function() {
 			this.$('.tiles-list').empty();
-		},
-		
-		applyFilters: function() {
-			app.events.publish('filters/change', [app.config.filters]);
 		}
 	});
 	
@@ -269,6 +265,7 @@ function(){
 			content += '<br />';
 		});
 		
+		
 		view = new AnswerView( { model: obj.model } );
 		$el = $(view.render(content).el).hide();
 					
@@ -276,7 +273,11 @@ function(){
 			
 		$el.css({position: 'absolute', top: xPos + 'px', left: yPos+ 'px', width: width, height: height});
 		
-		$el.fadeIn('fast');
+		$el.fadeIn('fast', function() {
+			if ($el.hasClass('important')) {
+				$el.trigger('click');
+			}
+		});
 		
 		_placedObjects.push({object: obj, location: location, element: $el.get(0)});
 	},
@@ -301,14 +302,15 @@ function(){
 				var	freeVTiles = tilemap.freeVertical( free.tile, {x:free.tile.x, y:free.tile.y + free.count } ),
 					object = app.stringtester.stringThatFits(free.count, freeVTiles);
 				
-				if (object) {					
-					if (tilemap.isTileFree(free.tile)) _placeObject(object, free.tile);
-					
-					mapWasFull = false;
+				if (object) {
+					if (tilemap.isTileFree(free.tile)) {
+						_placeObject(object, free.tile);
+						mapWasFull = false;
 
-					for (var l=free.tile.x, len=free.tile.x + object.maxVTiles-1; l<=len; l++) {
-						for (var c=free.tile.y; c <= free.tile.y + object.maxHTiles-1; c++) {
-							tilemap.occupyTile({x:l, y:c});
+						for (var l=free.tile.x, len=free.tile.x + object.maxVTiles-1; l<=len; l++) {
+							for (var c=free.tile.y; c <= free.tile.y + object.maxHTiles-1; c++) {
+								tilemap.occupyTile({x:l, y:c});
+							}
 						}
 					}
 					recursive(line, free.tile.y + object.maxHTiles);
@@ -353,13 +355,13 @@ function(){
 	},
 	
 	renderTilesOnMap = function(collection) {
-		var imageCollection = _(collection.filter(function(answer) { return answer.has('image') })),
+		var imageCollection = collection.filter(function(answer) { return answer.has('image') }),
 			ratios = [],
 			allowedSlots = [];
-			
+		
 		$('.tiles-list').empty();
 		
-		imageCollection.each(function(answer) {
+		_.each(imageCollection, function(answer) {
 			ratios.push(
 				Math.max(answer.get('image').width, answer.get('image').height) /
 				Math.min(answer.get('image').width, answer.get('image').height)
@@ -399,7 +401,8 @@ function(){
 		
 		app.tilemap.addImageSlots(allowedSlots);
 			
-		_.defer(fillMap, 500);
+		//_.defer(fillMap, 500);
+		fillMap();
 	};
 	
 	app.answers.collection.bind('reset', function(collection) {
@@ -415,18 +418,7 @@ function(){
 	});
 	
 	app.events.subscribe('filters/change', function(filters) {
-		var resultCollection = app.answers.collection,
-			functionMap = {
-				'usertype': 'filterByUserTypes',
-				'language':	'filterByLanguages'
-			}
-		
-		for (var key in filters) {
-			resultCollection = resultCollection[ functionMap[ key ] ]( filters[key] );
-		}
-
-		app.events.publish('tiles/reset', [resultCollection]);
-		app.views.answerListView.render(resultCollection);
+		app.answers.refresh();
 	});
 	
 	// Subscribe to interesting events

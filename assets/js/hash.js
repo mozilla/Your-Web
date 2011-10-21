@@ -150,7 +150,7 @@ function(){
                 app.events.subscribe('tile/select', function(payload) {
                     //
 
-                    app.hash.setProperty("important",payload.get('id'));  
+                    app.hash.setProperty("important", payload.get('id') || payload.cid);  
                     app.hash.refresh();
                     
 
@@ -196,19 +196,23 @@ function(){
             
             refresh: function() {
                 this._state = "";
-                if(this._language.join(",").length > 0) {
+                if (this._language && this._language.join(",").length > 0) {
                     this._state += "&tl="+this._language.join(",");
                 }
-                if(this._usertype.join(",").length > 0) {
+                
+                if (this._usertype && this._usertype.join(",").length > 0) {
                     this._state +="&ut="+this._usertype.join(",");
                 }
-                if(this._important.length > 0) {
+                
+                if (this._important && this._important.length > 0) {
                     this._state +="&f="+this._important;
                 }
-                if(this._userAnswered.length > 0) {
+                
+                if (this._userAnswered && this._userAnswered.length > 0) {
                    this._state += "&a="+this._userAnswered;
-                } 
-                if(this._currentQuestion.length > 0) {
+                }
+                
+                if (this._currentQuestion && this._currentQuestion.length > 0) {
                     this._state +="&q="+this._currentQuestion;
                 }
                 

@@ -223,7 +223,7 @@ function(){
 			app.answers.refresh();
 		}
 	});
-	
+	/*
 	app.events.subscribe('filters/change', function(filters) {
 		var resultCollection = app.answers.collection,
 			functionMap = {
@@ -237,7 +237,7 @@ function(){
 		
 		APP.views.answerListView.render(resultCollection);
 	});
-	
+	*/
 	// Instantiate the Question List View
 	app.views.QuestionListView = new QuestionListView;
 	

@@ -501,7 +501,7 @@
 							<li>
 								<fieldset>
 									<legend class="visuallyhidden">Privacy Policy:</legend>
-									<label for="policy-okay"><input id="policy-okay" type="checkbox" name="policy"> I’m okay with you handling this info as you explain in your <a href="#" title="Privacy Policy">Privacy Policy</a>.</label>
+									<label for="policy-okay"><input id="policy-okay" type="checkbox" name="policy-okay"> I’m okay with you handling this info as you explain in your <a href="#" title="Privacy Policy">Privacy Policy</a>.</label>
 								</fieldset>
 							</li>
 						</ol>
@@ -520,7 +520,7 @@
 		<!-- tooltip tile details -->
             <header>
               <hgroup>
-                <h1 class="sup-title">You and {{statistics.total}} people answered:</h1>
+                <h1 class="sup-title">{{#if createdByUser}}You {{#if moreThanOne}}and{{/if}} {{/if}} {{#unless createdByUser}} {{#if statistics.total}} {{statistics.total}} people {{/if}} {{/unless}} answered:</h1>
                 <h2 class="main-title">{{content}}</h2>
               </hgroup>
             </header>
@@ -547,7 +547,11 @@
               <h1 class="inner-title">Share with Friends</h1>
               <ul id="tooltip-share-options-nav">
                 <li class="facebook">Facebook</li>
-                <li class="twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a></li>
+                <li class="twitter">
+                <iframe allowtransparency="true" frameborder="0" scrolling="no"
+				src="http://platform.twitter.com/widgets/tweet_button.html?count=horizontal&lang=en-US&url=http://YOURWEBURL/{{id}}"
+				style="width:130px; height:20px;"></iframe>
+                </li>
               </ul>
               <p class="tooltip-translation-bttn-wrapper"><a href="#" title="Submit a translation" class="translation-bttn">Submit a translation</a></p>
             </nav>
@@ -570,19 +574,20 @@
                 <ol>
             			<li>
                     <label>Translation for:</label>
-                    <select>
+                    <select name="language" class="validate[required]" id="translation-language">
                       <option value="en-US">English (US)</option>
                       <option value="pt-PT">Português (PT)</option>
                     </select>
                   </li>
                   <li>
                     <label>My translation:</label>
-                    <input type="text" id="new-translation" class="validate[required]">
+                    <input type="text" id="new-translation" class="validate[required]" name="new-translation">
+                    <input type="hidden" name="answer-id" value="{{id}}">
                   </li>
                   <li>
             				<fieldset>
             					<legend class="visuallyhidden">Privacy Policy:</legend>
-            					<label for="policy-okay"><input id="policy-okay" type="checkbox"> I’m okay with you handling this info as you explain in your <a href="#" title="Privacy Policy">Privacy Policy</a>.</label>
+            					<label for="policy-okay"><input id="policy-okay" type="checkbox" name="policy" class="validate[required]"> I’m okay with you handling this info as you explain in your <a href="#" title="Privacy Policy">Privacy Policy</a>.</label>
             				</fieldset>
             			</li>
                 </ol>

@@ -23,6 +23,7 @@ function(){
 	_.extend(app.answers, (function(){
 		var Answer,
 		_answers,
+		_createdByUser = [],
 		filterList,
 		AnswerList;
 		
@@ -158,6 +159,20 @@ function(){
 						"web-beginner": 0
 					}
 				}
+			},
+			
+			/* 
+			 * Overriding sync method to produce different urls
+			 * on CREATE
+			*/
+			sync: function(method, model, options){
+			  	if (method=='GET'){
+					options.url = model.url;
+			  	} else {
+					options.url = '/answers/new'; 
+			  	}
+			  	
+			  	return Backbone.sync(method, model, options);
 			}
 		});	
 			
@@ -254,15 +269,23 @@ function(){
 				
 				if (alreadyExists.length) {
 					newModel = alreadyExists[0];
-					
 					statistics = newModel.get('statistics');
 					statistics[model.usertype] += 1;
 					
 					newModel.set({usertype: model.usertype, statistics: statistics, important: true});
 					
 				} else {
-					newModel = new Answer(model),
+					statistics = {};
+					statistics[model.usertype] = 1;
+					model.important = true;
+					model.statistics = statistics;
+					
+					newModel = new Answer(model);
 					newAnswer = _answers.create(newModel, {success: function(model) {
+						//Put it into the createdByUser array
+						_createdByUser.push(model);
+						
+						//Publish an event
 						app.events.publish('answers/new', [model]);
 					}});
 				}
@@ -299,7 +322,7 @@ function(){
 				_answers.fetch();
 			},
 			
-			createdByUser: []
+			createdByUser: function() {return _createdByUser;}
 		}
 	})());	
 });

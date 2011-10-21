@@ -241,7 +241,7 @@ function(){
 		});
 		
 		// And as they come in
-		app.answers.collection.bind('add', function(model, collection) {
+		app.events.subscribe('answers/new', function(model, collection) {
 			test(model.get('content'), model);
 		});
 		

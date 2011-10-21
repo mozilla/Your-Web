@@ -258,6 +258,21 @@ function() {
 			xhr.respond(200, { "Content-Type": "application/json" }, answers[id]);
 		});
 		
+		server.respondWith('/answers/new', function(xhr) {
+			function guidGenerator() {
+				var S4 = function() {
+				   return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+				};
+				return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+			}
+			
+			//generate a new id
+			var model = JSON.parse(xhr.requestBody);
+			model.id = guidGenerator();
+			
+			xhr.respond(200, {"Content-Type": "application/json" }, JSON.stringify(model));
+		});
+		
 		server.autoRespond = true;
 		
 		return {
