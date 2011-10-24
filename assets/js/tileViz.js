@@ -56,6 +56,8 @@ function(){
 		
 		app.tilemap.buildMap(mapConfig.lines, Math.floor($('#main').width() / app.tilemap.pixelsInTile), mapConfig.preoccupied, mapConfig.addPadding);
 		
+		app.tilemap.render($('#tilemap').get(0));
+		
 		$('.tiles-list').css({ height: app.tilemap.tilesToPixels(mapConfig.lines) });
 		
 	}
@@ -410,7 +412,7 @@ function(){
 				});
 			});
 		});
-		
+				
 		app.multistep(_.shuffle(tasks), null, function() {
 			app.ui.makeSlideShow('.tiles-list .image-list');
 		}, 125);
@@ -463,7 +465,6 @@ function(){
 		
 		app.tilemap.addImageSlots(allowedSlots);
 			
-		//_.defer(fillMap, 500);
 		fillMap();
 	};
 	
@@ -472,7 +473,10 @@ function(){
 	});
 	
 	app.events.subscribe('questions/active', function() {
-		if (app.questions.getActive()) {		
+		if (app.questions.getActive()) {
+			// Rebuild the map
+			app.tilemap.buildMap(mapConfig.lines, Math.floor($('#main').width() / app.tilemap.pixelsInTile), mapConfig.preoccupied, mapConfig.addPadding);
+			
 			app.views.answerListView.empty();
 			app.answers.refresh();
 		}
@@ -507,7 +511,9 @@ function(){
 	
 	// Instantiate the Question List View
 	$(document).ready(function() {		
-		init();
-		app.views.QuestionListView = new QuestionListView;
+		setTimeout(function() {
+			init();
+			app.views.QuestionListView = new QuestionListView;
+		}, 500);
 	});
 });

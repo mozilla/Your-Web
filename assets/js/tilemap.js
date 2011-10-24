@@ -31,6 +31,8 @@ function(){
 		_columns = 0,
 		_height = 0,
 		
+		_originalMap,
+		
 		_occupiedCache = [];
 		
 		/**
@@ -71,7 +73,9 @@ function(){
 				tilemap.push(line);
 			}
 			
-			return (padMap) ? _padMap(tilemap) : tilemap;
+			tilemap = (padMap) ? _padMap(tilemap) : tilemap;
+			
+			return tilemap;
 		},
 		
 		/**
@@ -350,7 +354,7 @@ function(){
 			buildMap			:	buildTileMap,
 			addImageSlots		: 	addImageSlots,
 			isTileFree			:	_isTileFree,
-			map					:	function() {
+			map						:	function() {
 										return tilemap;
 									},
 			render				:	renderMap,

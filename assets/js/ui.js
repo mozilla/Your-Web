@@ -8,6 +8,7 @@ define(
 	'libs/jquery.uniform',
 	'libs/jquery.validationEngine',
 	'libs/ajaxupload',
+	'libs/spin.min',
 	'core',
 	'hash'
 ],
@@ -212,10 +213,25 @@ function(){
 	
 	$(document).ready(function() {
 		
+		// Initial loader
+		var opts = {
+		  	lines: 12, // The number of lines to draw
+		  	length: 4, // The length of each line
+		  	width: 4, // The line thickness
+		  	radius: 10, // The radius of the inner circle
+		  	color: '#FFF', // #rgb or #rrggbb
+		  	speed: 1, // Rounds per second
+		  	trail: 60, // Afterglow percentage
+		  	shadow: true // Whether to render a shadow
+		},
+		target = $('.tiles-list').get(0),
+		spinner = new Spinner(opts).spin(target);
+		
+		// Resize event
 		var resetLayout = _.debounce(function() {
 								app.events.publish('app/reset');
 							}, 300);
-		// Resize event
+		
 		$(window).resize(resetLayout);
 		
 		//Uniform
