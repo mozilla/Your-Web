@@ -204,6 +204,16 @@
 				20: 'medium',
 				22: 'large'
 			},
+			spinner: {
+				lines: 12, // The number of lines to draw
+				length: 4, // The length of each line
+				width: 4, // The line thickness
+				radius: 10, // The radius of the inner circle
+				color: '#FFF', // #rgb or #rrggbb
+				speed: 1, // Rounds per second
+				trail: 60, // Afterglow percentage
+				shadow: true // Whether to render a shadow
+			},
 			filters: {
 				usertype: ['web-beginner', 'web-intermediate', 'web-expert', 'web-creator'],
 				language: ['en-US']
@@ -480,7 +490,7 @@
 	
 	<script type="text/template" id="submitAnswer-template">
 		 <!-- tooltip answer step 1 -->
-			  <section id="answer-step-1" class="tooltip large">
+			  <section id="answer-step-1" class="tooltip large modal">
 				<header>
 				  <hgroup>
 					<h1 class="sup-title">Question:</h1>
@@ -539,7 +549,7 @@
 			  <!-- /tooltip answer step 1 -->
 			  
 			  <!-- tooltip answer step 2 -->
-			  <section id="answer-step-2" class="tooltip large hidden">
+			  <section id="answer-step-2" class="tooltip large modal hidden">
 				<header>
 				  <hgroup>
 					<h1 class="sup-title">Hey,</h1>
