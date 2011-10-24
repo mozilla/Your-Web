@@ -225,6 +225,13 @@ function(){
 		
 		$(window).resize(resetLayout);
 		
+		// Esc key for closing dialogs
+		$(document).bind('keyup', function(e) {
+			if (e.keyCode == 27) {
+				$('.dialog').remove();
+			}
+		});
+		
 		//Uniform
 		$('select, input:checkbox, input:radio, input:file').uniform();
 	
@@ -355,6 +362,7 @@ function(){
 			var offsetTop = ($(this).attr('id') == 'tile-cta-bttn') ? 60 : 20,			
 				submitAnswerTooltip = app.ui.makeDialog($('#submitAnswer-template').text(), $(this), {exclusive: true, className: 'tooltip submitAnswer large', offsetTop: offsetTop, appendTo: $('#wrapper')}),
 				$element = $(submitAnswerTooltip.element),
+				spinner,
 				model;
 				
 			//Uniform
@@ -375,19 +383,30 @@ function(){
 				action: $element.find('form').attr('action'),
 				name: 'userfile',
 				onSubmit: function(file, extension) {
-					$element.find('.img-placeholder').addClass('loading');
+					var opts = app.config.spinner,
+					target = $('.tiles-list').get(0),
+					$placeholder = $element.find('.img-placeholder');
+					
+					spinner = new Spinner(opts).spin($placeholder.get(0));
+					
+					$placeholder.addClass('loading');
 				},
 				onComplete: function(file, response) {
-					var $thumb = $('<img />');
+					var $thumb = $('<img />'),
+						$placeholder = $element.find('.img-placeholder');
 					
-					$thumb.find('.img-placeholder').load(function(){
-						$element.find('.img-placeholder').removeClass('loading');
+					$thumb.load(function(){
+						$thumb.fadeIn('fast');
+						spinner.stop();
+						$placeholder.removeClass('loading');
 						$thumb.unbind();
 					});
 					
-					$thumb.attr('src', response);
+					$thumb
+					.attr('src', response)
+					.hide();
 					
-					$element.find('.img-placeholder').append($thumb);
+					$placeholder.append($thumb);
 				}
 			});
 			
