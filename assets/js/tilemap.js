@@ -18,7 +18,7 @@ function(){
 	_.extend(app.tilemap, (function(){
 		
 		// number of pixels in a tile.
-		var _PXINTILE = app.config.tilemap.pixelsInTile || 24,
+		var _PXINTILE = app.config.tilemap['default'].pixelsInTile || 24,
 		
 		/* Tile Map is a multidimensional array.
 		 * Occupied tiles have a value of 1, unoccupied tiles have a value of 0.

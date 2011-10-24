@@ -52,6 +52,8 @@ function(){
 			}
 		});
 		
+		app.tilemap.pixelsInTile = mapConfig.pixelsInTile;
+		
 		app.tilemap.buildMap(mapConfig.lines, Math.floor($('#main').width() / app.tilemap.pixelsInTile), mapConfig.preoccupied, mapConfig.addPadding);
 		
 		$('.tiles-list').css({ height: app.tilemap.tilesToPixels(mapConfig.lines) });
