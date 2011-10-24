@@ -56,8 +56,6 @@ function(){
 		
 		app.tilemap.buildMap(mapConfig.lines, Math.floor($('#main').width() / app.tilemap.pixelsInTile), mapConfig.preoccupied, mapConfig.addPadding);
 		
-		app.tilemap.render($('#tilemap').get(0));
-		
 		$('.tiles-list').css({ height: app.tilemap.tilesToPixels(mapConfig.lines) });
 		
 	}
