@@ -32,6 +32,42 @@ function(){
 			return $.param(filters);
 		},
 		
+		makeDialog = function(content, options) {
+			var template = Handlebars.compile('<div class="dialog"><div class="backdrop"></div><div class="content">{{{content}}}</div></div>'),
+			$dialog = $(template({content: content})),
+			backdropHeight = $(document).height(),
+			backdropWidth = $(document).width(),
+			winHeight = $(window).height(),
+			winWidth = $(window).width(),
+			$content = $dialog.find('.content');	
+			
+			$dialog.find('.backdrop').css({width: backdropWidth, height: backdropHeight, opacity: 0.5, background: '#000', position:'absolute'});
+			$dialog.css({position: 'absolute', top: 0, left:0, zIndex: 9999});
+			
+			$('body').append($dialog);
+			
+			$content.css({
+				position: 'absolute',
+				top: winHeight/2 - $content.height()/2,
+				left: winWidth/2 - $content.width()/2
+			});
+			
+			return {
+				show: function() {
+					if (options.effect == 'fadein') {
+						$tooltip.fadeIn('fast');
+					} 
+					else if (options.effect == 'slide') {
+						$tooltip.slideDown('fast');
+					}
+					else {
+						$tooltip.show();
+					}
+				},
+				element: $dialog.get(0)
+			};
+		},
+		
 		makeSlideShow = function(element) {
 			$(element)
 			.hide()
@@ -168,7 +204,8 @@ function(){
 		return {
 			getSerializedFilters: serializeFilters,
 			makeSlideShow		: makeSlideShow,
-			makeTooltip			: makeTooltip
+			makeTooltip			: makeTooltip,
+			makeDialog			: makeDialog
 		}
 	})());
 	
@@ -182,17 +219,47 @@ function(){
 			$.uniform.update($('.filter[data-filter-type="' + key + '"]'));
 		}
 		
+		$('#filterSubmit').click(function() {
+		
+			var newFilters = {};
+			
+			$('.filter').each(function() {
+				
+				if (!newFilters[$(this).attr('data-filter-type')]) {
+					newFilters[$(this).attr('data-filter-type')] = [];
+				}
+				
+				if ($(this).attr('type') == 'checkbox') {
+					if ($(this).is(':checked')) {
+						newFilters[$(this).attr('data-filter-type')].push($(this).val());
+					}
+				} else {
+					newFilters[$(this).attr('data-filter-type')].push($(this).val());
+				}
+			});
+			
+			app.config.filters = newFilters;
+			app.events.publish('filters/change', [app.config.filters]);
+			
+			return false;
+		});
+		
 		//Binding filters change event		
 		$('.filter').bind('change', function() {
-			var filterType = $(this).attr('data-filter-type'),
-				$filterCollection = $('[data-filter-type="' + filterType + '"]'),
-				filter = app.config.filters[filterType],
-				checkedNr = $('.filter[type="checkbox"]:checked').length;
+			var filterType,
+				$filterCollection,
+				filter,
+				checkedNr;
+				
+			if ($('#filterSubmit').is(':visible')) return false;
+				
+			filterType = $(this).attr('data-filter-type');
+			$filterCollection = $('[data-filter-type="' + filterType + '"]');
+			filter = [];
+			checkedNr = $('.filter[type="checkbox"]:checked').length;
 				
 			$(this).attr('value', $(this).val());
-			filter = [];		
 			$filterCollection.each(function() {
-				
 				if ($(this).attr('type') == 'checkbox') {
 					if ($(this).is(':checked')) {
 						filter.push($(this).val());
@@ -220,7 +287,15 @@ function(){
 		
 		// Question List tooltip
 		$('#current-question .current-question-btn').bind('click', function() {
-			var tooltip = app.ui.makeTooltip('<nav id="primary-nav-wrapper">' + $('#primary-nav-wrapper').html() + '</nav>', $('#current-question'), {exclusive: true, className: 'questionList', appendTo: $('#wrapper'), effect: 'fadein', offsetTop: 5});
+			var tooltip,
+				$questionlist = $('.questionList');
+			
+			if ($questionlist.length) {
+				$questionlist.remove();
+				return false;
+			}
+			
+			tooltip = app.ui.makeTooltip('<nav id="primary-nav-wrapper">' + $('#primary-nav-wrapper').html() + '</nav>', $('#current-question'), {exclusive: true, className: 'questionList', appendTo: $('#wrapper'), effect: 'fadein', offsetTop: 5});
 			
 			$('#primary-nav .question a').unbind();
 			
@@ -242,12 +317,12 @@ function(){
 		$('body').bind('click', function() {
 			var $questionlist = $('.questionList');
 			$questionlist.remove();
-		});		
+		});	
 		
 		// Submit tooltips
 		$('#tile-cta-bttn, #answer-form-shortcut input[type="submit"]').bind('click', function() {
 			var offsetTop = ($(this).attr('id') == 'tile-cta-bttn') ? 60 : 20,			
-				submitAnswerTooltip = app.ui.makeTooltip($('#submitAnswer-template').text(), $(this), {exclusive: true, className: 'tooltip submitAnswer large', offsetTop: offsetTop, appendTo: $('#wrapper')}),
+				submitAnswerTooltip = app.ui.makeDialog($('#submitAnswer-template').text(), $(this), {exclusive: true, className: 'tooltip submitAnswer large', offsetTop: offsetTop, appendTo: $('#wrapper')}),
 				$element = $(submitAnswerTooltip.element),
 				model;
 				
@@ -272,7 +347,7 @@ function(){
 					$element.find('.img-placeholder').addClass('loading');
 				},
 				onComplete: function(file, response) {
-					var $thumb = $element.find('.img-placeholder');
+					var $thumb = $('<img />');
 					
 					$thumb.find('.img-placeholder').load(function(){
 						$element.find('.img-placeholder').removeClass('loading');
@@ -280,6 +355,8 @@ function(){
 					});
 					
 					$thumb.attr('src', response);
+					
+					$element.find('.img-placeholder').append($thumb);
 				}
 			});
 			
