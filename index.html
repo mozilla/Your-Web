@@ -372,50 +372,88 @@
 				}
 			},
 			tilemap: {
-				pixelsInTile: 24,
-				lines: 20,
-				preoccupied: {
-					lines: {
-						start: 0,
-						stop: 4
+				"default": {
+					pixelsInTile: 24,
+					lines: 20,
+					preoccupied: {
+						lines: {
+							start: 0,
+							stop: 4
+						},
+						columns: {
+							start: 0,
+							stop: 10
+						}
 					},
-					columns: {
-						start: 0,
-						stop: 10
-					}
+					imageSlots: [
+						{
+							lines: {
+								start: 8,
+								stop: 20
+							},
+							columns: {
+								start: 1,
+								stop: 9
+							}
+						},
+						{
+							lines: {
+								start: 1,
+								stop: 9
+							},
+							columns: {
+								start: 22,
+								stop: 34
+							}
+						},
+						{
+							lines: {
+								start: 11,
+								stop: 19
+							},
+							columns: {
+								start: 30,
+								stop: 38
+							}
+						}
+					]
 				},
-				imageSlots: [
-					{
-						lines: {
-							start: 8,
-							stop: 20
+				500: {
+					pixelsInTile: 24,
+					lines: 20,
+					imageSlots: [
+						{
+							lines: {
+								start: 8,
+								stop: 20
+							},
+							columns: {
+								start: 1,
+								stop: 9
+							}
 						},
-						columns: {
-							start: 1,
-							stop: 9
-						}
-					},
-					{
-						lines: {
-							start: 1,
-							stop: 9
+						{
+							lines: {
+								start: 1,
+								stop: 9
+							},
+							columns: {
+								start: 22,
+								stop: 34
+							}
 						},
-						columns: {
-							start: 22,
-							stop: 34
+						{
+							lines: {
+								start: 11,
+								stop: 19
+							},
+							columns: {
+								start: 30,
+								stop: 38
+							}
 						}
-					},
-					{
-						lines: {
-							start: 11,
-							stop: 19
-						},
-						columns: {
-							start: 30,
-							stop: 38
-						}
-					}
-				]
+					]
+				}
 			}
 		}
 	</script>

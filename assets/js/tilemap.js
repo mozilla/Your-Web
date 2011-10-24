@@ -51,14 +51,12 @@ function(){
 			
 			tilemap = [];
 			
-			if (!preocuppied) preoccupied = {};
-			
 			// Create the preoccupied ranges from config
-			if (preocuppied.lines) {
+			if (preocuppied && preocuppied.lines) {
 				occupiedLines = _.range(preocuppied.lines.start, preocuppied.lines.stop, preocuppied.lines.step || 1);
 			}
 			
-			if (preocuppied.columns) {
+			if (preocuppied && preocuppied.columns) {
 				occupiedColumns = _.range(preocuppied.columns.start, preocuppied.columns.stop, preocuppied.columns.step || 1);
 			}
 			
@@ -335,6 +333,7 @@ function(){
 		
 		// Public API
 		return {
+			pixelsInTile		: 	_PXINTILE,
 			freeHorizontal		:	freeHorizontal,
 			freeVertical		:	freeVertical,
 			buildMap			:	buildTileMap,

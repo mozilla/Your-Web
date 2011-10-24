@@ -18,6 +18,9 @@ function(){
 	var app = window.APP,
 	instance = this,
 	map,
+	mapConfig = app.config.tilemap['default'],
+	sizeKeys,
+	clientWidth,
 	_placedObjects = [],
 	AnswerView,
 	AnswerDetailView,
@@ -34,8 +37,20 @@ function(){
 	app.namespace('views');
 	
 	// Generate the tilemap
-	app.tilemap.buildMap(app.config.tilemap.lines, app.tilemap.pixelsToTiles($('#main').width()), app.config.tilemap.preoccupied);
-	$('.tiles-list').css({ height: app.tilemap.tilesToPixels(app.config.tilemap.lines) });
+	sizeKeys = _.keys(app.config.tilemap);
+	clientWidth = document.getElementsByTagName('html')[0].clientWidth;
+	
+	sizeKeys.sort();
+	
+	_.each(sizeKeys, function(key) {
+		if (clientWidth <= parseInt(key)) {
+			mapConfig = app.config.tilemap[key];
+		}
+	});
+	
+	app.tilemap.buildMap(mapConfig.lines, app.tilemap.pixelsToTiles($('#main').width()), mapConfig.preoccupied);
+	
+	$('.tiles-list').css({ height: app.tilemap.tilesToPixels(mapConfig.lines) });
 	// Set up a simple view
 	AnswerView = Backbone.View.extend({
 		
@@ -270,6 +285,8 @@ function(){
 			$el,
 			view,
 			grids = obj.grid,
+			lineHeight,
+			paddingAdjust,
 			content = '';
 			
 		_.each(grids, function(line) {
@@ -284,8 +301,14 @@ function(){
 		$el = $(view.render(content).el).hide();
 					
 		$('.tiles-list').append($el);
-			
-		$el.css({position: 'absolute', top: xPos + 'px', left: yPos+ 'px', width: width, height: height});
+		
+		lineHeight = parseInt($el.find('.main-title').css('lineHeight'), 10);
+		
+		paddingAdjust = (Math.round( (tilemap.pixelsInTile - lineHeight) /2)) * obj.maxVTiles;
+		
+		$el
+		.css({position: 'absolute', top: xPos + 'px', left: yPos+ 'px', width: width - 4, height: height - 4, padding: 2})
+		.find('.tile').css({width: width - 4, height: (height - 4 - paddingAdjust*2), paddingTop: paddingAdjust, paddingBottom: paddingAdjust});
 		
 		$el.fadeIn('fast', function() {
 			if ($el.hasClass('important')) {

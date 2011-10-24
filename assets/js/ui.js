@@ -251,6 +251,9 @@ function(){
 				$element = $(submitAnswerTooltip.element),
 				model;
 				
+			//Uniform
+			$element.find('select, input:checkbox, input:radio, input:file').uniform();
+			
 			//Validation
 			$element.find('form').validationEngine(app.config.validation);
 			$('form').validationEngine('hide');
