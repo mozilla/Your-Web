@@ -64,11 +64,13 @@ function(){
 		
 		// Test strings on first reset
 		app.answers.collection.bind('reset', function(collection) {
-			_(collection.filter(function(answer) {
-				return answer.get('image');
-			})).each(function(model){
-				test(model.get('image'), model);
-			});
+			if (collection.length) {
+				_(collection.filter(function(answer) {
+					return answer.get('image');
+				})).each(function(model){
+					test(model.get('image'), model);
+				});
+			}
 		});
 		
 		// And as they come in

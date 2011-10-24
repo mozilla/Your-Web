@@ -331,6 +331,8 @@ function(){
 			_.each(_occupiedCache, freeTile);
 		});
 		
+	
+		
 		// Public API
 		return {
 			pixelsInTile		: 	_PXINTILE,

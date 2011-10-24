@@ -36,21 +36,26 @@ function(){
 	
 	app.namespace('views');
 	
-	// Generate the tilemap
-	sizeKeys = _.keys(app.config.tilemap);
-	clientWidth = document.getElementsByTagName('html')[0].clientWidth;
 	
-	sizeKeys.sort();
+	function init() {
+		// Generate the tilemap
+		sizeKeys = _.keys(app.config.tilemap);
+		clientWidth = document.getElementsByTagName('html')[0].clientWidth;
+		
+		sizeKeys.sort();
+		
+		_.each(sizeKeys, function(key) {
+			if (clientWidth <= parseInt(key)) {
+				mapConfig = app.config.tilemap[key];
+			}
+		});
+		
+		app.tilemap.buildMap(mapConfig.lines, app.tilemap.pixelsToTiles($('#main').width()), mapConfig.preoccupied);
+		
+		$('.tiles-list').css({ height: app.tilemap.tilesToPixels(mapConfig.lines) });
+		
+	}
 	
-	_.each(sizeKeys, function(key) {
-		if (clientWidth <= parseInt(key)) {
-			mapConfig = app.config.tilemap[key];
-		}
-	});
-	
-	app.tilemap.buildMap(mapConfig.lines, app.tilemap.pixelsToTiles($('#main').width()), mapConfig.preoccupied);
-	
-	$('.tiles-list').css({ height: app.tilemap.tilesToPixels(mapConfig.lines) });
 	// Set up a simple view
 	AnswerView = Backbone.View.extend({
 		
@@ -219,10 +224,14 @@ function(){
 			var that = this;
 										
 			this.input = this.$('#new-answer');
+			
+			app.events.subscribe('app/reset', that.empty);
 
 			this.collection.bind('reset', function(collection) {
-				app.events.publish('tiles/reset', [collection]);
-				that.render(collection);
+				if (collection.length) {
+					app.events.publish('tiles/reset', [collection]);
+					that.render(collection);
+				}
 			});
 		},
 		
@@ -231,7 +240,7 @@ function(){
 		},
 		
 		empty: function() {
-			this.$('.tiles-list').empty();
+			$('.tiles-list').empty();
 		}
 	});
 	
@@ -453,7 +462,6 @@ function(){
 	};
 	
 	app.answers.collection.bind('reset', function(collection) {
-		
 		app.events.publish('tiles/reset', [collection]);
 	});
 	
@@ -484,8 +492,16 @@ function(){
 	
 	app.events.subscribe('string/test', fillMap);
 	
+	app.events.subscribe('app/reset', function() {
+		// clear the answer collection and reinit
+		init();
+		app.answers.collection.reset();
+		app.answers.refresh();
+	});
+	
 	// Instantiate the Question List View
-	$(document).ready(function() {
+	$(document).ready(function() {		
+		init();
 		app.views.QuestionListView = new QuestionListView;
 	});
 });

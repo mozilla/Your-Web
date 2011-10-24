@@ -39,6 +39,7 @@ function(){
 			backdropWidth = $(document).width(),
 			winHeight = $(window).height(),
 			winWidth = $(window).width(),
+			top
 			$content = $dialog.find('.content');	
 			
 			$dialog.find('.backdrop').css({width: backdropWidth, height: backdropHeight, opacity: 0.5, background: '#000', position:'absolute'});
@@ -48,8 +49,8 @@ function(){
 			
 			$content.css({
 				position: 'absolute',
-				top: winHeight/2 - $content.height()/2,
-				left: winWidth/2 - $content.width()/2
+				top: (winHeight/2 - $content.height()/2 > 0) ? winHeight/2 - $content.height()/2 : 0,
+				left: (winWidth/2 - $content.width()/2 > 0) ? winWidth/2 - $content.width()/2 : 0
 			});
 			
 			return {

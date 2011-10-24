@@ -13,6 +13,7 @@
 	'core',
 	'libs/jquery-1.6.4.min',
 	'libs/underscore.min',
+	'libs/backbone-0.5.3.min',
 	'tilemap'
 ],
 function(){
@@ -31,12 +32,17 @@ function(){
 			return wordsArray;
 		},
 		
-		_renderWord = function(word) {
+		_renderWord = function(word, tileWeight) {
 			// Create a mock element
 			var $el = $('<article class="mock-tile" style="display:inline">' + word + '</span>').css({visibility: 'hidden'}),
 			height = 0,
 			width = 0,
-			returnable = {};
+			returnable = {},
+			weightClass;
+			
+			weightClass = (!_.isUndefined(app.config.weights[tileWeight])) ? app.config.weights[tileWeight] : app.config.weights['default'];
+			
+			$el.addClass(weightClass);
 			
 			$('body').append($el);
 			width = Math.ceil($el.outerWidth());
@@ -170,7 +176,7 @@ function(){
 			_cache[string].words = [];
 			
 			_.each(words, function(word) {
-				var rendered = _renderWord(word);
+				var rendered = _renderWord(word, model.get('weight'));
 						
 				_cache[string].words.push({
 					text: word,
