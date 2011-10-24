@@ -18,7 +18,7 @@ function(){
 	var app = window.APP,
 	instance = this,
 	map,
-	mapConfig = app.config.tilemap['default'],
+	mapConfig,
 	sizeKeys,
 	clientWidth,
 	_placedObjects = [],
@@ -38,6 +38,8 @@ function(){
 	
 	
 	function init() {
+		mapConfig = app.config.tilemap['default'];
+		
 		// Generate the tilemap
 		sizeKeys = _.keys(app.config.tilemap);
 		clientWidth = document.getElementsByTagName('html')[0].clientWidth;
@@ -50,7 +52,7 @@ function(){
 			}
 		});
 		
-		app.tilemap.buildMap(mapConfig.lines, app.tilemap.pixelsToTiles($('#main').width()), mapConfig.preoccupied);
+		app.tilemap.buildMap(mapConfig.lines, Math.floor($('#main').width() / app.tilemap.pixelsInTile), mapConfig.preoccupied, mapConfig.addPadding);
 		
 		$('.tiles-list').css({ height: app.tilemap.tilesToPixels(mapConfig.lines) });
 		
@@ -296,18 +298,20 @@ function(){
 			grids = obj.grid,
 			lineHeight,
 			paddingAdjust,
-			content = '';
+			content = '',
+			weightClass = (!_.isUndefined(app.config.weights[obj.model.get('weight')])) ? app.config.weights[obj.model.get('weight')] : app.config.weights['default'];
 			
 		_.each(grids, function(line) {
 			_.each(line, function(word) {
 				content += word.text + ' ';
 			});
 			content += '<br />';
-		});
-		
+		});		
 		
 		view = new AnswerView( { model: obj.model } );
 		$el = $(view.render(content).el).hide();
+		
+		$el.find('.tile').addClass(weightClass);
 					
 		$('.tiles-list').append($el);
 		
@@ -424,7 +428,7 @@ function(){
 			)
 		});
 			
-		_.each(app.config.tilemap.imageSlots, function(slot) {
+		_.each(mapConfig.imageSlots, function(slot) {
 			var width = slot.lines.stop - slot.lines.start,
 				height = slot.columns.stop - slot.columns.start,
 				ratio = Math.max(width, height) / Math.min(width, height),
@@ -449,7 +453,7 @@ function(){
 				.attr('data-hTiles', height)
 				.attr('data-vTiles', width);
 				
-				$('.tiles-list').append($container);				
+				$('.tiles-list').append($container);
 			}
 		});
 		
@@ -494,8 +498,8 @@ function(){
 	
 	app.events.subscribe('app/reset', function() {
 		// clear the answer collection and reinit
-		init();
 		app.answers.collection.reset();
+		init();
 		app.answers.refresh();
 	});
 	

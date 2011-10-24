@@ -39,7 +39,7 @@ function(){
 		 * @param {int} 	lines 		Number of lines in tile map.
 		 * @param {int} 	columns		Number of columns in tile map.
 		 */
-		buildTileMap = function(lines, columns, preocuppied) {	
+		buildTileMap = function(lines, columns, preocuppied, padMap) {	
 			var occupiedLines = [],
 				occupiedColumns = [];
 			
@@ -71,7 +71,7 @@ function(){
 				tilemap.push(line);
 			}
 			
-			return _padMap(tilemap);
+			return (padMap) ? _padMap(tilemap) : tilemap;
 		},
 		
 		/**
@@ -326,12 +326,21 @@ function(){
 		
 		//Subscribe to interesting events
 		app.events.subscribe('tiles/reset', function(collection) {
-			//_occupiedCache.each(freeTile);
 			//clearMap(canvas);
 			_.each(_occupiedCache, freeTile);
 		});
 		
-	
+		app.events.subscribe('app/reset', function() {
+			tilemap = undefined;
+		
+			_lines = 0;
+			_width = 0;
+			
+			_columns = 0;
+			_height = 0;
+			
+			_occupiedCache = [];
+		});
 		
 		// Public API
 		return {

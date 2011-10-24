@@ -140,3 +140,48 @@
 	border: none;
 	background: #ddd;
 }
+
+/* overrides */
+
+.formError .formErrorContent {
+	width: 100%;
+	background: #E35100;
+	position: relative;
+	z-index: 5001;
+	color: #FFF;
+	width: 180px;
+	font-size: 11px;
+	padding: 5px 10px;
+	border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;
+	border: 0;
+	box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none;
+	font-family: Georgia, 'Times New Roman', Times, serif;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+  font-size: 13px;
+}
+
+.formError .formErrorArrow {
+    margin: -2px 0 0 20px;
+}
+
+.formError .formErrorArrow div {
+	border-left: 0;
+	border-right: 0;
+	box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none;
+	font-size: 0px;
+	height: 1px;
+	background: #E35100;
+	margin: 0 auto;
+	line-height: 0;
+	font-size: 0;
+	display: block;
+}
+
+.formError .formErrorArrow .line3 {
+  border: 0;
+  box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none;
+  background: #E35100;
+}
+
+.formError .formErrorArrow .line2 { display: none; }
+.formError .formErrorArrow .line1 { display: none; }

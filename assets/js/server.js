@@ -30,7 +30,7 @@ function() {
 		answersFor1 = '[\
 							{\
 								"content":"Kittens",\
-								"weight":0,\
+								"weight":16,\
 								"usertype":"web-expert",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
@@ -43,7 +43,7 @@ function() {
 							},\
 							{\
 								"content":"Foxes on Fire!!",\
-								"weight":0,\
+								"weight":16,\
 								"usertype":"web-creator",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"statistics": {\
@@ -54,7 +54,7 @@ function() {
 							},\
 							{\
 								"content":"Open Source",\
-								"weight":0,\
+								"weight":18,\
 								"usertype":"web-expert",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
@@ -68,7 +68,7 @@ function() {
 							},\
 							{\
 								"content":"Free",\
-								"weight":0,\
+								"weight":20,\
 								"usertype":"web-expert",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"en-US",\
@@ -82,7 +82,7 @@ function() {
 							},\
 							{\
 								"content":"Beer",\
-								"weight":0,\
+								"weight":22,\
 								"usertype":"web-beginner",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
@@ -93,7 +93,7 @@ function() {
 							},\
 							{\
 								"content":"Giga Puddi",\
-								"weight":0,\
+								"weight":20,\
 								"usertype":"web-intermediate",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"en-US",\
@@ -105,7 +105,7 @@ function() {
 							},\
 							{\
 								"content":"Raposas!!",\
-								"weight":0,\
+								"weight":18,\
 								"usertype":"web-intermediate",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"pt-PT",\
@@ -119,7 +119,7 @@ function() {
 							},\
 							{\
 								"content":"Kittens gone wild",\
-								"weight":0,\
+								"weight":16,\
 								"usertype":"web-creator",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
@@ -131,7 +131,7 @@ function() {
 							},\
 							{\
 								"content":"Communication",\
-								"weight":0,\
+								"weight":22,\
 								"usertype":"web-creator",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"en-US",\
@@ -145,7 +145,7 @@ function() {
 							},\
 							{\
 								"content":"Openness!",\
-								"weight":0,\
+								"weight":20,\
 								"usertype":"web-expert",\
 								"created":"2011-10-04T16:12:53.228Z",\
 								"language":"en-US",\
@@ -159,7 +159,7 @@ function() {
 							},\
 							{\
 								"content":"Books",\
-								"weight":0,\
+								"weight":18,\
 								"image": {\
 											"url": "http://placekitten.com/500/500",\
 											"width": 500,\
@@ -176,7 +176,7 @@ function() {
 							},\
 							{\
 								"content":"Keypads",\
-								"weight":0,\
+								"weight":22,\
 								"image": {\
 											"url": "http://placekitten.com/300/300",\
 											"width": 500,\
@@ -195,7 +195,7 @@ function() {
 							},\
 							{\
 								"content":"No more mice",\
-								"weight":0,\
+								"weight":16,\
 								"usertype":"web-beginner",\
 								"created":"2011-10-04T16:13:02.284Z",\
 								"language":"en-US",\
@@ -207,7 +207,7 @@ function() {
 							},\
 							{\
 								"content":"Browsers",\
-								"weight":0,\
+								"weight":16,\
 								"image": {\
 											"url": "http://placekitten.com/400/300",\
 											"width": 400,\
@@ -233,7 +233,7 @@ function() {
 											"width": 200,\
 											"height": 300\
 										  },\
-								"weight":0,\
+								"weight":22,\
 								"usertype":"web-creator",\
 								"created":"2011-10-04T16:13:12.492Z",\
 								"language":"en-US",\

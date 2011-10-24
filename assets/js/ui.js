@@ -211,6 +211,13 @@ function(){
 	})());
 	
 	$(document).ready(function() {
+		
+		var resetLayout = _.debounce(function() {
+								app.events.publish('app/reset');
+							}, 300);
+		// Resize event
+		$(window).resize(resetLayout);
+		
 		//Uniform
 		$('select, input:checkbox, input:radio, input:file').uniform();
 	
@@ -220,6 +227,20 @@ function(){
 			$.uniform.update($('.filter[data-filter-type="' + key + '"]'));
 		}
 		
+		//View filters button action (small screen)
+		$('#filters-bttn-wrapper a').bind('click', function() {
+			var $el = $($(this).attr('href'));
+			
+			if ($el.is(':visible')) {
+				$el.hide();
+			} else {
+				$el.fadeIn('fast');
+			}
+			
+			return false;
+		});
+		
+		//Filter submit button action (small screen)
 		$('#filterSubmit').click(function() {
 		
 			var newFilters = {};
@@ -241,6 +262,8 @@ function(){
 			
 			app.config.filters = newFilters;
 			app.events.publish('filters/change', [app.config.filters]);
+			
+			$('#filters').hide();
 			
 			return false;
 		});

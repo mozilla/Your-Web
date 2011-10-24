@@ -13,12 +13,29 @@
     <meta name="author" content="Quodis">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/mobile.css">
     <link rel="stylesheet" href="assets/css/uniform.yourweb.css">
     <link rel="stylesheet" href="assets/css/validationEngine.jquery.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,700,300">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="touch-icon-iphone.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="touch-icon-114x114.png">
   </head>
   
   <body>
+    
+    <!-- fb like script -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "http://connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <!-- /fb like script -->
     
     <!-- page -->
     <div id="page">
@@ -31,7 +48,7 @@
           <hgroup>
             <h1 id="main-brand-name"><a href="/" title="YourWeb">Your<span>Web</span></a></h1>
             <h2 id="sub-brand-name"><a href="http://mozilla.com" title="Visit Mozilla" class="ir"><span class="visually-hidden">By</span> Mozilla</a></h2>
-            <h3 id="brand-tagline">Lorem ipsum dolor sit amet, consectetur ipsum urna arcu, sagittis eu euismod eget lorem ipsum dictum sit amet.</h3>
+            <h3 id="brand-tagline"><a href="#" title="About" class="ir">About:</a> <div><span>Lorem ipsum dolor sit amet, consectetur ipsum urna arcu, sagittis eu euismod eget lorem ipsum dictum sit amet.</span></div></h3>
             <h4 id="current-question"><a href="#primary-nav-wrapper" class="current-question-btn" title="Current Question"></a></h4>
           </hgroup>
           <nav id="primary-nav-wrapper" role="navigation" class="visuallyhidden">
@@ -51,6 +68,7 @@
             </fieldset>
           </form>
           <nav id="secondary-nav-wrapper" role="navigation">
+            <h1 id="filters-bttn-wrapper"><a href="#filters" title="View filters">View filters</a></h1>
             <form id="filters">
               <fieldset>
                 <legend class="visuallyhidden">Filters</legend>
@@ -71,8 +89,8 @@
                       <option value="pt-PT">Português (PT)</option>
                     </select>
                   </li>
-                  <li>
-                  	<button id="filterSubmit">Submit</button>
+                  <li class="button-wrapper">
+                    <input id="filterSubmit" type="submit" value="Apply">
                   </li>
                 </ol>
               </fieldset>
@@ -88,8 +106,6 @@
         	
           <ul class="tiles-list clearfix"></ul>
           
-        	<div id="submitAnswer-modal" class="modal hide fade"></div>
-          
           
         </div>
         <!-- /main -->
@@ -97,7 +113,32 @@
         <!-- colophon -->
         <footer id="colophon">
           
-          <!-- credits -->
+         <div class="col">
+          <!-- share-options -->
+            <nav id="share-options" role="navigation">
+              <h1 class="main-title">Share with Friends</h1>
+              <ul id="share-options-nav">
+                <li class="facebook"><div class="fb-like" data-href="http://www.mozilla.org" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div></li>
+                <li class="twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a></li>
+              </ul>
+            </nav>
+            <!-- /share-options -->
+            
+            <!-- lang-options -->
+            <nav id="lang-options" role="navigation">
+              <h1 class="main-title">Other Languages</h1>
+              <form id="language-options-form">
+                <label class="visuallyhidden">Language:</label>
+                <select>
+                  <option>English (US)</option>
+                  <option>Português</option>
+                </select>
+              </form>
+            </nav>
+          <!-- /lang-options -->
+          </div>
+          
+           <!-- credits -->
           <section id="credits">
             <h1 class="main-title">About Mozilla</h1>
             <div class="prose">
@@ -114,29 +155,6 @@
             </div>
           </section>
           <!-- /credits -->
-          
-          <!-- share-options -->
-          <nav id="share-options" role="navigation">
-            <h1 class="main-title">Share with Friends</h1>
-            <ul id="share-options-nav">
-              <li>Facebook</li>
-              <li><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a></li>
-            </ul>
-          </nav>
-          <!-- /share-options -->
-          
-          <!-- lang-options -->
-          <nav id="lang-options" role="navigation">
-            <h1 class="main-title">Other Languages</h1>
-            <form id="language-options-form">
-              <label class="visuallyhidden">Language:</label>
-              <select>
-                <option>English (US)</option>
-                <option>Português</option>
-              </select>
-            </form>
-          </nav>
-          <!-- /lang-options -->
           
         </footer>
         <!-- /colophon -->
@@ -385,6 +403,7 @@
 				"default": {
 					pixelsInTile: 24,
 					lines: 20,
+					addPadding: true,
 					preoccupied: {
 						lines: {
 							start: 0,
@@ -428,38 +447,29 @@
 						}
 					]
 				},
-				500: {
+				569: {
 					pixelsInTile: 24,
-					lines: 20,
+					lines: 26,
+					addPadding: false,
 					imageSlots: [
 						{
 							lines: {
-								start: 8,
-								stop: 20
+								start: 0,
+								stop: 4
 							},
 							columns: {
-								start: 1,
-								stop: 9
+								start: 5,
+								stop: 8
 							}
 						},
 						{
 							lines: {
-								start: 1,
-								stop: 9
+								start: 7,
+								stop: 11
 							},
 							columns: {
-								start: 22,
-								stop: 34
-							}
-						},
-						{
-							lines: {
-								start: 11,
-								stop: 19
-							},
-							columns: {
-								start: 30,
-								stop: 38
+								start: 0,
+								stop: 5
 							}
 						}
 					]
@@ -611,12 +621,8 @@
             <nav id="tooltip-options-nav-wrapper" role="navigation">
               <h1 class="inner-title">Share with Friends</h1>
               <ul id="tooltip-share-options-nav">
-                <li class="facebook">Facebook</li>
-                <li class="twitter">
-                <iframe allowtransparency="true" frameborder="0" scrolling="no"
-				src="http://platform.twitter.com/widgets/tweet_button.html?count=horizontal&lang=en-US&url=http://YOURWEBURL/{{id}}"
-				style="width:130px; height:20px;"></iframe>
-                </li>
+                <li class="facebook"><iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2FYOURWEB_URL%2F{{id}}&amp;send=false&amp;layout=button_count&amp;width=90&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=35&amp;appId=212969178730681" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:90px; height:20px;" allowTransparency="true"></iframe></li>
+                <li class="twitter"><iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?count=horizontal&lang=en-US&url=http://YOURWEBURL/{{id}}" style="width:130px; height:20px;"></iframe></li>
               </ul>
               <p class="tooltip-translation-bttn-wrapper"><a href="#" title="Submit a translation" class="translation-bttn">Submit a translation</a></p>
             </nav>

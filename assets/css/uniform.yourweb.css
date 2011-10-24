@@ -627,6 +627,8 @@ div.selector.focus {
   line-height: 30px;
   font-style: italic;
   font-family: inherit;
+  -moz-box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.3) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.3) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.2) inset;
   box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.3) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.2) inset;
   padding: 0;
 }
@@ -644,6 +646,8 @@ div.selector.focus {
   line-height: 30px;
   font-style: italic;
   font-family: inherit;
+  -moz-box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.2), 0 -1px 0 0 rgba(255, 255, 255, 0.2) inset, 0 2px 0 0 rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.2), 0 -1px 0 0 rgba(255, 255, 255, 0.2) inset, 0 2px 0 0 rgba(0, 0, 0, 0.2) inset;
   box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.2), 0 -1px 0 0 rgba(255, 255, 255, 0.2) inset, 0 2px 0 0 rgba(0, 0, 0, 0.2) inset;
   padding: 0;
 }
@@ -704,14 +708,15 @@ div.selector select option {
 /* override usertypes checker */
 
 .usertype div.checker {
-  height: 20px;
+  height: 24px;
   width: 25px;
   margin: 0;
 }
 
 .usertype div.checker span {
-  height: 20px;
+  height: 22px;
   width: 25px;
+  margin: 2px 0 0 0;
 }
 
 .usertype .orange div.checker span { background-position: -10px -820px; }
@@ -727,7 +732,7 @@ div.selector select option {
 .usertype .blue div.checker span.checked { background-position: -220px -820px; }
 
 .usertype div.checker input[type="checkbox"] {
-  height: 20px;
+  height: 24px;
   width: 25px;
   cursor: pointer;
 }
@@ -802,6 +807,8 @@ div.uploader span.filename {
   color: #668FAC;
   background: #FFF;
   border-radius: 4px;
+  -moz-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.4), 0 2px 0 0 rgba(255, 255, 255, 0.3), 0 0 2px 0 rgba(0, 0, 0, 0.4) inset;
+  -webkit-box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.4), 0 2px 0 0 rgba(255, 255, 255, 0.3), 0 0 2px 0 rgba(0, 0, 0, 0.4) inset;
   box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.4), 0 2px 0 0 rgba(255, 255, 255, 0.3), 0 0 2px 0 rgba(0, 0, 0, 0.4) inset;
   margin: 0 5px 0 0;
   text-shadow: none;
@@ -832,6 +839,8 @@ div.uploader.focus.active span.action {
   color: #FFF;
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
   border-radius: 4px;
+  -moz-box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.4) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.2) inset;
+  -webkit-box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.4) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.2) inset;
   box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.4) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.2) inset;
   background: rgb(62,172,230); /* Old browsers */
   background: -moz-linear-gradient(top, rgba(62,172,230,1) 0%, rgba(38,124,194,1) 100%); /* FF3.6+ */
