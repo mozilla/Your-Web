@@ -717,7 +717,7 @@ function() {
 							}\
 						]',
 		
-		answers = {"7bd1255f-6efe-983a-6918-52b213d8d176": answersFor1, "7bd1255f-6efe-983a-6918-91e017177342": answersFor2};
+		answers = {"7bd1255f-6efe-983a-6918-52b213d8d176": answersFor1, "7bd1255f-6efe-983a-6918-91e017177342": answersFor1};
 						
 	
 		server.respondWith('/questions/', function (xhr) {
