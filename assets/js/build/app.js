@@ -2149,7 +2149,7 @@ function() {
         	    publish: publish,
         	    subscribe: subscribe,
         	    unsubscribe: unsubscribe
-        	};	
+        	};
     	})()
 	});
 	
@@ -12857,8 +12857,10 @@ require([], function() {
 		'browsertester'
 	], 
 	function(){
-		// Bootstrap the app
-		window.APP.events.publish('app/ready');
+		$(document).ready(function() {
+			// Bootstrap the app
+			window.APP.events.publish('app/ready');
+		});
 	});
 });
 define("main", function(){});

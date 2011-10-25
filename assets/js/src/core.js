@@ -183,7 +183,7 @@ function() {
         	    publish: publish,
         	    subscribe: subscribe,
         	    unsubscribe: unsubscribe
-        	};	
+        	};
     	})()
 	});
 	
