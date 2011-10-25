@@ -9,7 +9,8 @@
  define(
 //Module dependencies
 [
-	'libs/underscore.min'
+	'libs/underscore.min',
+	'core'
 ],
 function(){
 	var app = window.APP;

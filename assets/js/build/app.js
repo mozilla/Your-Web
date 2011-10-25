@@ -11473,7 +11473,8 @@ function(){
  * @class tilemap
  */
  define('tilemap',[
-	'libs/underscore.min'
+	'libs/underscore.min',
+	'core'
 ],
 function(){
 	var app = window.APP;
