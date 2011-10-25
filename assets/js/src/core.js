@@ -21,6 +21,7 @@ function() {
 	{console.log();return window.console;}catch(err){return window.console={};}})());
 	
 	
+	console.log('extending config');
 	// Extend App to include some cool core functionality and App config object
 	_.extend(app, {
 		

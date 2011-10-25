@@ -14,7 +14,8 @@
 ],
 function(){
 	var app = window.APP;
-
+	
+	console.log('accessing config');
 	app.namespace('tilemap');
 	_.extend(app.tilemap, (function(){
 		
