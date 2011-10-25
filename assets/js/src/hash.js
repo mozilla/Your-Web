@@ -115,7 +115,7 @@ function(){
                 this._currentQuestion = "";  
 
             // Publish the done event with the current state as a payload
-                app.events.publish('hash/done', this.state());
+                app.events.publish('hash/done', [this.state()]);
 
             // Subscribe to interesting events
 
@@ -235,9 +235,10 @@ function(){
             
 		}	
         
-        
         _hash = Hash;
-        _hash.init();
+        app.events.subscribe('app/ready', function() {
+        	_hash.init();
+        });
 
 
 				
