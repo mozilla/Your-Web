@@ -1,9 +1,6 @@
-[submodule "assets/js/libs/requirejs"]
-	path = assets/js/libs/requirejs
+[submodule "assets/js/src/libs/requirejs"]
+	path = assets/js/src/libs/requirejs
 	url = https://github.com/jrburke/requirejs.git
-[submodule "assets/lib/bootstrap"]
-	path = assets/lib/bootstrap
-	url = https://github.com/twitter/bootstrap.git
-[submodule "assets/js/libs/sinon"]
-	path = assets/js/libs/sinon
+[submodule "assets/js/src/libs/sinon"]
+	path = assets/js/src/libs/sinon
 	url = git://github.com/cjohansen/Sinon.JS.git

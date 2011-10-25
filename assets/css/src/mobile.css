@@ -7,7 +7,7 @@
   /* ==== structure components ==== */
   
   body {
-    background-image: url(../img/layout/mobile-swirls-bg.png), url(../img/layout/grunge-bg-pttrn.png);
+    background-image: url(../../img/layout/mobile-swirls-bg.png), url(../../img/layout/grunge-bg-pttrn.png);
     background-position: center top, center -50px;
     background-repeat: no-repeat, repeat-x;
   }
@@ -80,7 +80,7 @@
     display: block;
     margin: -35px 0 0 0;
     padding: 35px 0 0 0;
-    background: transparent url(../img/layout/tooltip-arr.png) 20px top no-repeat;
+    background: transparent url(../../img/layout/tooltip-arr.png) 20px top no-repeat;
     font-size: 14px;
     line-height: 20px;
   }
@@ -90,7 +90,7 @@
     display: block;
     width: 35px;
     height: 30px;
-    background: transparent url(../img/layout/mobile-about-bttn.png) center center no-repeat;
+    background: transparent url(../../img/layout/mobile-about-bttn.png) center center no-repeat;
     margin: -15px 0 0 -8px;
   }
   
@@ -104,7 +104,7 @@
     height: 40px;
     line-height: 40px;
     font-size: 24px;
-    background-image: url(../img/layout/mobile-current-question-icon.png), url(../img/layout/current-question-bg.png);
+    background-image: url(../../img/layout/mobile-current-question-icon.png), url(../../img/layout/current-question-bg.png);
     background-position: 5px 12px, center center;
     background-repeat: no-repeat, no-repeat;
     background-size: auto auto, 100% 100%;
@@ -199,7 +199,7 @@
   #filters ol {
     margin: -35px 0 0 0;
     padding: 35px 0 0 0;
-    background: transparent url(../img/layout/tooltip-arr.png) center top no-repeat;
+    background: transparent url(../../img/layout/tooltip-arr.png) center top no-repeat;
   }
   
   #filters li.usertype,

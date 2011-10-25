@@ -5,8 +5,6 @@ define(
 	'libs/backbone-0.5.3.min',
 	'libs/underscore.min',
 	'libs/handlebars',
-	'libs/strftime',
-	'../lib/bootstrap/js/bootstrap-modal',
 	'core',
 	'questions',
 	'answers',
@@ -87,8 +85,6 @@ function(){
 			animationClasses = ['animation-a', 'animation-b', 'animation-c', 'animation-d'],
 			ids = [];
 			color = classes[modelData.usertype];
-			
-			modelData.created = created.strftime('%A %d, %B %Y');
 			
 			modelData.layout = layout;
 			
@@ -199,8 +195,6 @@ function(){
 		render: function(type) {
 			var modelData = this.model.toJSON(),
 			created = new Date(modelData.created);
-			
-			modelData.created = created.strftime('%A %d, %B %Y');
 			
 			if (type == 'header') {
 				this.template = Handlebars.compile(activeQuestionTemplate);

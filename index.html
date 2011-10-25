@@ -12,10 +12,13 @@
     <meta name="description" content="">
     <meta name="author" content="Quodis">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/mobile.css">
-    <link rel="stylesheet" href="assets/css/uniform.yourweb.css">
-    <link rel="stylesheet" href="assets/css/validationEngine.jquery.css">
+    <link rel="stylesheet" href="assets/css/build/app.css">
+    <!-- DEVELOPMENT
+    <link rel="stylesheet" href="assets/css/src/style.css">
+    <link rel="stylesheet" href="assets/css/src/mobile.css">
+    <link rel="stylesheet" href="assets/css/src/uniform.yourweb.css">
+    <link rel="stylesheet" href="assets/css/src/validationEngine.jquery.css">
+    -->
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,700,300">
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="touch-icon-iphone.png">
@@ -166,8 +169,11 @@
     <!-- /page -->
   
     <!-- scripts -->
+    <!-- DEVELOPMENT
     <script data-main="assets/js/main.js" src="assets/js/libs/requirejs/require.js"></script>
-	<script>
+    // DEVELOPMENT -->
+    <script src="assets/js/build/app.js"></script>
+    <script>
 		var APP_CONFIG = {
 			questions: [
 				{

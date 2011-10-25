@@ -76,7 +76,7 @@ function(){
                         usertype: this._usertype,
                         important: this._important,
                         userAnswered: this._userAnswered,
-                        currentQuestion: this._currentQuestion,
+                        currentQuestion: this._currentQuestion
 
                     }
                 

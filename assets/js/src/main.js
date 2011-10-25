@@ -3,11 +3,10 @@ require([], function() {
 		'libs/jquery-1.6.4.min',
 		'core',
 		'server',
-        'hash',        
+        'hash',
 		'ui',
 		'tileViz',
-		'browsertester',
-        
+		'browsertester'
 	], 
 	function(){
 	
