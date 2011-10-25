@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Compressing Javascript..."
-node r.js -o name=main baseUrl=./assets/js/src paths.requireLib=libs/requirejs/require include=requireLib out=./assets/js/build/app.js compress=none
+node r.js -o name=main baseUrl=./assets/js/src paths.requireLib=libs/requirejs/require include=requireLib out=./assets/js/build/app.js optimize=none
 echo "Done!"
 
 echo "Compressing CSS..."
