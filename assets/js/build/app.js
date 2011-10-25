@@ -1986,6 +1986,8 @@ function() {
 	(function(b){function c(){}for(var d="assert,count,debug,dir,dirxml,error,exception,group,groupCollapsed,groupEnd,info,log,timeStamp,profile,profileEnd,time,timeEnd,trace,warn".split(","),a;a=d.pop();){b[a]=b[a]||c}})((function(){try
 	{console.log();return window.console;}catch(err){return window.console={};}})());
 	
+	console.log(window.APP_CONFIG);
+	
 	// Extend App to include some cool core functionality and App config object
 	_.extend(app, {
 		
@@ -11479,9 +11481,7 @@ function(){
 	var app = window.APP;
 	
 	app.namespace('tilemap');
-	_.extend(app.tilemap, (function(){
-		app.log(app.config);
-			
+	_.extend(app.tilemap, (function(){			
 		// number of pixels in a tile.
 		var _PXINTILE = app.config.tilemap['default'].pixelsInTile || 24,
 		
@@ -12847,20 +12847,20 @@ function(){
 	})());	
 });
 
-require([], function() {
-	require([
-		'libs/jquery-1.6.4.min',
-		'core',
-		'server',
-        'hash',
-		'ui',
-		'tileViz',
-		'browsertester'
-	], 
-	function(){
-		$(document).ready(function() {
-			// Bootstrap the app
-			window.APP.events.publish('app/ready');
+$(document).ready(function() {
+	require([], function() {
+		require([
+			'libs/jquery-1.6.4.min',
+			'core',
+			'server',
+			'hash',
+			'ui',
+			'tileViz',
+			'browsertester'
+		], 
+		function(){
+				// Bootstrap the app
+				window.APP.events.publish('app/ready');
 		});
 	});
 });

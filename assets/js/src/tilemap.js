@@ -16,9 +16,7 @@ function(){
 	var app = window.APP;
 	
 	app.namespace('tilemap');
-	_.extend(app.tilemap, (function(){
-		app.log(app.config);
-			
+	_.extend(app.tilemap, (function(){			
 		// number of pixels in a tile.
 		var _PXINTILE = app.config.tilemap['default'].pixelsInTile || 24,
 		
