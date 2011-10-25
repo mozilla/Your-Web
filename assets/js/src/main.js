@@ -9,6 +9,7 @@ require([], function() {
 		'browsertester'
 	], 
 	function(){
-	
+		// Bootstrap the app
+		window.APP.events.publish('app/ready');
 	});
 });

@@ -502,7 +502,7 @@ function(){
 	});
 	
 	// Instantiate the Question List View
-	$(document).ready(function() {		
+	app.events.subscribe('app/ready', function() {	
 		setTimeout(function() {
 			init();
 			app.views.QuestionListView = new QuestionListView;
