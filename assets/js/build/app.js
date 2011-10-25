@@ -10389,15 +10389,6 @@ function(){
 		
 	app.namespace('ui');
 	
-	// Validation Engine language
-	$.fn.validationEngineLanguage = function(){};
-	$.validationEngineLanguage = {
-        newLang: function(){
-        	$.validationEngineLanguage.allRules = app.config.strings.validation;
-        }
-    };
-	$.validationEngineLanguage.newLang();
-	
 	_.extend(app.ui, (function() {
 		
 		var serializeFilters = function() {
@@ -10582,7 +10573,16 @@ function(){
 		}
 	})());
 	
-	$(document).ready(function() {
+	app.events.subscribe('app/ready', function() {
+			
+		// Validation Engine language
+		$.fn.validationEngineLanguage = function(){};
+		$.validationEngineLanguage = {
+			newLang: function(){
+				$.validationEngineLanguage.allRules = app.config.strings.validation;
+			}
+		};
+		$.validationEngineLanguage.newLang();
 		
 		// Initial loader
 		var opts = app.config.spinner,
