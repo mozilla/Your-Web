@@ -897,7 +897,7 @@ body {
 }
 
 .tooltip .img-placeholder, .modal .img-placeholder {
-  width: 240px;
+  width: 220px;
   height: 180px;
   background: transparent url(../../img/layout/tooltip-img-placeholder.png) center center no-repeat;
   margin: 0;

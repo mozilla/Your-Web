@@ -9,6 +9,7 @@ define(
 	'libs/jquery.validationEngine',
 	'libs/ajaxupload',
 	'libs/spin.min',
+	'bgpos',
 	'core',
 	'hash'
 ],
@@ -41,7 +42,7 @@ function(){
 			
 			$content.css({
 				position: 'absolute',
-				top: (winHeight/2 - $content.height()/2 > 0) ? winHeight/2 - $content.height()/2 : 0,
+				top: (winHeight/2 - $content.height()/2 > 0) ? (winHeight/2 - $content.height()/2) + $(document).scrollTop() : 0,
 				left: (winWidth/2 - $content.width()/2 > 0) ? winWidth/2 - $content.width()/2 : 0
 			});
 			
@@ -203,6 +204,8 @@ function(){
 	})());
 	
 	app.events.subscribe('app/ready', function() {
+	
+		var _tileListWidth = $('.tiles-list').width();
 			
 		// Validation Engine language
 		$.fn.validationEngineLanguage = function(){};
@@ -219,9 +222,14 @@ function(){
 		spinner = new Spinner(opts).spin(target);
 		
 		// Resize event
-		var resetLayout = _.debounce(function() {
-								app.events.publish('app/reset');
-							}, 300);
+		var resetLayout = _.debounce(
+			function() {
+				var listWidth =$('.tiles-list').width();
+				if (listWidth != _tileListWidth) {
+					_tileListWidth = listWidth;
+					app.events.publish('app/reset');
+				}
+			}, 800);
 		
 		$(window).resize(resetLayout);
 		
