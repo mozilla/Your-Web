@@ -494,6 +494,8 @@ function(){
 	
 	app.events.subscribe('string/test', fillMap);
 	
+	app.events.subscribe('image/test', fillMap);
+	
 	app.events.subscribe('app/reset', function() {
 		// clear the answer collection and reinit
 		app.answers.collection.reset();

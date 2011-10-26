@@ -42,7 +42,7 @@ function(){
 			
 			$content.css({
 				position: 'absolute',
-				top: (winHeight/2 - $content.height()/2 > 0) ? (winHeight/2 - $content.height()/2) + $(document).scrollTop() : 0,
+				top: (winHeight/2 - $content.height()/2 > 0) ? (winHeight/2 - $content.height()/2) + $(document).scrollTop() : $(document).scrollTop(),
 				left: (winWidth/2 - $content.width()/2 > 0) ? winWidth/2 - $content.width()/2 : 0
 			});
 			
@@ -66,6 +66,7 @@ function(){
 			$(element)
 			.hide()
 			.cycle({
+				pause: true,
 				before: function(oldImg, newImg) {
 					var oldTooltip = $('#tile-details[data-tile="' + $(oldImg).attr('data-tile') + '"]');
 					
@@ -371,6 +372,7 @@ function(){
 				submitAnswerTooltip = app.ui.makeDialog($('#submitAnswer-template').text(), $(this), {exclusive: true, className: 'tooltip submitAnswer large', offsetTop: offsetTop, appendTo: $('#wrapper')}),
 				$element = $(submitAnswerTooltip.element),
 				spinner,
+				image,
 				model;
 				
 			//Uniform
@@ -408,6 +410,12 @@ function(){
 						spinner.stop();
 						$placeholder.removeClass('loading');
 						$thumb.unbind();
+						
+						image = {
+							url: response,
+							width: $thumb.width(),
+							height: $thumb.height()
+						}
 					});
 					
 					$thumb
@@ -472,6 +480,10 @@ function(){
 				model.usertype = $('#answer-step-1').find('input[name="usertype"]:checked').attr('id');
 				model.important = true;
 				model.language = $('#answer-step-1').find('.language select').val();
+				
+				if (image) {
+					model.image = image;
+				}
 				
 				return false;
 			});

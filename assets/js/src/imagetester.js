@@ -23,7 +23,7 @@ function(){
 		
 		_cache = {},
 		
-		test = function(image, model) {
+		test = function(image, model, silent) {
 			if (!image || !model) return false;
 			
 			var width = image.width,
@@ -35,7 +35,13 @@ function(){
 				hTiles: tilemap.pixelsToTiles(height),
 				vTiles: tilemap.pixelsToTiles(width),
 				ratio: Math.max(width, height) / Math.min(width, height),
-				model: model
+				model: model,
+				used: false,
+				url: image.url
+			}
+			
+			if (!silent) {
+				app.events.publish('image/test', [_cache[image.url]]);
 			}
 		},
 		
@@ -54,7 +60,12 @@ function(){
 					if (!falsy) return false;
 				}
 									
-				return (object.ratio == ratio && falsy);
+				return (object.ratio == ratio && !object.used && falsy);
+			});
+			
+			// mark as used
+			_.each(filtered, function(object) {
+				_cache[object.url].used = true;
 			});
 			
 			return filtered;
@@ -68,14 +79,16 @@ function(){
 				_(collection.filter(function(answer) {
 					return answer.get('image');
 				})).each(function(model){
-					test(model.get('image'), model);
+					test(model.get('image'), model, true);
 				});
 			}
 		});
 		
 		// And as they come in
 		app.answers.collection.bind('add', function(model, collection) {
-			test(model.get('image'), model);
+			if (model.has('image')) {
+				test(model.get('image'), model, false);
+			}
 		});
 		
 		// Public API

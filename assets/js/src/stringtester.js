@@ -248,7 +248,9 @@ function(){
 		
 		// And as they come in
 		app.events.subscribe('answers/new', function(model, collection) {
-			test(model.get('content'), model);
+			if (!model.has('image')) {
+				test(model.get('content'), model);
+			}
 		});
 		
 		// Public API
