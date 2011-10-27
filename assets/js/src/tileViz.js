@@ -220,8 +220,6 @@ function(){
 		
 		initialize: function() {
 			var that = this;
-										
-			this.input = this.$('#new-answer');
 			
 			app.events.subscribe('app/reset', that.empty);
 

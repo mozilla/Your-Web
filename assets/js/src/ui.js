@@ -4,7 +4,7 @@ define(
 	'libs/jquery-1.6.4.min',
 	'libs/underscore.min',
 	'libs/handlebars',
-	'libs/jquery.cycle.lite',
+	'libs/jquery.cycle.all',
 	'libs/jquery.uniform',
 	'libs/jquery.validationEngine',
 	'libs/ajaxupload',
@@ -66,6 +66,9 @@ function(){
 			$(element)
 			.hide()
 			.cycle({
+				fit: true,
+				height: $(element).height(),
+				width: $(element).width(),
 				pause: true,
 				before: function(oldImg, newImg) {
 					var oldTooltip = $('#tile-details[data-tile="' + $(oldImg).attr('data-tile') + '"]');
@@ -221,6 +224,9 @@ function(){
 		var opts = app.config.spinner,
 		target = $('.tiles-list').get(0),
 		spinner = new Spinner(opts).spin(target);
+		
+		//Weird width bug
+		$(spinner.el).css({width: 0});
 		
 		// Resize event
 		var resetLayout = _.debounce(
@@ -530,14 +536,6 @@ function(){
 			return false;
 		});
 		
-		// Bind Answer Detail tooltip close button
-		$('.tiles-list').delegate('.tooltip-close-bttn-wrapper a', 'click', function() {
-			var $details = $('#tile-details');
-			$details.find('form').validationEngine('hide');
-			$details.remove();
-			
-			return false;
-		});
 		
 		// Tile click event
 		function handleTileClick(model, element) {
@@ -553,6 +551,11 @@ function(){
 			
 			if ($closestImage.length) {
 				element = $closestImage;
+			}
+			
+			if (model.has('image')) {
+				// Should be pause, but only this works...
+				$(element).find('.image-list').cycle('resume');
 			}
 			
 			elPos = $(element).position();
@@ -605,6 +608,19 @@ function(){
 				
 				$arrow.css({backgroundPositionX: p});	
 			}
+			
+			// Bind Answer Detail tooltip close button
+			$tooltip.find('.tooltip-close-bttn-wrapper a').bind('click', function() {
+				var $details = $('#tile-details');
+				$details.find('form').validationEngine('hide');
+				$details.remove();
+				
+				if (model.has('image')) {
+					$(element).find('.image-list').cycle('resume');
+				}
+				
+				return false;
+			});
 		}
 		
 		//Translation form submission
